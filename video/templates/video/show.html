@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-xxl mt-3">
+    <div class="row">
+        <div class="col-md-7">
+            <video controls crossorigin playsinline
+                poster="{{ video.image.url }}" id="player">
+                <!-- Video files -->
+                <source src="{{ video.video_file.url }}" type="video/mp4" size="576">
+                <!-- <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" type="video/mp4"
+                size="720">
+            <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" type="video/mp4"
+                size="1080">
+            <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1440p.mp4" type="video/mp4"
+                size="1440"> -->
+
+                <!-- Caption files -->
+                <track kind="captions" label="English" srclang="en"
+                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" default>
+                <track kind="captions" label="Français" srclang="fr"
+                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
+
+                <!-- Fallback for browsers that don't support the <video> element -->
+                <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
+                    download>Download</a>
+            </video>
+
+
+            <div class="actions">
+                <button type="button" class="btn js-play">Play</button>
+                <button type="button" class="btn js-pause">Pause</button>
+                <button type="button" class="btn js-stop">Stop</button>
+                <button type="button" class="btn js-rewind">Rewind</button>
+                <button type="button" class="btn js-forward">Forward</button>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="row p-0 m-0">
+                <div class="rounded col-5 p-0 overflow-hidden">
+                    <a href="#!">
+                        <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="">
+                    </a>
+                </div>
+                <div class="rounded col-5 p-0 overflow-hidden ps-2">
+                    <h2 class="card-title mb-0">
+                        <a href="#!" class="text-black">How to Detect an Undefined Object Property in JavaScript?</a>
+                    </h2>
+                    <small class="p-0 m-0 text-muted">By <strong><a href="#!" class="text-black">Hassan Agmir</a></strong></small> <br>
+                    <small class="p-0 m-0 text-primary">212 views - 5 days ago</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

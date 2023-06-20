@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+      The current link item
+    </a>
+    {% for video in videos  %}
+    <a href="/{{video.id}}" class="list-group-item list-group-item-action">{{video.title}}</a>
+    {% endfor %}
+  </div>
+{% endblock content %}

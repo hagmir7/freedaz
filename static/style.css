@@ -1,0 +1,32 @@
+.video-list-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* This is purely for the demo */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.plyr {
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+
+* {
+    font-family: 'Raleway', sans-serif;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+
+
+.card-title {
+    font-size: 14px;
+    font-weight: 800;
+}
