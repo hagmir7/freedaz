@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-b_yj4b=-(4g^zqi+a^8*ehv&b@+yu_3gpkh#26zbq)11_073nt
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 CPANEL = str(os.environ.get('CPANEL')) == '1'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
