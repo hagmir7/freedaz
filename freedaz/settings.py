@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-b_yj4b=-(4g^zqi+a^8*ehv&b@+yu_3gpkh#26zbq)11_073nt
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+CPANEL = str(os.environ.get('CPANEL')) == '1'
 ALLOWED_HOSTS = []
 
 
@@ -135,3 +135,32 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+if CPANEL:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+  
+
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'agha6919_freedaz',
+            'USER': 'agha6919_freesad_admin',
+            'PASSWORD': 'Guigou.1998@',
+            'HOST': 'localhost',  # Typically 'localhost' or '127.0.0.1'
+            'PORT': '3306',  # Typically '3306'
+            'OPTIONS': {
+                'sql_mode': 'STRICT_TRANS_TABLES',
+                'charset': 'utf8mb4',
+                'use_unicode': True,
+            },
+        }
+    }
+
+
+
+
+
