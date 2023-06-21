@@ -8,7 +8,7 @@ def index(request):
     videos = Video.objects.all()
 
     context = {
-        'videos' : videos
+        'videos' : videos,
     }
     return render(request, 'video/index.html', context)
 
@@ -19,18 +19,20 @@ def video_upload(request):
             video = form.save(commit=False)
             video.user = request.user
             video.save()
-            # Handle success case
             return JsonResponse({'messsage': "You video uploaded successfully."})
     else:
         form = VideoForm()
     return render(request, 'video/create.html', {'form': form})
 
 
-def video(request, id):
-    video = get_object_or_404(Video, id=id)
+def video(request, slug):
+    video = get_object_or_404(Video, slug=slug)
+    videos = Video.objects.all().order_by('-uploaded_at')[0:15]
 
     context = {
-        'video' : video
+        'video' : video,
+        'videos' : videos,
+        'title': video.title
     }
     return render(request, 'video/show.html', context)
 

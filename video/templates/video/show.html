@@ -3,28 +3,25 @@
 {% block content %}
 <div class="container-xxl mt-3">
     <div class="row">
-        <div class="col-md-7">
-            <video controls crossorigin playsinline
-                poster="{{ video.image.url }}" id="player">
+        <div class="col-12 col-md-7">
+            {% if video.image %}
+            <video autoplay controls crossorigin playsinline poster="{{ video.image.url }}" id="player">
+            {% else %}
+            <video autoplay controls crossorigin playsinline poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" id="player">
+            {% endif %}
                 <!-- Video files -->
                 <source src="{{ video.video_file.url }}" type="video/mp4" size="576">
-                <!-- <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4" type="video/mp4"
-                size="720">
-            <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1080p.mp4" type="video/mp4"
-                size="1080">
-            <source src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-1440p.mp4" type="video/mp4"
-                size="1440"> -->
+                <source src="{{ video.video_file.url }}" type="video/mp4" size="720">
+                <source src="{{ video.video_file.url }}" type="video/mp4" size="1080">
+                <source src="{{ video.video_file.url }}" type="video/mp4" size="1440">
 
                 <!-- Caption files -->
-                <track kind="captions" label="English" srclang="en"
-                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" default>
-                <track kind="captions" label="Français" srclang="fr"
-                    src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
-
+                <track kind="captions" label="English" srclang="en" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.en.vtt" default>
+                <track kind="captions" label="Français" srclang="fr" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.fr.vtt">
                 <!-- Fallback for browsers that don't support the <video> element -->
-                <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4"
-                    download>Download</a>
+                <a href="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-576p.mp4" download>Download</a>
             </video>
+            <h1 class="h4">{{ video.title }}</h1>
 
 
             <div class="actions">
@@ -34,22 +31,29 @@
                 <button type="button" class="btn js-rewind">Rewind</button>
                 <button type="button" class="btn js-forward">Forward</button>
             </div>
+            <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill" download>Download</a>
+
         </div>
-        <div class="col-md-5">
-            <div class="row p-0 m-0">
-                <div class="rounded col-5 p-0 overflow-hidden">
-                    <a href="#!">
-                        <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="">
-                    </a>
+        <div class="col-12 col-md-5">
+            {% for video in videos  %}
+                <div class="row p-0 m-0 mb-3">
+                    <div class="rounded col-5 p-0 overflow-hidden">
+                        <a href="/video/{{ video.slug }}">
+                            {% if video.image %}
+                            <img width="100%" src="{{ video.image.url }}"  alt="{{ video.title }}">
+                            {% else %}
+                            <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ video.title }}">                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="rounded col-5 p-0 overflow-hidden ps-2">
+                        <h2 class="card-title mb-0">
+                            <a href="/video/{{ video.slug }}" class="text-black">{{ video.title }}</a>
+                        </h2>
+                        <small class="p-0 m-0 text-muted">By <strong><a href="/video/{{ video.slug }}" class="text-black">Hassan Agmir</a></strong></small> <br>
+                        <small class="p-0 m-0 text-primary">212 views - 5 days ago</small>
+                    </div>
                 </div>
-                <div class="rounded col-5 p-0 overflow-hidden ps-2">
-                    <h2 class="card-title mb-0">
-                        <a href="#!" class="text-black">How to Detect an Undefined Object Property in JavaScript?</a>
-                    </h2>
-                    <small class="p-0 m-0 text-muted">By <strong><a href="#!" class="text-black">Hassan Agmir</a></strong></small> <br>
-                    <small class="p-0 m-0 text-primary">212 views - 5 days ago</small>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </div>

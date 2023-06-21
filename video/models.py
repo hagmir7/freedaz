@@ -66,3 +66,17 @@ class Video(models.Model):
             self.slug = uuid.uuid4().hex
         return super(Video, self).save(*args, **kwargs)
     
+
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    like = models.ManyToManyField(User, related_name='comment_like', blank=True)
+    body = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+    
+
+    
