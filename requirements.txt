@@ -9,7 +9,7 @@ django-user-agents==0.4.0
 djangorestframework==3.14.0
 idna==3.4
 Pillow==9.5.0
-PyMySQL==1.0.3
+PyMySQL
 pytz==2023.3
 requests==2.31.0
 sqlparse==0.4.4
