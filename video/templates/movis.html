@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-2">
+  <div class="row">
+      {% for video in videos  %}
+          <div class="p-0 m-0 mb-3 col-md-2 p-2">
+              <div class="rounded p-0 overflow-hidden border">
+                  <a href="/video/{{ video.slug }}">
+                      {% if video.image %}
+                      <img width="100%" src="{{ video.image.url }}"  alt="{{ video.title }}">
+                      {% else %}
+                      <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ video.title }}">                            {% endif %}
+                  </a>
+              </div>
+              <div class="rounded p-0 overflow-hidden pt-2">
+                  <h2 class="card-title mb-0">
+                      <a href="/video/{{ video.slug }}" class="text-black">{{ video.title }}</a>
+                  </h2>
+              </div>
+          </div>
+      {% endfor %}
+  </div>
+</div>
+{% endblock content %}

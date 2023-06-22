@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<div class="container mt-2">
+    <div class="row d-flex">
+        <div class="col-md-6 mt-3 justify-content-center movie-card">
+          <h1 class="h3">Upload a Video</h1>
+          <div class="progress" style="display: none;">
+            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+         <div id="upload"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/babel">
+    const App = () => {
+
+        const [width, setWidth] = React.useState(0)
+        const [progress, setProgress] = React.useState(false)
+
+        const upload = async (e) => {
+            e.preventDefault();
+          
+            const progressBar = document.querySelector('.progress-bar');
+            const progressContainer = document.querySelector('.progress');
+            progressBar.style.width = '0%';
+            progressContainer.style.display = 'block';
+          
+            const formData = new FormData(e.target);
+            try {
+              const response = await axios.post('/upload/{{movie.slug}}', formData, {
+                onUploadProgress: (progressEvent) => {
+                  const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                  progressBar.style.width = `${progress}%`;
+                  progressBar.setAttribute('aria-valuenow', progress);
+                  progressBar.innerHTML = `${progress}%`;
+                },
+              });
+          
+              console.log(response);
+              if(response.statusText == 'OK'){
+                e.target.reset()
+                swal("Good job!", "Viedo uploaded successfully!", "success");
+              }
+              progressContainer.style.display = 'none';
+            } catch (error) {
+              console.log(error);
+              progressContainer.style.display = 'none';
+            }
+          };
+          
+
+
+        return (
+            <form onSubmit={upload} method="POST" encType="multipart/form-data">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                    <div id="div_id_quality" class="mb-3"> 
+                        <label for="id_quality" class="form-label requiredField"> Quality <span class="asteriskField">*</span> </label> 
+                        <input type="text" name="quality" maxlength="100" class="textinput form-control" required id="id_quality" /> 
+                    </div>
+
+                     <div id="div_id_video_file" class="mb-3"> 
+                        <label for="id_video_file" class="form-label requiredField"> Video file<span class="asteriskField">*</span> </label>
+                        <input type="file" name="video_file" class="form-control" id="id_video_file" required /> 
+                    </div>
+                <button className="btn btn-success mt-3">Create</button>
+            </form>
+
+            
+        );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('upload'));
+</script>
+
+{% endblock content %}

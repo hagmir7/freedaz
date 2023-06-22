@@ -5,7 +5,11 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('video.urls') )
+    path('', include('video.urls') ),
+    path('', include('users.urls') ),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include('video.api.urls')),
+
 ]
 
 

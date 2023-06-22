@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import uuid
 import os
@@ -17,22 +18,84 @@ def filename(instance, filename):
     return file
 
 
-
-class IpAddress(models.Model):
+class Location(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     ip = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    country_flag = models.CharField(max_length=300, null=True, blank=True)
+    country_code = models.CharField(max_length=10, null=True, blank=True)
+    browser = models.CharField(max_length=100, null=True, blank=True)
+    os = models.CharField(max_length=100, null=True, blank=True)
+    date = models.DateField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.ip
+    
+class Category(models.Model):
+    name = models.CharField(max_length=150)
+    image = models.ImageField(upload_to=filename)
+    views = models.ManyToManyField(Location, related_name='category_views')
+    slug = models.SlugField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = uuid.uuid4().hex
+        return super(Category, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+
+
+class Subscription(models.Model):
+    name = models.CharField(max_length=150)
+    image = models.ImageField(upload_to=filename)
+    description = models.TextField()
+    slug = models.SlugField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = uuid.uuid4().hex
+        return super(Subscription, self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+    
+
+
+class Serie(models.Model):
+    title = models.CharField(max_length=150)
+    description = models.TextField(default='')
+    image = models.ImageField(upload_to=filename, null=True, blank=True)
+    views = models.ManyToManyField(Location, related_name='serie_views')
+    created_at = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    save = models.ManyToManyField(User, related_name='serie_save', blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True)
+
+
+    def __str__(self):
+        return self.title
+    
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = uuid.uuid4().hex
+        return super(Serie, self).save(*args, **kwargs)
+
     
 
 class PlayList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
-    description = models.TextField()
+    description = models.TextField(default='')
     image = models.ImageField(upload_to=filename, null=True, blank=True)
-    views = models.ManyToManyField(IpAddress, related_name='paly_list_views')
+    views = models.ManyToManyField(Location, related_name='paly_list_views')
     created_at = models.DateTimeField(auto_now_add=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    save = models.ManyToManyField(User, related_name='play_list_save', blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
 
     def __str__(self):
@@ -44,21 +107,42 @@ class PlayList(models.Model):
             self.slug = uuid.uuid4().hex
         return super(PlayList, self).save(*args, **kwargs)
     
-
-
-class Video(models.Model):
+class Movie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to=filename, null=True, blank=True)
-    video_file = models.FileField(upload_to=filename)
-    description = models.TextField()
+    list = models.ForeignKey(PlayList, on_delete=models.CASCADE, null=True, blank=True)
+    description = models.TextField(default='')
     tags = models.CharField(max_length=200, null=True, blank=True)
-    views = models.ManyToManyField(IpAddress, related_name='video_views')
+    views = models.ManyToManyField(Location, related_name='movie_views')
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    save = models.ManyToManyField(User, related_name='movie_save', blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
+    episode = models.IntegerField(null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
+
 
     def __str__(self):
         return self.title
+    
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = uuid.uuid4().hex
+        return super(Movie, self).save(*args, **kwargs)  
+    
+
+class Video(models.Model):
+    quality = models.CharField(max_length=100)
+    video_file = models.FileField(upload_to=filename)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(null=True, blank=True)
+
+
+    def __str__(self):
+        return self.movie.title
     
 
     def save(self, *args, **kwargs):

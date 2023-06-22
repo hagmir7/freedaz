@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-2">
+    <div class="card bg-card mb-2">
+        <h2 class="h4 text-white p-2 m-0">{{ list.title }}</h2>
+    </div>
+    <div class="row">
+        {% for movie in movies %}
+        <div class="p-0 m-0 mb-3 col-md-2 p-1">
+            <div class="movie-card">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/movie/{{ movie.slug }}">
+                     {% if movie.image %}
+                     <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                     {% else %}
+                     <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ movie.title }}">                            {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                 <h2 class="card-title mb-0">
+                     <a href="/movie/{{ movie.slug }}" class="text-white">{{ movie.title|truncatechars:70  }}</a>
+                 </h2>
+             </div>
+            </div>
+         </div>
+        {% empty %}
+        <h1 class="text-center my-5">No movies</h1>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-2">
+    <div class="row">
+        {% for list in lists %}
+        <div class="p-0 m-0 mb-3 col-md-2 p-1">
+            <div class="movie-card">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/list/{{ list.slug }}">
+                     {% if list.image %}
+                     <img width="100%" class="cover movie-image" src="{{ list.image.url }}"  alt="{{ list.title }}">
+                     {% else %}
+                     <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ list.title }}">                
+                    {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                 <h2 class="card-title mb-0">
+                     <a href="/list/{{ list.slug }}" class="text-white">{{ list.title|truncatechars:70  }}</a>
+                 </h2>
+             </div>
+            </div>
+         </div>
+        {% empty %}
+        <h1 class="text-center my-5">No lists</h1>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

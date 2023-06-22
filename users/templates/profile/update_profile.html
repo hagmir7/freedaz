@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% block content %}
+<div class="container mt-3">
+  <div class="row d-flex justify-content-center">
+    <div class="col-xl-6 order-xl-1 card shadow-sm">
+      <h3 class="p-1 text-center">{% trans 'Update Profile' %}</h3>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Avatar -->
+        <div class="d-flex d-flex justify-content-center ">
+          <div class="rounded-circle border overflow-hidden" style="width: 70px; height: 70px;">
+            <img width="100%" height="100%" class="cover" src="{{page.avatar.url}}" alt="{{user.username}}">
+          </div>
+        </div>
+        <div class="justify-content-center d-flex">
+          <h1 class="h6 text-center">{{page.user.first_name}} {{page.user.last_name}}</h1>
+        </div>
+        <!-- Avatar -->
+        <div class="m-2">
+          <label for="id_avatar">{% trans 'Avatar' %}</label>
+          <input type="file" name="avatar" value="{{page.avatar}}" id="id_avatar" accept="image/*" class="border form-control">
+          {% if page.avatar %}
+          <a href="/media/{{page.avatar}}">Current image</a>
+          {% endif %}
+        </div>
+        <!-- Phone -->
+        <div class="m-2">
+          <label for="id_phone">{% trans 'Phone' %}</label>
+          <input type="tel" name="phone" value="{{page.phone}}" id="id_phone" class="border form-control"
+            placeholder="{% trans 'Phone' %}...">
+        </div>
+        <!-- Country -->
+        <div class="m-2">
+          <span> {% trans 'Country' %}</span>
+          <input type="text" name="country" value="{{page.country}}" class="border form-control"
+            placeholder="{% trans 'Country' %}...">
+        </div>
+        <div class="m-2">
+          <input type="submit" class="btn-success btn w-100 mt-2" value="{% trans 'Update' %}">
+  
+          <div class=" mt-2 ">
+            <a class="text-primary text-sm" href="{% url 'change_password' %}">{% trans 'Change Password' %}</a>
+          </div>
+        </div>
+      </form>
+      
+  
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

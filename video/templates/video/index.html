@@ -1,27 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="container mt-2">
-  <div class="row">
-      {% for video in videos  %}
-          <div class="p-0 m-0 mb-3 col-md-3 p-2">
-              <div class="rounded p-0 overflow-hidden border">
-                  <a href="/video/{{ video.slug }}">
-                      {% if video.image %}
-                      <img width="100%" src="{{ video.image.url }}"  alt="{{ video.title }}">
-                      {% else %}
-                      <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ video.title }}">                            {% endif %}
-                  </a>
-              </div>
-              <div class="rounded p-0 overflow-hidden pt-2">
-                  <h2 class="card-title mb-0">
-                      <a href="/video/{{ video.slug }}" class="text-black">{{ video.title }}</a>
-                  </h2>
-                  <small class="p-0 m-0 text-muted">By <strong><a href="/video/{{ video.slug }}" class="text-black">Hassan Agmir</a></strong></small> <br>
-                  <small class="p-0 m-0 text-primary">212 views - 5 days ago</small>
-              </div>
-          </div>
-      {% endfor %}
-  </div>
+<div>
+    <div class="hero-section" style="background-image: url({% static 'img/hero.svg' %});">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 hero-text">
+                    <h1>مرحبا بك في الموقع الجديد للأفلام والمسلسلات</h1>
+                    <p>استمتع بمشاهدة وتنزيل المسلسلات والأفلام التي تحبها بجودة عالية، دون تشويش من الإعلانات المزعجة.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt-2">
+
+    <div class="card bg-card mb-2">
+        <h2 class="h4 text-white p-2 m-0">أخر الأفلام والمسلسلات</h2>
+    </div>
+    <div class="row">
+        {% for video in videos %}
+        <div class="p-0 m-0 mb-3 col-md-2 p-1">
+            <div class="movie-card">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/movie/{{ video.slug }}">
+                     {% if video.image %}
+                     <img width="100%" class="cover movie-image" src="{{ video.image.url }}"  alt="{{ video.title }}">
+                     {% else %}
+                     <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ video.title }}">                            {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+                 {% if video.episode %}
+                 <div class="movie-card-badg">الحلقة 1</div>
+                 {% endif %}
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                 <h2 class="card-title mb-0">
+                     <a href="/video/{{ video.slug }}" class="text-white">{{ video.title|truncatechars:70  }}</a>
+                 </h2>
+             </div>
+            </div>
+         </div>
+        {% empty %}
+        <h1 class="text-center my-5">No Videos</h1>
+        {% endfor %}
+    </div>
 </div>
 {% endblock content %}
