@@ -6,6 +6,9 @@ from django.http import JsonResponse
 import requests
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
+from django.views import View
+from django.contrib import messages
+
 
 def index(request):
     list = Movie.objects.all().order_by('-uploaded_at')
@@ -29,6 +32,40 @@ def movies(request):
     }
     return render(request, 'movies.html', context)
 
+
+
+
+class MovieUpdateView(View):
+    template_name = 'video/create.html'
+
+    def get(self, request, slug):
+        movie = Movie.objects.get(slug=slug)
+        videos = Video.objects.filter(movie=movie.id)
+        form = MovieForm(instance=movie)
+        context = {
+            'form': form,
+            'movie': movie,
+            'videos' : videos
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, slug):
+        movie = Movie.objects.get(slug=slug)
+        form = MovieForm(request.POST, request.FILES, instance=movie)
+        if form.is_valid():
+            form.save()
+            # Redirect to the movie detail page or wherever you want
+            return redirect(f'/movie/{movie.slug}')
+        return render(request, self.template_name, {'form': form, 'movie': movie})
+
+
+
+
+def deleteVideo(request, id):
+    video = get_object_or_404(Video, id=id)
+    video.delete()
+    messages.success(request, "تم حذف الفيديو بنجاح.")
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 def series(request):

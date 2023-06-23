@@ -3,78 +3,42 @@
 
 {% block content %}
 
-
 <div class="container mt-2">
-    <div class="row d-flex">
-        <div class="col-md-6 mt-3 justify-content-center movie-card">
-          <h1 class="h3">Upload a Video</h1>
-          <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{form|crispy}} 
-            <button class="btn btn-success w-100 mt-2" type="submit">Create</button>
-          </form>
-          {% comment %} <div id="upload"></div> {% endcomment %}
-          <div class="progress" style="display: none;">
-              <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-        </div>
+  <div class="row d-flex mt-3">
+    <div class="col-md-6 justify-content-center movie-card m-0">
+      <h1 class="h3">تعديل الفيلم</h1>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class="btn btn-success w-100 mt-2" type="submit">Create</button>
+      </form>
+      <div class="progress" style="display: none;">
+        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+          aria-valuemax="100"></div>
+      </div>
     </div>
+    <div class="col-md-6 m-0">
+    {% if "update" in request.path %}
+      <div class="movie-card">
+        {% for video in videos %}
+        <div class="movie-card d-flex justify-content-between rounded border p-2 m-0 w-100 mb-2">
+          <div class="d-flex align-items-center text-white">
+            <div>
+              <i class="bi h5 bi-play-circle"></i>
+            </div>
+            <div class="mx-3 fw-bold">
+              الجودة {{ video.quality }}
+            </div>
+          </div>
+          <div class="flex-start">
+            <a href="/video/delete/{{ video.id }}" onclick="return confirm('هل أنت متأكد من حذف الفيديو؟')" class="btn btn-danger btn-sm ">حذف</a>
+          </div>
+          {% endfor %}
+        </div>
+        <a href="/upload/{{ movie.slug }}" class="mt-2 btn btn-success btn-sm">تحميل فيديو جديد</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
 </div>
-
-<script type="text/babel">
-    const App = () => {
-
-        const [width, setWidth] = React.useState(0)
-        const [progress, setProgress] = React.useState(false)
-
-        const upload = async (e) => {
-            e.preventDefault();
-          
-            const progressBar = document.querySelector('.progress-bar');
-            const progressContainer = document.querySelector('.progress');
-            progressBar.style.width = '0%';
-            progressContainer.style.display = 'block';
-          
-            const formData = new FormData(e.target);
-            try {
-              const response = await axios.post('/upload/', formData, {
-                onUploadProgress: (progressEvent) => {
-                  const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                  progressBar.style.width = `${progress}%`;
-                  progressBar.setAttribute('aria-valuenow', progress);
-                  progressBar.innerHTML = `${progress}%`;
-                },
-              });
-          
-              console.log(response);
-              progressContainer.style.display = 'none';
-            } catch (error) {
-              console.log(error);
-              progressContainer.style.display = 'none';
-            }
-          };
-          
-
-
-        return (
-            <form onSubmit={upload} method="POST" encType="multipart/form-data">
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                <label htmlFor="id_title">Title:</label>
-                <input className="form-control" type="text" name="title" maxLength="255" required id="id_title" />
-                <label htmlFor="id_image">Image:</label>
-                <input className="form-control" type="file" name="image" accept="image/*" id="id_image" />
-                <label htmlFor="id_description">Description:</label>
-                <textarea className='form-control' name="description" cols="40" rows="5" required id="id_description"></textarea>
-                <label htmlFor="id_tags">Tags:</label>
-                <input className="form-control" type="text" name="tags" maxLength="200" id="id_tags" />
-                <label htmlFor="id_video_file">Video file:</label>
-                <input className="form-control" type="file" name="video_file" required id="id_video_file" />
-                <button className="btn btn-success mt-3">Create</button>
-            </form>
-        );
-    };
-
-    ReactDOM.render(<App />, document.getElementById('upload'));
-</script>
-
 {% endblock content %}

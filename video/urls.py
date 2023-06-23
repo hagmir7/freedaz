@@ -17,5 +17,7 @@ urlpatterns = [
 
     path('play-list/<str:slug>', playLists, name='play-list'),
     path('play-list/create/', playListCreate, name='create-play-list'),
-    path('play-lists/', lists, name='lists')
+    path('play-lists/', lists, name='lists'),
+    path('movie/update/<str:slug>', MovieUpdateView.as_view(), name='movie-update'),
+    path('video/delete/<int:id>', deleteVideo, name='delete-video')
 ]
