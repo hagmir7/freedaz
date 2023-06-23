@@ -35,7 +35,7 @@
                     </div>
                 </a>
 
-                <button class="btn btn-success btn-sm rounded-pill px-3"> <i class="bi bi-patch-minus"></i> &#xa0;متابعة </button>
+                {% comment %} <button class="btn btn-success btn-sm rounded-pill px-3"> <i class="bi bi-patch-minus"></i> &#xa0;متابعة </button> {% endcomment %}
             </div>
            
 
@@ -59,35 +59,36 @@
                 <h2 class="h4 text-white p-2 m-0">أفلام ومسلسلات ذات صلة</h2>
             </div>
             
-<div class="container-xxl mt-2">
-    <div class="row">
-        {% for movie in movies  %}
-            <div class="p-0 m-0 mb-3 col-md-4 col-6 p-1">
-               <div class="movie-card m-0">
-                <div class="rounded p-0 overflow-hidden border position-relative">
-                    <a href="/movie/{{ movie.slug }}">
-                        {% if movie.image %}
-                        <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
-                        {% else %}
-                        <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ movie.title }}">                            {% endif %}
-                    </a>
-                    <div class="movie-card-shadow"> </div>
-                    {% if movie.episode %}
-                    <div class="movie-card-badg">الحلقة {{ movie.episode }}</div>
-                    {% endif %}
+            <div class="container-xxl mt-2">
+                <div class="row">
+                    {% for movie in movies  %}
+                        <div class="p-0 m-0 mb-3 col-md-4 col-6 p-1">
+                        <div class="movie-card m-0">
+                            <div class="rounded p-0 overflow-hidden border position-relative">
+                                <a href="/movie/{{ movie.slug }}">
+                                    {% if movie.image %}
+                                    <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                                    {% else %}
+                                    <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ movie.title }}">                      
+                                  {% endif %}
+                                </a>
+                                <div class="movie-card-shadow"> </div>
+                                {% if movie.episode %}
+                                <div class="movie-card-badg">الحلقة {{ movie.episode }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="rounded p-0 overflow-hidden pt-2">
+                                <h2 class="card-title mb-0">
+                                    <a href="/movie/{{ movie.slug }}" class="text-white">مشاهدة وتحميل {{ movie.title|truncatechars:70  }}</a>
+                                </h2>
+                            </div>
+                        </div>
+                        </div>
+                    {% empty %}
+                    <h1 class="text-center my-5">لا يوجد أفلام</h1>
+                    {% endfor %}
                 </div>
-                <div class="rounded p-0 overflow-hidden pt-2">
-                    <h2 class="card-title mb-0">
-                        <a href="/movie/{{ movie.slug }}" class="text-white">مشاهدة وتحميل {{ movie.title|truncatechars:70  }}</a>
-                    </h2>
-                </div>
-               </div>
             </div>
-        {% empty %}
-        <h1 class="text-center my-5">No movies</h1>
-        {% endfor %}
-    </div>
-</div>
 
             
         </div>
@@ -123,14 +124,18 @@
 
                 {% else %}
 
-                <a href="/movie/{{ episode.slug }}" class="d-flex align-items-center text-white">
+                {% for category in categories %}
+                <a href="/category/{{ category.slug }}" class="rounded d-flex align-items-center text-white mb-1 category-movie">
                     <div>
-                        <i class="bi h5 bi-play-circle"></i>
+                        <img width="40px" height="40px" src="{{ category.image.url }}" />
                     </div>
                     <div class="mx-3 fw-bold">
-                        الحلقة 
+                        {{ category.name }} 
                     </div>
                 </a>
+                {% endfor %}
+
+
                 {% endif %}
             
             </div>

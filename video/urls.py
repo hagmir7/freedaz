@@ -24,8 +24,9 @@ urlpatterns = [
 
 
     path('category/create/', create_category, name='create-category'),
-    path('category/<str:slug>/', category, name='view-category'),
     path('category/list/', categoryList, name='list-category'),
-    path('category/update/<int:category_id>/', update_category, name='update-category'),
+    path('category/update/<int:id>/', update_category, name='update-category'),
     path('category/delete/<int:id>/', delete_category, name='delete-category'),
+    path('category/<str:slug>/', category, name='view-category'),
+
 ]

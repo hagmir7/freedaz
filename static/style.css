@@ -77,8 +77,9 @@ a {
     color: white!important;
 }
 
-.bg-card{
+.bg-card, tr, td, tbody, th{
     background-color: var(--bg-card)!important;
+    color: white!important;
 }
 
 .form-control{
@@ -163,4 +164,16 @@ a {
     line-height: 34px;
     padding: 0px 8px;
     border-radius: 8px;
+}
+
+.category-movie{
+    background-color: var(--bg-card);
+    padding: 4px;
+    transition: 0.3s ease;
+
+}
+
+
+.category-movie:hover{
+    background-color: #000000!important;
 }

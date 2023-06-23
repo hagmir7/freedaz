@@ -12,7 +12,7 @@ from django.contrib import messages
 
 def index(request):
     list = Movie.objects.all().order_by('-uploaded_at')
-    paginator = Paginator(list, 25) 
+    paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
     videos = paginator.get_page(page_number)
 
@@ -170,6 +170,7 @@ def video(request, slug):
     episodes = Movie.objects.filter(list=movie.list)
 
     videos = Video.objects.filter(movie=movie.id)
+    categories = Category.objects.all()
 
     agent = get_user_agent(request)
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -203,7 +204,8 @@ def video(request, slug):
         'movies' : movies,
         'title': movie.title,
         'videos': videos,
-        'episodes' : episodes
+        'episodes' : episodes,
+        'categories' : categories
     }
     
     return render(request, 'video/show.html', context)
@@ -270,9 +272,9 @@ def create_category(request):
         if form.is_valid():
             form.save()
             messages.success(request, "تم إنشاء الصنف بنجاح.")
+            return redirect('/category/list/')
     else:
-        form = CategoryForm()
-    return render(request, 'category/create.html', {'form': form})
+        return redirect('/category/list/')
 
 
 def category(request, slug):
@@ -281,18 +283,19 @@ def category(request, slug):
 
 
 
-def categoryList(request, slug):
+def categoryList(request):
     categories = Category.objects.all()
     return render(request, 'category/list.html', {'categories': categories})
 
 
-def update_category(request, category_id):
-    category = Category.objects.get(pk=category_id)
+def update_category(request, id):
+    category = Category.objects.get(id=id)
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES, instance=category)
         if form.is_valid():
             form.save()
             messages.success(request, "تم تعديل الصنف بنجاح.")
+            return redirect('/category/list/')
 
     else:
         form = CategoryForm(instance=category)
