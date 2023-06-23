@@ -4,9 +4,9 @@
 {% block content %}
 <div class="page-login mt-3">
     <div class="row m-0 p-0 justify-content-center">
-        <div class="card border col-sm-12  col-md-6 col-lg-4 col-xl-4">
+        <div class="movie-card col-sm-12  col-md-6 col-lg-4 col-xl-4">
             <div class="p-2">
-                <h4 class="modal-title">{% trans 'Sing Up | Log In' %}</h4>
+                <h4 class="modal-title">{% trans 'تسجيل الدخول أو الإنضمام' %}</h4>
             </div>
             <div class=" p-2">
                 {% if messages %}
@@ -24,7 +24,7 @@
                             <div class="mr-0 lang-text ">
                                 {{form.username}}
                             </div>
-                            <small class="text-info mb-2 mr-4">{{ form.username.help_text}}</small>
+                            <small class="text-info mb-2 mr-4">إسم المستخدم لا يحتوي على مسافة.</small>
                         </div>
                         <div class="mb-3">
                             <small class="text-danger">{{ form.email.errors }}</small>
@@ -45,8 +45,8 @@
                             {{form.password2}}
                         </div>
                         <div class="text-center mb-3">
-                            <button class="btn btn-primary w-100 ">{% trans 'Sing in' %}</button>
-                            <a href="{% url 'login' %}" class="btn-ag ag-blue mt-3 w-100">{% trans 'I have account' %}</a>
+                            <button class="btn btn-primary w-100  mb-2">{% trans 'تسجيل' %}</button>
+                            <a href="{% url 'login' %}" class="btn-ag ag-blue mt-3 w-100">{% trans 'لدي حساب؟' %}</a>
                         </div>
                     </form>
                 </div>

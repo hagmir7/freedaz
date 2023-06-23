@@ -40,8 +40,8 @@
                     <img width="40px" class="rounded-pill border" height="40px" src="{{ user.profile.avatar.url }}" alt="{{ user.username}}">
                 </a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-outline-success rounded-pill">Login</a>
-                    <a href="{% url 'register' %}" class="btn btn-outline-primary rounded-pill">Register</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-success rounded-pill">تسجيل الدخول</a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-primary rounded-pill">الإنضمام</a>
                 {% endif %}
             </div>
         </div>

@@ -148,6 +148,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+LOGIN_REDIRECT_URL = '/'  # Replace 'dashboard' with your desired login redirect URL name or path
+LOGOUT_REDIRECT_URL = '/'
+
 if CPANEL:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True

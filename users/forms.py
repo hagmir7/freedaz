@@ -40,13 +40,13 @@ class UserCreationForm(forms.ModelForm):
     email = forms.EmailField(label=_('Email'), widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': _('Email')}))
     first_name = forms.CharField(label=_('First Name'), widget=forms.TextInput(
-        attrs={'class': 'form-control input-size', 'placeholder': _('First Name')}))
+        attrs={'class': 'form-control input-size', 'placeholder': _('الإسم الأول')}))
     last_name = forms.CharField(label=_('Last Name'),widget=forms.TextInput(
-        attrs={'class': 'form-control input-size ', 'placeholder': _('Last Name')}))
+        attrs={'class': 'form-control input-size ', 'placeholder': _('الإسم الثاني')}))
     password1 = forms.CharField(label=_('Password'), widget=forms.PasswordInput(
         attrs={'class': 'form-control input-size', 'placeholder': _('Password')}), min_length=8)
     password2 = forms.CharField(label=_('Confirm Password'), widget=forms.PasswordInput(
-        attrs={'class': 'form-control input-size', 'placeholder': _('Confirm Password')}), min_length=8)
+        attrs={'class': 'form-control input-size', 'placeholder': _('تأكيد كلمة المرور')}), min_length=8)
 
     class Meta:
         model = User
