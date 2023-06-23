@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         {% for video in videos %}
-        <div class="p-0 m-0 mb-3 col-md-2 p-1">
+        <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
             <div class="movie-card">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ video.slug }}">
@@ -33,18 +33,18 @@
                  </a>
                  <div class="movie-card-shadow"> </div>
                  {% if video.episode %}
-                 <div class="movie-card-badg">الحلقة 1</div>
+                 <div class="movie-card-badg">الحلقة {{ video.episode }}</div>
                  {% endif %}
              </div>
              <div class="rounded p-0 overflow-hidden pt-2">
-                 <h2 class="card-title mb-0">
-                     <a href="/video/{{ video.slug }}" class="text-white">{{ video.title|truncatechars:70  }}</a>
-                 </h2>
+                <a href="/video/{{ video.slug }}" class="text-white">
+                    <h2 class="card-title mb-0" dir='auto'> مشاهدة وتحميل {{ video.title|truncatechars:70  }} </h2>
+                </a>
              </div>
             </div>
          </div>
         {% empty %}
-        <h1 class="text-center my-5">No Videos</h1>
+        <h1 class="text-center my-5 text-white h3">لا توجد أفلام</h1>
         {% endfor %}
     </div>
 </div>

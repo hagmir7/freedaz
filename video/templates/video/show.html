@@ -40,7 +40,9 @@
            
 
             <div class="mt-3">
-                <a href="{{ movie.video_file.url }}" class="btn btn-success rounded-pill" download><i class="bi bi-cloud-download"></i> &#xa0;  720p HD</a>
+                {% for video in videos  %}
+                    <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                {% endfor %}
                 <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="bi bi-share"></i> &#xa0; مشاركة
                 </button>
@@ -54,19 +56,11 @@
             <div class="card bg-card my-2">
                 <h2 class="h4 text-white p-2 m-0">أفلام ومسلسلات ذات صلة</h2>
             </div>
-        </div>
-        <div class="col-12 col-md-5 ">
-            <div class=" bg-card sticky">
-
-            </div>
-        </div>
-    </div>
-</div>
-
+            
 <div class="container-xxl mt-2">
     <div class="row">
         {% for movie in movies  %}
-            <div class="p-0 m-0 mb-3 col-md-2 p-1">
+            <div class="p-0 m-0 mb-3 col-md-4 col-6 p-1">
                <div class="movie-card">
                 <div class="rounded p-0 overflow-hidden border position-relative">
                     <a href="/movie/{{ movie.slug }}">
@@ -76,10 +70,13 @@
                         <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ movie.title }}">                            {% endif %}
                     </a>
                     <div class="movie-card-shadow"> </div>
+                    {% if movie.episode %}
+                    <div class="movie-card-badg">الحلقة {{ movie.episode }}</div>
+                    {% endif %}
                 </div>
                 <div class="rounded p-0 overflow-hidden pt-2">
                     <h2 class="card-title mb-0">
-                        <a href="/movie/{{ movie.slug }}" class="text-white">{{ movie.title|truncatechars:70  }}</a>
+                        <a href="/movie/{{ movie.slug }}" class="text-white">مشاهدة وتحميل {{ movie.title|truncatechars:70  }}</a>
                     </h2>
                 </div>
                </div>
@@ -90,11 +87,55 @@
     </div>
 </div>
 
+            
+        </div>
+        <div class="col-12 col-md-5 ">
+            <div class=" bg-card sticky">
 
 
 
-  
-  
+                {% if movie.episode %}
+                    {% for episode in episodes %}
+                    <div class="movie-card rounded border p-2 m-0 w-100 mb-2 ">
+                        {% if movie == episode %}
+                        <a href="/movie/{{ episode.slug }}" class="d-flex align-items-center">
+                            <div>
+                                <i class="bi bi-pause-circle"></i>
+                            </div>
+                            <div class="mx-3 fw-bold">
+                                الحلقة {{ episode.episode }}
+                            </div>
+                        </a>
+                        {% else %}
+                        <a href="/movie/{{ episode.slug }}" class="d-flex align-items-center text-white">
+                            <div>
+                                <i class="bi h5 bi-play-circle"></i>
+                            </div>
+                            <div class="mx-3 fw-bold">
+                                الحلقة {{ episode.episode }}
+                            </div>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                {% else %}
+
+                <a href="/movie/{{ episode.slug }}" class="d-flex align-items-center text-white">
+                    <div>
+                        <i class="bi h5 bi-play-circle"></i>
+                    </div>
+                    <div class="mx-3 fw-bold">
+                        الحلقة 
+                    </div>
+                </a>
+                {% endif %}
+            
+            </div>
+        </div>
+    </div>
+</div>
+
   <!-- Modal -->
   <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -106,18 +147,18 @@
         <div class="modal-body">
         <ul class="d-flex justify-content-around p-3 list-unstyled">
             <li>
-                <a href="whatsapp://send/?text={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-3" target="_blank" style="color: rgb(37, 211, 102);">
+                <a href="whatsapp://send/?text={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(37, 211, 102);">
                     <i class="bi bi-whatsapp"></i>
                 </a>
             </li>
             <li>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-3" target="_blank" style="color: rgb(24, 119, 242);"> <i class="bi bi-facebook"></i> </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(24, 119, 242);"> <i class="bi bi-facebook"></i> </a>
             </li>
             <li>
-                <a href="https://twitter.com/intent/tweet?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-3" target="_blank" style="color: rgb(29, 161, 242);"><i class="bi bi-twitter"></i></a>
+                <a href="https://twitter.com/intent/tweet?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(29, 161, 242);"><i class="bi bi-twitter"></i></a>
             </li>
             <li>
-                <a href="https://telegram.me/share/url?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-3" target="_blank" style="color: rgb(0, 136, 204);">
+                <a href="https://telegram.me/share/url?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(0, 136, 204);">
                     <i class="bi bi-telegram"></i>
                 </a>
             </li>

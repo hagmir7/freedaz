@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
 <div class="container-fluid mt-2">
-    <div class="card bg-card mb-2">
-        <h2 class="h4 text-white p-2 m-0">مشاهدة وتحميل مسلسل {{ list.title }}</h2>
-    </div>
-    <div class="row">
-        {% for movie in movies %}
+  <div class="row">
+    {% for movie in movies %}
         <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
             <div class="movie-card">
              <div class="rounded p-0 overflow-hidden border position-relative">
@@ -32,6 +28,6 @@
         {% empty %}
         <h1 class="text-center h3 text-white my-5">لا توجد حلقة </h1>
         {% endfor %}
-    </div>
+  </div>
 </div>
 {% endblock content %}

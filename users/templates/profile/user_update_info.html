@@ -1,41 +1,42 @@
-{% extends 'dash.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
 
 {% block content %}
   <main class="main" id="main">
     <div class="row d-flex justify-content-center">
-        <div class="col-md-6">
-            <h1 class="text-center bold h4">{% trans 'Change Contact information' %}</h1>
+        <div class="col-md-6 movie-card mt-2">
+            <h1 class="text-center bold h4">{% trans 'تعديل معلومات الإتصال' %}</h1>
             <div class='post-body post-content pt-0'>
                 <form method="POST" class="p-lg-4 p-xl-4 p-sm-0 p-md-4">
                     {% if confirm %}
-                    <div class="alert alert-success p-1" role="alert">
-                        <span class="alert-text"><strong>{% trans 'Success!' %}</strong> {% trans 'Info has been updated successfully...' %}</span>
+                    <div class="alert alert-success p-1 px-2" role="alert">
+                        <span class="alert-text"> {% trans 'تم تعديل معلومات الإتصال بنجاح.' %}</span>
                     </div>
                     {% endif %}
                         {% csrf_token %}
                         <label for="id_username">{% trans 'Username' %}</label>
                         <small class="text-red text-right">{{ form.username.errors }}</small>
                         <input class="form-control border" type="text" name="username" value="{{form.username.value}}" maxlength="150" required id="id_username">
-                        <span class="helptext text-primary ">{% trans 'Username should not contain spaces' %}.</span><br><br>
+                        <span class="helptext text-primary ">{% trans 'إسم المستخدم لا يجب أن يحتوي على مسافة.' %}.</span><br><br>
                 
-                        <label for="id_first_name">{% trans 'First name' %}</label>
+                        <label for="id_first_name">{% trans 'الإسم الإول' %}</label>
                         <small class="text-red text-right">{{ form.first_name.errors }}</small>
                         <input class="form-control border" type="text" name="first_name" value="{{form.first_name.value}}" maxlength="50" required id="id_first_name">
                 
-                        <label for="id_last_name">{% trans 'Last name' %}</label>
+                        <label for="id_last_name">{% trans 'الإسم الثاني' %}</label>
                         <small class="text-red text-right">{{ form.last_name.errors }}</small>
                         <input class="form-control border" type="text" name="last_name" value="{{form.last_name.value}}" maxlength="50" required id="id_last_name">
                 
                         <label for="id_email">{% trans 'Email' %}</label>
                         <small class="text-red text-right">{{ form.email.errors }}</small>
                         <input class="form-control border" type="email" name="email" value="{{form.email.value}}" required id="id_email">
-                        <input class="btn-success btn mt-3 w-100" type="submit" value="{% trans 'Update' %}">
+                        <input class="btn-success btn mt-3 w-100" type="submit" value="{% trans 'تعديل' %}">
                     </form>
                   <br>
-                <div>
-                    {% trans 'Make sure that your contact information is correct and real, so that we can recover your account if you encounter a problem logging in.' %}</div>
+                <div class='alert alert-warning p-2'>
+                    {% trans 'تأكد من أن معلومات الاتصال الخاصة بك صحيحة وحقيقية ، حتى نتمكن من استعادة حسابك إذا واجهت مشكلة في تسجيل الدخول.' %}
+                </div>
             </div>
         </div>
     </div>

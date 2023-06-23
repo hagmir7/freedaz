@@ -8,7 +8,7 @@
         <div class="p-0 m-0 mb-3 col-md-2 p-1">
             <div class="movie-card">
              <div class="rounded p-0 overflow-hidden border position-relative">
-                 <a href="/list/{{ list.slug }}">
+                 <a href="/play-list/{{ list.slug }}">
                      {% if list.image %}
                      <img width="100%" class="cover movie-image" src="{{ list.image.url }}"  alt="{{ list.title }}">
                      {% else %}
@@ -19,13 +19,13 @@
              </div>
              <div class="rounded p-0 overflow-hidden pt-2">
                  <h2 class="card-title mb-0">
-                     <a href="/list/{{ list.slug }}" class="text-white">{{ list.title|truncatechars:70  }}</a>
+                     <a href="/play-list/{{ list.slug }}" class="text-white"> مشاهدة مسلسل {{ list.title|truncatechars:70  }}</a>
                  </h2>
              </div>
             </div>
          </div>
         {% empty %}
-        <h1 class="text-center my-5">No lists</h1>
+        <h1 class="text-center h4 my-5 text-white">لا توجد مسلسلات</h1>
         {% endfor %}
     </div>
 </div>

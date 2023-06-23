@@ -1,49 +1,49 @@
-{% extends 'dash.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load i18n %}
 
 {% block content %}
- <main id="main" class="main">
+ <div id="main" class="container">
     <div class="row d-flex justify-content-center">
-        <div class="col-md-8 ">
-            <h1 class="h4">Settings</h1>
-            <ul class="list-group list-group-numbered text-dark">
-                <li class="list-group-item d-flex">
+        <div class="col-md-8 movie-card mt-3">
+            <h1 class="h4">الإعدادات</h1>
+            <ul class="list-group list-group-numbered bg-card">
+                <li class="list-group-item d-flex bg-card">
                     <a href="{% url 'profile_update' user.id %}">
                         <div class="ms-2 me-auto">
                             <div class="fw-bold">
                                 <span class="fa fa-user mr-2"></span>
-                                <strong>{% trans "Profile" %}</strong>
+                                <strong>{% trans "المف الشخصي" %}</strong>
                             </div>
-                            {% trans "Change your Avatar, Phone, Country..." %}
+                            {% trans "تعديل الصورة, رقم الهاتف, الدولة..." %}
                         </div>
                     </a>
                 </li>
-                <li class="list-group-item d-flex">
+                <li class="list-group-item d-flex bg-card">
                     <a href="{% url 'user_update_info' %}">
                         <div class="ms-2 me-auto">
                             <div class="fw-bold">
                                 <span class="fa fa-suitcase mr-2"></span>
-                                <strong>{% trans "Contact Info" %}</strong>
+                                <strong>{% trans "تعديل معلومات الإتصال" %}</strong>
                             </div>
-                            {% trans "Change your Username, Email..." %}
+                            {% trans "تعديل البريد الإلكتروني, إسم المستخدم..." %}
                         </div>
                     </a>
                 </li>
-                <li class="list-group-item d-flex">
+                <li class="list-group-item d-flex bg-card">
                     <a href="{% url 'change_password' %}">
                         <div class="ms-2 me-auto">
                             <div class="fw-bold">
                                 <span class="fa fa-lock mr-2"></span>
                                 <strong>{% trans "Password" %}</strong></div>
-                            {% trans "Change your password." %}
+                            {% trans "تغير كلمة السر." %}
                         </div>
                     </a>
                 </li>
             </ul>
         </div>
     </div>
- </main>
+ </div>
 
 
 {% endblock content %}

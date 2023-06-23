@@ -4,29 +4,33 @@
         <a class="navbar-brand" href="/">
             <img width="35px" height="35px" src="{% static 'img/icon.svg' %}" alt="Freedaz">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler text-white" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse d-flex justify-content-between d-none">
             <div>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" aria-current="page" href="#">الصفحة الرئيسية</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" href="/movis">أفلام</a>
+                        <a class="nav-link rounded fw-bold text-white" href="{% url 'movies' %}">أفلام</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link rounded fw-bold text-white" href="/play-lists/">مسلسلات</a>
                     </li>
+
+                    {% if user.is_superuser %}
                     <li class="nav-item">
+                        <a class="nav-link rounded fw-bold text-white" href="{% url 'create-movie' %}">+ فلم جديد </a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link rounded fw-bold text-white" href="{% url 'create-play-list' %}">+ مسلسل جديد </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2 rounded-pill w-100" type="search" placeholder="بحث..." aria-label="Search">
+                    <input class="form-control me-2 rounded-pill w-100" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
                 </form>
             </div>
         

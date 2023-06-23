@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 
 def index(request):
-    list = Movie.objects.all()
+    list = Movie.objects.all().order_by('-uploaded_at')
     paginator = Paginator(list, 25) 
     page_number = request.GET.get("page")
     videos = paginator.get_page(page_number)
@@ -19,15 +19,15 @@ def index(request):
     return render(request, 'video/index.html', context)
 
 
-def movis(request):
-    list = Video.objects.filter(category__name='Movis')
+def movies(request):
+    list = Movie.objects.filter(episode__isnull=True)
     paginator = Paginator(list, 25) 
     page_number = request.GET.get("page")
-    videos = paginator.get_page(page_number)
+    movies = paginator.get_page(page_number)
     context = {
-        'videos' : videos,
+        'movies' : movies,
     }
-    return render(request, 'movis.html', context)
+    return render(request, 'movies.html', context)
 
 
 
@@ -130,6 +130,8 @@ def getLocaction(ip):
 def video(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
     movies = Movie.objects.all().order_by('-uploaded_at')[0:15]
+    episodes = Movie.objects.filter(list=movie.list)
+
     videos = Video.objects.filter(movie=movie.id)
 
     agent = get_user_agent(request)
@@ -163,7 +165,8 @@ def video(request, slug):
         'movie' : movie,
         'movies' : movies,
         'title': movie.title,
-        'videos': videos
+        'videos': videos,
+        'episodes' : episodes
     }
     
     return render(request, 'video/show.html', context)
@@ -211,5 +214,14 @@ def lists(request):
     return render(request, 'list/list.html', context)
 
 
+
+
+
+def dashboard(request):
+
+    context = {
+
+    }
+    return render(request, 'dashboard.html', context)
 
 
