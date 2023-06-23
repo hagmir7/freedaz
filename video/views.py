@@ -262,3 +262,50 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
+
+
+def create_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "تم إنشاء الصنف بنجاح.")
+    else:
+        form = CategoryForm()
+    return render(request, 'category/create.html', {'form': form})
+
+
+def category(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    return render(request, 'category/show.html', {'category': category})
+
+
+
+def categoryList(request, slug):
+    categories = Category.objects.all()
+    return render(request, 'category/list.html', {'categories': categories})
+
+
+def update_category(request, category_id):
+    category = Category.objects.get(pk=category_id)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, request.FILES, instance=category)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "تم تعديل الصنف بنجاح.")
+
+    else:
+        form = CategoryForm(instance=category)
+    return render(request, 'category/update.html', {'form': form})
+
+
+
+def delete_category(request, id):
+    category = get_object_or_404(Category ,pk=id)
+    category.delete()
+    return redirect('/category/list')
+
+
+
+
+

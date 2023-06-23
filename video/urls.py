@@ -19,5 +19,13 @@ urlpatterns = [
     path('play-list/create/', playListCreate, name='create-play-list'),
     path('play-lists/', lists, name='lists'),
     path('movie/update/<str:slug>', MovieUpdateView.as_view(), name='movie-update'),
-    path('video/delete/<int:id>', deleteVideo, name='delete-video')
+    path('video/delete/<int:id>', deleteVideo, name='delete-video'),
+
+
+
+    path('category/create/', create_category, name='create-category'),
+    path('category/<str:slug>/', category, name='view-category'),
+    path('category/list/', categoryList, name='list-category'),
+    path('category/update/<int:category_id>/', update_category, name='update-category'),
+    path('category/delete/<int:id>/', delete_category, name='delete-category'),
 ]

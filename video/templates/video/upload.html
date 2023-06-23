@@ -43,9 +43,15 @@
               });
           
               console.log(response);
-              if(response.statusText == 'OK'){
+              if(response.status == 200){
                 e.target.reset()
-                swal("Good job!", "Viedo uploaded successfully!", "success");
+                swal("نجحة العملية!", "تم تحميل الفيديو بنجاح.", "danger");
+              }else{
+                swal({
+                  title: "فشلة العملية!",
+                  text: "فشل تحميل الفيديو.",
+                  icon: "warning",
+                })
               }
               progressContainer.style.display = 'none';
             } catch (error) {
@@ -59,14 +65,14 @@
         return (
             <form onSubmit={upload} method="POST" encType="multipart/form-data">
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                    <div id="div_id_quality" class="mb-3"> 
-                        <label for="id_quality" class="form-label requiredField"> Quality <span class="asteriskField">*</span> </label> 
-                        <input type="text" name="quality" maxlength="100" class="textinput form-control" required id="id_quality" /> 
+                    <div id="div_id_quality" className="mb-3"> 
+                        <label htmlFor="id_quality" className="form-label requiredField"> Quality <span className="asteriskField">*</span> </label> 
+                        <input type="text" name="quality" maxLength="100" className="textinput form-control" required id="id_quality" /> 
                     </div>
 
-                     <div id="div_id_video_file" class="mb-3"> 
-                        <label for="id_video_file" class="form-label requiredField"> Video file<span class="asteriskField">*</span> </label>
-                        <input type="file" name="video_file" class="form-control" id="id_video_file" required /> 
+                     <div id="div_id_video_file" className="mb-3"> 
+                        <label htmlFor="id_video_file" className="form-label requiredField"> Video file<span className="asteriskField">*</span> </label>
+                        <input type="file" name="video_file" className="form-control" id="id_video_file" required /> 
                     </div>
                 <button className="btn btn-success mt-3">Create</button>
             </form>
