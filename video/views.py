@@ -172,7 +172,7 @@ def getLocaction(ip):
 
 def video(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
-    movies = Movie.objects.all().order_by('-uploaded_at')[0:15]
+    movies = Movie.objects.all().order_by('-uploaded_at')[0:16]
     episodes = Movie.objects.filter(list=movie.list)
 
     videos = Video.objects.filter(movie=movie.id)
@@ -313,6 +313,17 @@ def delete_category(request, id):
     category = get_object_or_404(Category ,pk=id)
     category.delete()
     return redirect('/category/list')
+
+
+
+
+def menu(request):
+    categories = Category.objects.all()
+    context = {
+        'categories' : categories,
+        'title': 'فري داز - القائمة'
+    }
+    return render(request, 'menu.html', context)
 
 
 

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-8 movie-card">
+            <ul class="list-group">
+                {% for category in categories %}
+                <a href="/category/{{ category.slug }}">
+                    <li class="list-group-item bg-card category-movie">
+
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="{{ category.image.url }}" width="40px" height="40px" alt="{{ category.name }}" class="img-fluid">
+                            </div>
+                            <div class="col">
+                                <h6>{{ category.name }}</h6>
+                            </div>
+                        </div>
+
+                    </li>
+                </a>
+                {% endfor %}
+
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -2,11 +2,18 @@
 {% load static %}
 {% load humanize %}
 
+{% block head %}
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.4.6/plyr.css">
+    <script>
+        window.console = window.console || function (t) { };
+    </script>
+{% endblock %}
+
 {% block content %}
 <div class="container-xxl mt-3">
     <div class="row">
         <div class="col-12 col-md-7">
-            <video controls crossorigin playsinline poster="{% static 'img/background.svg' %}" id="player" class="border">
+            <video controls crossorigin playsinline poster="{% static 'img/background.svg' %}" id="player" class="border w-100">
                 <!-- movie files -->
                 {% for video in videos  %}
                     {% if forloop.first %}
@@ -66,11 +73,11 @@
                         <div class="movie-card m-0">
                             <div class="rounded p-0 overflow-hidden border position-relative">
                                 <a href="/movie/{{ movie.slug }}">
-                                    {% if movie.image %}
-                                    <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
-                                    {% else %}
-                                    <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ movie.title }}">                      
-                                  {% endif %}
+                                {% if movie.list %}
+                                    <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
+                                {% else%}
+                                    <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                                {% endif %}
                                 </a>
                                 <div class="movie-card-shadow"> </div>
                                 {% if movie.episode %}
@@ -93,10 +100,7 @@
             
         </div>
         <div class="col-12 col-md-5 ">
-            <div class=" bg-card sticky">
-
-
-
+            <div class="bg-card sticky overflow-auto pb-5 mb-4" style="max-height: 100vh;">
                 {% if movie.episode %}
                     {% for episode in episodes %}
                     <div class="movie-card rounded border p-2 m-0 w-100 mb-2 ">
@@ -178,5 +182,12 @@
     </div>
   </div>
 
+  
 
 {% endblock content %}
+
+
+{% block footer %}
+    <script src="https://cdn.plyr.io/3.4.6/plyr.js"></script>
+    <script src="{% static 'script.js' %}"> </script>
+{% endblock footer %}

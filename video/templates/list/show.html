@@ -12,10 +12,11 @@
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ movie.slug }}">
-                     {% if movie.image %}
-                     <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
-                     {% else %}
-                     <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ movie.title }}">                            {% endif %}
+                    {% if movie.list %}
+                        <img width="100%" class="cover movie-image" src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
+                    {% else%}
+                        <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                    {% endif %}
                  </a>
                  <div class="movie-card-shadow"> </div>
                  {% if movie.episode %}
@@ -34,4 +35,6 @@
         {% endfor %}
     </div>
 </div>
+
+
 {% endblock content %}

@@ -1,9 +1,17 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block head %}
+<!-- React -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<!-- Babel -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<!-- Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+{% endblock head %}
+
 {% block content %}
-
-
 <div class="container mt-3">
     <div class="row d-flex">
         <div class="col-md-6 justify-content-center movie-card m-0">
@@ -18,7 +26,7 @@
         <div class="col-md-6">
           <div class="movie-card">
             {% for video in videos %}
-            <div class="movie-card d-flex justify-content-between rounded border p-2 m-0 w-100 mb-2">
+            <div class="d-flex justify-content-between rounded border p-2 m-0 w-100 mb-2">
               <div class="d-flex align-items-center text-white">
                 <div>
                   <i class="bi h5 bi-play-circle"></i>
@@ -30,81 +38,82 @@
               <div class="flex-start">
                 <a href="/video/delete/{{ video.id }}" onclick="return confirm('هل أنت متأكد من حذف الفيديو؟')" class="btn btn-danger btn-sm ">حذف</a>
               </div>
+            </div>
               {% empty %}
               <h6 class="py-3 text-center w-100">لا يوجد فيديو</h6>
               {% endfor %}
-            </div>
           </div>
         </div>
     </div>
 </div>
 
 
+{% block script %}
 <script type="text/babel">
-    const App = () => {
+  const App = () => {
 
-        const [width, setWidth] = React.useState(0)
-        const [progress, setProgress] = React.useState(false)
+      const [width, setWidth] = React.useState(0)
+      const [progress, setProgress] = React.useState(false)
+      const btn = React.useRef(null)
 
-        const upload = async (e) => {
-            e.preventDefault();
+      const upload = async (e) => {
+          e.preventDefault();
+          btn.current.disabled = true;
+          const progressBar = document.querySelector('.progress-bar');
+          const progressContainer = document.querySelector('.progress');
+          progressBar.style.width = '0%';
+          progressContainer.style.display = 'block';
+        
+          const formData = new FormData(e.target);
+          try {
+            const response = await axios.post('/upload/{{movie.slug}}', formData, {
+              onUploadProgress: (progressEvent) => {
+                const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+                progressBar.style.width = `${progress}%`;
+                progressBar.setAttribute('aria-valuenow', progress);
+                progressBar.innerHTML = `${progress}%`;
+              },
+            }).then(response =>{
+              btn.current.disabled = false;
+              e.target.reset()
+              swal("نجحة العملية!", "تم تحميل الفيديو بنجاح.", "success");
+            }).catch(error=>{
+              btn.current.disabled = false;
+              swal({ title: "فشلة العملية!", text: "فشل تحميل الفيديو.", icon: "warning"})
+            });
+            progressContainer.style.display = 'none';
+          } catch (error) {
+            console.log(error);
+            progressContainer.style.display = 'none';
+            btn.current.disabled = false;
+          }
+        };
+        
+
+
+      return (
+          <form onSubmit={upload} method="POST" encType="multipart/form-data">
+              <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+                  <div id="div_id_quality" className="mb-3"> 
+                      <label htmlFor="id_quality" className="form-label requiredField"> Quality <span className="asteriskField">*</span> </label> 
+                      <input type="text" name="quality" maxLength="100" className="textinput form-control" required id="id_quality" /> 
+                  </div>
+
+                   <div id="div_id_video_file" className="mb-3"> 
+                      <label htmlFor="id_video_file" className="form-label requiredField"> Video file<span className="asteriskField">*</span> </label>
+                      <input type="file" name="video_file" className="form-control" id="id_video_file" required /> 
+                  </div>
+              <button className="btn btn-success mt-3" ref={btn}>نــشـــر</button>
+          </form>
+
           
-            const progressBar = document.querySelector('.progress-bar');
-            const progressContainer = document.querySelector('.progress');
-            progressBar.style.width = '0%';
-            progressContainer.style.display = 'block';
-          
-            const formData = new FormData(e.target);
-            try {
-              const response = await axios.post('/upload/{{movie.slug}}', formData, {
-                onUploadProgress: (progressEvent) => {
-                  const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                  progressBar.style.width = `${progress}%`;
-                  progressBar.setAttribute('aria-valuenow', progress);
-                  progressBar.innerHTML = `${progress}%`;
-                },
-              });
-          
-              console.log(response);
-              if(response.status == 200){
-                e.target.reset()
-                swal("نجحة العملية!", "تم تحميل الفيديو بنجاح.", "danger");
-              }else{
-                swal({
-                  title: "فشلة العملية!",
-                  text: "فشل تحميل الفيديو.",
-                  icon: "warning",
-                })
-              }
-              progressContainer.style.display = 'none';
-            } catch (error) {
-              console.log(error);
-              progressContainer.style.display = 'none';
-            }
-          };
-          
+      );
+  };
 
-
-        return (
-            <form onSubmit={upload} method="POST" encType="multipart/form-data">
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
-                    <div id="div_id_quality" className="mb-3"> 
-                        <label htmlFor="id_quality" className="form-label requiredField"> Quality <span className="asteriskField">*</span> </label> 
-                        <input type="text" name="quality" maxLength="100" className="textinput form-control" required id="id_quality" /> 
-                    </div>
-
-                     <div id="div_id_video_file" className="mb-3"> 
-                        <label htmlFor="id_video_file" className="form-label requiredField"> Video file<span className="asteriskField">*</span> </label>
-                        <input type="file" name="video_file" className="form-control" id="id_video_file" required /> 
-                    </div>
-                <button className="btn btn-success mt-3">نــشـــر</button>
-            </form>
-
-            
-        );
-    };
-
-    ReactDOM.render(<App />, document.getElementById('upload'));
+  ReactDOM.render(<App />, document.getElementById('upload'));
 </script>
+{% endblock script %}
+
+
 
 {% endblock content %}

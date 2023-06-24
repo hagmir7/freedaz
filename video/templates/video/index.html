@@ -26,10 +26,11 @@
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ video.slug }}">
-                     {% if video.image %}
-                     <img width="100%" class="cover movie-image" src="{{ video.image.url }}"  alt="{{ video.title }}">
-                     {% else %}
-                     <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ video.title }}">                            {% endif %}
+                    {% if video.list %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ video.list.image.url }}"  alt="{{ video.title }}">
+                    {% else%}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ video.image.url }}"  alt="{{ video.title }}">
+                    {% endif %}
                  </a>
                  <div class="movie-card-shadow"> </div>
                  {% if video.episode %}
@@ -38,7 +39,7 @@
              </div>
              <div class="rounded p-0 overflow-hidden pt-2">
                 <a href="/movie/{{ video.slug }}" class="text-white">
-                    <h2 class="card-title mb-0" dir='auto'> مشاهدة وتحميل {{ video.title|truncatechars:70  }} </h2>
+                    <h2 class="card-title mb-0" dir="auto"> مشاهدة وتحميل {{ video.title|truncatechars:70  }} </h2>
                 </a>
              </div>
             </div>
