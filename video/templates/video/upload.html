@@ -87,6 +87,7 @@
               e.target.reset()
               swal("نجحة العملية!", "تم تحميل الفيديو بنجاح.", "success");
             }).catch(error=>{
+              console.log(error);
               btn.current.disabled = false;
               swal({ title: "فشلة العملية!", text: "فشل تحميل الفيديو.", icon: "warning"})
             });
