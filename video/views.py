@@ -141,16 +141,22 @@ def create_movie(request):
 
 def video_upload(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
+    videos = Video.objects.filter(movie=movie.id)
     if request.method == 'POST':
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
             video = form.save(commit=False)
             video.movie = movie
             video.save()
-            return JsonResponse({'messsage': "You video uploaded successfully."})
+            return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
     else:
         form = VideoForm()
-    return render(request, 'video/upload.html', {'form': form, 'movie' : movie})
+    context = {
+        'form': form,
+        'movie' : movie,
+        'videos': videos
+    }
+    return render(request, 'video/upload.html', context)
 
 
 

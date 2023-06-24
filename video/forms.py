@@ -24,7 +24,7 @@ class SerieForm(forms.ModelForm):
 class PlayListForm(forms.ModelForm):
     class Meta:
         model = PlayList
-        fields = ['title','image', 'description', 'category', 'subscription']
+        fields = ['title','image','season','serie', 'description', 'category', 'subscription']
 
 
 
