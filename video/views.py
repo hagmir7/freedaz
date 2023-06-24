@@ -8,6 +8,14 @@ from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.views import View
 from django.contrib import messages
+from django.contrib.auth.decorators import user_passes_test
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q
+
+def superuser_required(user):
+    if not user.is_superuser:
+        raise PermissionDenied
+    return True
 
 
 def index(request):
@@ -22,9 +30,18 @@ def index(request):
     return render(request, 'video/index.html', context)
 
 
+
 def movies(request):
-    list = Movie.objects.filter(episode__isnull=True)
-    paginator = Paginator(list, 25) 
+    keywords = request.GET.get('q')
+    q = Q()
+    if keywords:
+        q &= (Q(title__icontains=keywords) | Q(description__icontains=keywords) | Q(tags__icontains=keywords))
+        list = Movie.objects.filter(q)
+    else:
+        list = Movie.objects.filter(episode__isnull=True)
+
+
+    paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
     context = {
@@ -60,7 +77,7 @@ class MovieUpdateView(View):
 
 
 
-
+@user_passes_test(superuser_required)
 def deleteVideo(request, id):
     video = get_object_or_404(Video, id=id)
     video.delete()
@@ -124,7 +141,7 @@ def course_list(request):
     return render(request, 'anime-serise.html', context)
 
 
-
+@user_passes_test(superuser_required)
 def create_movie(request):
     if request.method == 'POST':
         form = MovieForm(request.POST, request.FILES)
@@ -138,7 +155,7 @@ def create_movie(request):
     return render(request, 'video/create.html', {'form': form})
 
 
-
+@user_passes_test(superuser_required)
 def video_upload(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
     videos = Video.objects.filter(movie=movie.id)
@@ -172,7 +189,7 @@ def getLocaction(ip):
 
 def video(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
-    movies = Movie.objects.all().order_by('-uploaded_at')[0:16]
+    movies = Movie.objects.all().order_by('-uploaded_at')[0:18]
     episodes = Movie.objects.filter(list=movie.list)
 
     videos = Video.objects.filter(movie=movie.id)
@@ -231,6 +248,8 @@ def playLists(request, slug):
     }
     return render(request, 'list/show.html', context)
 
+
+@user_passes_test(superuser_required)
 def playListCreate(request):
     if request.method == 'POST':
         form = PlayListForm(request.POST, request.FILES)
@@ -261,7 +280,7 @@ def lists(request):
 
 
 
-
+@user_passes_test(superuser_required)
 def dashboard(request):
 
     context = {
@@ -271,7 +290,7 @@ def dashboard(request):
 
 
 
-
+@user_passes_test(superuser_required)
 def create_category(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST, request.FILES)
@@ -285,15 +304,19 @@ def create_category(request):
 
 def category(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    return render(request, 'category/show.html', {'category': category})
+    list = Movie.objects.filter(category__id=category.id)
+    paginator = Paginator(list, 24) 
+    page_number = request.GET.get("page")
+    movies = paginator.get_page(page_number)
+    return render(request, 'category/show.html', {'category': category, 'movies': movies})
 
 
-
+@user_passes_test(superuser_required)
 def categoryList(request):
     categories = Category.objects.all()
     return render(request, 'category/list.html', {'categories': categories})
 
-
+@user_passes_test(superuser_required)
 def update_category(request, id):
     category = Category.objects.get(id=id)
     if request.method == 'POST':
@@ -308,7 +331,7 @@ def update_category(request, id):
     return render(request, 'category/update.html', {'form': form})
 
 
-
+@user_passes_test(superuser_required)
 def delete_category(request, id):
     category = get_object_or_404(Category ,pk=id)
     category.delete()
@@ -331,6 +354,7 @@ def serie(request, slug):
     seasons = serie.playlist_set.all()
     return render(request, 'serie.html', {'serie': serie, 'seasons': seasons})
 
+@user_passes_test(superuser_required)
 def create_serie(request):
     if request.method == 'POST':
         form = SerieForm(request.POST, request.FILES)
@@ -342,6 +366,8 @@ def create_serie(request):
         form = SerieForm()
     return render(request, 'serie/create.html', {'form': form})
 
+
+@user_passes_test(superuser_required)
 def update_serie(request, id):
     serie = get_object_or_404(Serie, id=id)
     if request.method == 'POST':
@@ -354,7 +380,7 @@ def update_serie(request, id):
         form = SerieForm(instance=serie)
     return render(request, 'serie/update.html', {'form': form, 'serie': serie})
 
-
+@user_passes_test(superuser_required)
 def delete_serie(request, id):
     serie = get_object_or_404(Serie, id=id)
     serie.delete()

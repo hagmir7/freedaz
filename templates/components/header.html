@@ -37,8 +37,8 @@
                 </ul>
             </div>
             <div class="col-md-4">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2 rounded-pill w-100" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
+                <form class="d-flex" method='GET' action="/movies/" role="search">
+                    <input class="form-control me-2 rounded-pill w-100" name='q' value="{{ request.GET.q }}" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
                 </form>
             </div>
         

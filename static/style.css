@@ -20,6 +20,10 @@ nav {
     background-color: #6d758d;
 }
 
+.movie-body{
+    white-space: pre-line!important;
+}
+
 
 /* This is purely for the demo */
 .container {
