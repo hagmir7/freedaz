@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="row d-flex justify-content-center mt-3">
+        <div class="col-md-8 movie-card">
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                + إضافة صنف
+            </button>
+            {% if series %}
+            <table class="table bg-card">
+                <thead class="bg-card">
+                    <tr class="bg-card">
+                        <th scope="col">#</th>
+                        <th scope="col">الإسم</th>
+                        <th scope="col">تفاعل</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-card">
+                    {% for serie in series %}
+                    <tr>
+                        <th scope="row">{{ serie.id }}</th>
+                        <td>{{ serie.title }}</td>
+                        <td>
+                            <a href="{% url 'serie_delete' serie.id %}" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من حذف الصنف؟')">Delete</a>
+                            <a href="{% url 'serie_update' serie.id %}" class="btn btn-success btn-sm">Update</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <h6 class="text-center w-100 my-5">لا توجد أصناف</h6>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+  
+  <!-- Modal -->
+  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-card">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">إنشاء صنف جديد</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <form method="POST" action="{% url 'serie_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-success w-100 mt-2">Save changes</button>
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">غلق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

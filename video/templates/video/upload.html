@@ -50,6 +50,15 @@
 
 {% block script %}
 <script type="text/babel">
+  window.addEventListener('beforeunload', function (e) {
+    // Cancel the event as a precaution
+    e.preventDefault();
+    // Chrome requires the event to be explicitly set
+    e.returnValue = '';
+    // Display the confirmation dialog
+    const confirmationMessage = 'هل أنت متأكد من المغادرة';
+    return confirmationMessage;
+  });
   const App = () => {
 
       const [width, setWidth] = React.useState(0)

@@ -30,4 +30,12 @@ urlpatterns = [
     path('category/delete/<int:id>/', delete_category, name='delete-category'),
     path('category/<str:slug>/', category, name='view-category'),
 
+
+    path('serie/create/', create_serie, name='serie_create'),
+    path('serie/update/<int:id>/', update_serie, name='serie_update'),
+    path('serie/delete/<int:id>/', delete_serie, name='serie_delete'),
+    path('serie/list/', serie_list, name='serie_list'),
+    path('serie/<slug:slug>/', serie, name='serie_detail'),
+
+
 ]

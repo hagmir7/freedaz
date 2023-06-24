@@ -17,7 +17,7 @@
                 <!-- movie files -->
                 {% for video in videos  %}
                     {% if forloop.first %}
-                    <source src="{{ video.video_file.url }}" type="video/mp4" size="720">
+                    <source src="{{ video.video_file.url }}"  type="video/mp4" size="720">
                     {% endif %}
                 {% endfor %}
                 <!-- Fallback for browsers that don't support the <video> element -->

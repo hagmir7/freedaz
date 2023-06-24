@@ -13,9 +13,9 @@
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ movie.slug }}">
                     {% if movie.list %}
-                        <img width="100%" class="cover movie-image" src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
+                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
                     {% else%}
-                        <img width="100%" class="cover movie-image" src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
                     {% endif %}
                  </a>
                  <div class="movie-card-shadow"> </div>

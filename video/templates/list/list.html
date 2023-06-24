@@ -9,11 +9,7 @@
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/play-list/{{ list.slug }}">
-                     {% if list.image %}
-                     <img width="100%" class="cover movie-image" src="{{ list.image.url }}"  alt="{{ list.title }}">
-                     {% else %}
-                     <img width="100%" src="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg"  alt="{{ list.title }}">                
-                    {% endif %}
+                     <img width="100%" class="cover movie-image lazy" src='{% static "img/lazy.svg" %}' data-src="{{ list.image.url }}"  alt="{{ list.title }}">
                  </a>
                  <div class="movie-card-shadow"> </div>
              </div>

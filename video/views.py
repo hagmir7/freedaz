@@ -326,6 +326,53 @@ def menu(request):
     return render(request, 'menu.html', context)
 
 
+def serie(request, slug):
+    serie = get_object_or_404(Serie, slug=slug)
+    seasons = serie.playlist_set.all()
+    return render(request, 'serie.html', {'serie': serie, 'seasons': seasons})
+
+def create_serie(request):
+    if request.method == 'POST':
+        form = SerieForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'تم إنشاء المسلسل بنجاح.')
+            return redirect('serie_list')
+    else:
+        form = SerieForm()
+    return render(request, 'serie/create.html', {'form': form})
+
+def update_serie(request, id):
+    serie = get_object_or_404(Serie, id=id)
+    if request.method == 'POST':
+        form = SerieForm(request.POST, request.FILES, instance=serie)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'تم تعديل المسلسل بنجاح.')
+            return redirect('serie_list')
+    else:
+        form = SerieForm(instance=serie)
+    return render(request, 'serie/update.html', {'form': form, 'serie': serie})
+
+
+def delete_serie(request, id):
+    serie = get_object_or_404(Serie, id=id)
+    serie.delete()
+    messages.success(request, 'تم حذف الموسم بنجاح')   
+    return redirect('/serie/list')
+
+
+def serie_list(request):
+    lsit_series = Serie.objects.all()
+    form = SerieForm()
+    paginator = Paginator(lsit_series, 10)  # Display 10 series per page
+
+    page_number = request.GET.get('page')
+    series = paginator.get_page(page_number)
+
+    return render(request, 'serie/list.html', {'series': series, 'form': form})
+
+
 
 
 
