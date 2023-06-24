@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container mt-2">
+  <div class="row d-flex mt-3">
+    <div class="col-md-6 justify-content-center movie-card m-0">
+      <h1 class="h3">تعديل الفيلم</h1>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class="btn btn-success w-100 mt-2" type="submit">Create</button>
+      </form>
+      <div class="progress" style="display: none;">
+        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0"
+          aria-valuemax="100"></div>
+      </div>
+    </div>
+    <div class="col-md-6 m-0">
+    {% if "update" in request.path %}
+      <div class="movie-card">
+        {% for video in videos %}
+        <div class="movie-card d-flex justify-content-between rounded border p-2 m-0 w-100 mb-2">
+          <div class="d-flex align-items-center text-white">
+            <div>
+              <i class="bi h5 bi-play-circle"></i>
+            </div>
+            <div class="mx-3 fw-bold">
+              الجودة {{ video.quality }}
+            </div>
+          </div>
+          <div class="flex-start">
+            <a href="/video/delete/{{ video.id }}" onclick="return confirm('هل أنت متأكد من حذف الفيديو؟')" class="btn btn-danger btn-sm ">حذف</a>
+          </div>
+          {% empty %}
+          <h6 class="py-3 text-center w-100">لا يوجد فيديو</h6>
+          {% endfor %}
+        </div>
+        <a href="/upload/{{ movie.slug }}" class="mt-2 btn btn-success btn-sm">تحميل فيديو جديد</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
