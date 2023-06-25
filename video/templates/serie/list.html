@@ -6,7 +6,7 @@
     <div class="row d-flex justify-content-center mt-3">
         <div class="col-md-8 movie-card">
             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                + إضافة صنف
+                + إضافة مسلسل
             </button>
             {% if series %}
             <table class="table bg-card">
@@ -31,7 +31,7 @@
                 </tbody>
             </table>
             {% else %}
-            <h6 class="text-center w-100 my-5">لا توجد أصناف</h6>
+            <h6 class="text-center w-100 my-5">لا توجد مسلسلات</h6>
             {% endif %}
         </div>
     </div>
@@ -44,14 +44,14 @@
     <div class="modal-dialog">
       <div class="modal-content bg-card">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">إنشاء صنف جديد</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">إنشاء مسلسل جديد</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
         <form method="POST" action="{% url 'serie_create' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-success w-100 mt-2">Save changes</button>
+            <button type="submit" class="btn btn-success w-100 mt-2">حفظ</button>
         </form>
         </div>
         <div class="modal-footer">

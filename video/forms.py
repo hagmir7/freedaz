@@ -34,7 +34,7 @@ class MovieForm(forms.ModelForm):
         fields = ['title','image', 'description', 'tags', 'subscription', 'category']
 
 
-class SerieForm(forms.ModelForm):
+class EpisodeForm(forms.ModelForm):
     class Meta:
         model = Movie
         fields = ['title', 'list', 'tags', 'episode', 'is_last']
