@@ -18,6 +18,44 @@ def superuser_required(user):
     return True
 
 
+
+
+import requests
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+
+def download_and_save_file(url, quality, slug):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Check for any errors during the request
+
+        file_temp = NamedTemporaryFile()
+        file_temp.write(response.content)
+        file_temp.flush()
+
+
+        video = Video.objects.create(movie=Movie.objects.get(slug=slug))
+
+        with open(file_temp.name, 'rb') as file:
+            video.video_file.save('file_name.mp4', File(file))
+            video.quality = quality
+
+            
+
+        return video
+    except requests.exceptions.RequestException as e:
+        print(f"Error occurred while downloading the file: {e}")
+        return None
+
+def file(request):
+    url = request.GET.get('url')
+    result = download_and_save_file(url)
+    if result:
+        return JsonResponse({"Success": "File Uploaded successfully."})
+    else:
+        return JsonResponse({"Error": "Fail to Upload File."})
+
+
 def index(request):
     list = Movie.objects.all().order_by('-uploaded_at')
     paginator = Paginator(list, 24) 
@@ -177,9 +215,14 @@ def video_upload(request, slug):
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
             video = form.save(commit=False)
-            video.movie = movie
-            video.save()
-            return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
+            if(video.url):
+                download_and_save_file(video.url, video.quality, slug)
+                return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
+
+            else:
+                video.movie = movie
+                video.save()
+                return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
     else:
         form = VideoForm()
     context = {
