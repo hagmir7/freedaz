@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.db.models.signals import pre_save, pre_delete,post_save
+from django.dispatch import receiver
 import uuid
 import os
 
@@ -153,6 +155,24 @@ class Video(models.Model):
         if not self.slug:
             self.slug = uuid.uuid4().hex
         return super(Video, self).save(*args, **kwargs)
+    
+@receiver(pre_delete, sender=Video)
+def delete_video_file(sender, instance, **kwargs):
+    # Delete the image file when the model instance is deleted
+    instance.video_file.delete(save=False)
+
+
+
+@receiver(pre_save, sender=Video)
+def delete_old_image(sender, instance, **kwargs):
+    if instance.pk:
+        # Retrieve the existing instance from the database
+        existing_instance = sender.objects.get(pk=instance.pk)
+
+        # Check if the image field has changed
+        if existing_instance.video_file and existing_instance.video_file != instance.video_file:
+            # Delete the old video_file file
+            existing_instance.video_file.delete(save=False)
     
 
 
