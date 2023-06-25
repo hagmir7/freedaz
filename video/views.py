@@ -156,6 +156,20 @@ def create_movie(request):
 
 
 @user_passes_test(superuser_required)
+def create_episode(request):
+    if request.method == 'POST':
+        form = SerieForm(request.POST, request.FILES)
+        if form.is_valid():
+            movie = form.save(commit=False)
+            movie.user = request.user
+            movie.save()
+            return redirect(f'/upload/{movie.slug}')
+    else:
+        form = SerieForm()
+    return render(request, 'video/create.html', {'form': form})
+
+
+@user_passes_test(superuser_required)
 def video_upload(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
     videos = Video.objects.filter(movie=movie.id)

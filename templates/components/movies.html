@@ -1,0 +1,31 @@
+{% load static %}
+<div class="container-xxl mt-2">
+    <div class="row">
+        {% for movie in movies  %}
+            <div class="p-0 m-0 mb-3 col-md-4 col-6 p-1">
+            <div class="movie-card m-0">
+                <div class="rounded p-0 overflow-hidden border position-relative">
+                    <a href="/movie/{{ movie.slug }}">
+                    {% if movie.list %}
+                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
+                    {% else%}
+                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                    {% endif %}
+                    </a>
+                    <div class="movie-card-shadow"> </div>
+                    {% if movie.episode %}
+                    <div class="movie-card-badg">الحلقة {{ movie.episode }}</div>
+                    {% endif %}
+                </div>
+                <div class="rounded p-0 overflow-hidden pt-2">
+                    <h2 class="card-title mb-0">
+                        <a href="/movie/{{ movie.slug }}" class="text-white">مشاهدة وتحميل {{ movie.title|truncatechars:70  }}</a>
+                    </h2>
+                </div>
+            </div>
+            </div>
+        {% empty %}
+        <h1 class="text-center my-5">لا يوجد أفلام</h1>
+        {% endfor %}
+    </div>
+</div>

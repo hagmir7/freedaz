@@ -33,8 +33,8 @@ class Location(models.Model):
         return self.ip
     
 class Category(models.Model):
-    name = models.CharField(max_length=150)
-    image = models.ImageField(upload_to=filename)
+    name = models.CharField(max_length=150, verbose_name="إسم الصنف")
+    image = models.ImageField(upload_to=filename, verbose_name="صورة ")
     views = models.ManyToManyField(Location, related_name='category_views')
     slug = models.SlugField(null=True, blank=True)
 
@@ -48,9 +48,9 @@ class Category(models.Model):
 
 
 class Subscription(models.Model):
-    name = models.CharField(max_length=150)
-    image = models.ImageField(upload_to=filename)
-    description = models.TextField()
+    name = models.CharField(max_length=150, verbose_name="إسم الشركة ")
+    image = models.ImageField(upload_to=filename, verbose_name="صورة ")
+    description = models.TextField(verbose_name="وصف ")
     slug = models.SlugField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -64,14 +64,15 @@ class Subscription(models.Model):
 
 
 class Serie(models.Model):
-    title = models.CharField(max_length=150)
-    description = models.TextField(default='')
-    image = models.ImageField(upload_to=filename, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    description = models.TextField(default='', verbose_name="وصف")
+    image = models.ImageField(upload_to=filename, null=True, blank=True, verbose_name="صورة")
     views = models.ManyToManyField(Location, related_name='serie_views')
     created_at = models.DateTimeField(auto_now_add=True)
-    category = models.ManyToManyField(Category, related_name='serie_category', blank=True)
+    category = models.ManyToManyField(Category, related_name='serie_category', blank=True, verbose_name="صنف")
     save = models.ManyToManyField(User, related_name='serie_save', blank=True)
-    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True, verbose_name="الشركة المنتجة ")
     slug = models.SlugField(null=True, blank=True)
 
 
@@ -88,16 +89,16 @@ class Serie(models.Model):
 
 class PlayList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=150)
-    description = models.TextField(default='')
-    image = models.ImageField(upload_to=filename, null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    description = models.TextField(default='', verbose_name="وصف")
+    image = models.ImageField(upload_to=filename, null=True, blank=True, verbose_name="صورة")
     views = models.ManyToManyField(Location, related_name='paly_list_views')
-    category = models.ManyToManyField(Category, related_name='play_list_category', blank=True)
-    serie = models.ForeignKey(Serie, on_delete=models.CASCADE, null=True, blank=True)
-    season = models.IntegerField(null=True, blank=True)
+    category = models.ManyToManyField(Category, related_name='play_list_category', blank=True, verbose_name="صنف")
+    serie = models.ForeignKey(Serie, on_delete=models.CASCADE, null=True, blank=True, verbose_name="تحديد المسلسل")
+    season = models.IntegerField(null=True, blank=True, verbose_name="موسم")
     created_at = models.DateTimeField(auto_now_add=True)
     save = models.ManyToManyField(User, related_name='play_list_save', blank=True)
-    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True, verbose_name="الشركة المنتجة ")
     slug = models.SlugField(null=True, blank=True)
 
     def __str__(self):
@@ -111,17 +112,18 @@ class PlayList(models.Model):
     
 class Movie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to=filename, null=True, blank=True)
-    list = models.ForeignKey(PlayList, on_delete=models.CASCADE, null=True, blank=True)
-    description = models.TextField(default='')
-    tags = models.CharField(max_length=200, null=True, blank=True)
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    image = models.ImageField(upload_to=filename, null=True, blank=True, verbose_name="صورة")
+    list = models.ForeignKey(PlayList, on_delete=models.CASCADE, null=True, blank=True, verbose_name="إختيار الموسم")
+    description = models.TextField(default='', verbose_name="الوصف")
+    tags = models.CharField(max_length=200, null=True, blank=True, verbose_name="علامات")
     views = models.ManyToManyField(Location, related_name='movie_views')
-    category = models.ManyToManyField(Category, related_name='movie_category', blank=True)
+    category = models.ManyToManyField(Category, related_name='movie_category', blank=True, verbose_name="صنف")
     uploaded_at = models.DateTimeField(auto_now_add=True)
     save = models.ManyToManyField(User, related_name='movie_save', blank=True)
-    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True)
-    episode = models.IntegerField(null=True, blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True, verbose_name='الشركة المنتجة')
+    episode = models.IntegerField(null=True, blank=True, verbose_name="لاحلقة")
+    is_last = models.BooleanField(null=True, default=False, verbose_name="الحلقة الأخيرة")
     slug = models.SlugField(null=True, blank=True)
 
 
@@ -136,8 +138,8 @@ class Movie(models.Model):
     
 
 class Video(models.Model):
-    quality = models.CharField(max_length=100)
-    video_file = models.FileField(upload_to=filename)
+    quality = models.CharField(max_length=100, verbose_name="الجودة")
+    video_file = models.FileField(upload_to=filename, verbose_name="تحميل الفيديو ")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(null=True, blank=True)
@@ -157,6 +159,7 @@ class Video(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     like = models.ManyToManyField(User, related_name='comment_like', blank=True)
     body = models.TextField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)

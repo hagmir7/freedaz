@@ -6,7 +6,11 @@
 <div class="container mt-2">
   <div class="row d-flex mt-3">
     <div class="col-md-6 justify-content-center movie-card m-0">
+      {% if "episode" in request.path %}
+      <h1 class="h3">نشر وتعديل مسلسل</h1>
+      {% else %}
       <h1 class="h3">نشر وتعديل فلم</h1>
+      {% endif %}
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{form|crispy}}

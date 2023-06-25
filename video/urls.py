@@ -37,5 +37,7 @@ urlpatterns = [
     path('serie/list/', serie_list, name='serie_list'),
     path('serie/<slug:slug>/', serie, name='serie_detail'),
 
+    path('episode/create', create_episode, name="create_episode")
+
 
 ]

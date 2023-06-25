@@ -1,0 +1,43 @@
+<div class="bg-card sticky overflow-auto pb-5 mb-4">
+    {% if movie.episode %}
+        {% for episode in episodes %}
+        <div class="movie-card rounded border p-2 m-0 w-100 mb-2 ">
+            {% if movie == episode %}
+            <a href="/movie/{{ episode.slug }}" class="d-flex align-items-center">
+                <div>
+                    <i class="bi bi-pause-circle"></i>
+                </div>
+                <div class="mx-3 fw-bold">
+                    الحلقة {{ episode.episode }}
+                </div>
+            </a>
+            {% else %}
+            <a href="/movie/{{ episode.slug }}" class="d-flex align-items-center text-white">
+                <div>
+                    <i class="bi h5 bi-play-circle"></i>
+                </div>
+                <div class="mx-3 fw-bold">
+                    الحلقة {{ episode.episode }}
+                </div>
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+    {% for category in categories %}
+    <a href="/category/{{ category.slug }}" class="rounded d-flex align-items-center text-white mb-1 category-movie">
+        <div>
+            <img width="40px" height="40px" src="{{ category.image.url }}" />
+        </div>
+        <div class="mx-3 fw-bold">
+            {{ category.name }} 
+        </div>
+    </a>
+    {% endfor %}
+
+
+    {% endif %}
+
+</div>
