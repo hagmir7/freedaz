@@ -105,14 +105,17 @@
           <form onSubmit={upload} method="POST" encType="multipart/form-data">
               <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
                   <div id="div_id_quality" className="mb-3"> 
-                      <label htmlFor="id_quality" className="form-label requiredField"> Quality <span className="asteriskField">*</span> </label> 
+                      <label htmlFor="id_quality" className="form-label requiredField"> الجودة <span className="asteriskField">*</span> </label> 
                       <input type="text" name="quality" maxLength="100" className="textinput form-control" required id="id_quality" /> 
                   </div>
-
                    <div id="div_id_video_file" className="mb-3"> 
-                      <label htmlFor="id_video_file" className="form-label requiredField"> Video file<span className="asteriskField">*</span> </label>
-                      <input type="file" name="video_file" className="form-control" id="id_video_file" required /> 
+                      <label htmlFor="id_video_file" className="form-label"> ملف الفيديو<span className="asteriskField">*</span> </label>
+                      <input type="file" name="video_file" className="form-control" id="id_video_file" /> 
                   </div>
+                  <div id="div_id_url" className="mb-3"> 
+                    <label htmlFor="url" className="form-label"> رابط الفيديو<span className="asteriskField">*</span> </label>
+                    <input type="text" name="url" maxLength='1000' className="form-control" id="url" /> 
+                </div>
               <button className="btn btn-success mt-3" ref={btn}>نــشـــر</button>
           </form>
 

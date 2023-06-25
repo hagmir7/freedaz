@@ -19,12 +19,17 @@
                 <!-- movie files -->
                 {% for video in videos  %}
                     {% if forloop.first %}
-                    <source src="{{ video.video_file.url }}"  type="video/mp4" size="720">
+                        {% if video.video_file %}
+                        <source src="{{ video.video_file.url }}"  type="video/mp4" size="720">
+                        {% else %}
+                        <source src="{{ video.url }}"  type="video/mp4" size="720">
+                        {% endif %}
+                    {% else %}
                     {% endif %}
                 {% endfor %}
                 <!-- Fallback for browsers that don't support the <video> element -->
             </video>
-            
+
             <h1 class="h5 m-0 fw-bold text-white">{{ movie.title }}</h1>
             <p class="p-0 m-0 text-mut">{{ movie.views.all.count}} مشاهدات - {{ movie.uploaded_at|naturaltime }}</p>
           
@@ -51,7 +56,11 @@
 
             <div class="my-3">
                 {% for video in videos  %}
+                    {% if video.video_file %}
                     <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                    {% else %}
+                    <a href="{{ video.url }}" class="btn btn-success rounded-pill" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                    {% endif %}
                 {% endfor %}
                 <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="bi bi-share"></i> &#xa0; مشاركة

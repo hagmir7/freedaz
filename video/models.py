@@ -141,7 +141,8 @@ class Movie(models.Model):
 
 class Video(models.Model):
     quality = models.CharField(max_length=100, verbose_name="الجودة")
-    video_file = models.FileField(upload_to=filename, verbose_name="تحميل الفيديو ")
+    video_file = models.FileField(upload_to=filename, verbose_name="تحميل الفيديو ", null=True, blank=True)
+    url = models.CharField(max_length=1000, null=True, blank=True, verbose_name="رابط الفيديو")
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(null=True, blank=True)

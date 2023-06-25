@@ -44,7 +44,7 @@ class EpisodeForm(forms.ModelForm):
 class VideoForm(forms.ModelForm):
     class Meta:
         model = Video
-        fields = ['quality','video_file',]
+        fields = ['quality','video_file', 'url']
 
 
 
