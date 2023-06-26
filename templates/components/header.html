@@ -1,12 +1,36 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg shadow-white">
-    <div class="container-fluid">
+
+<style>
+    .search-container {
+        display: none;
+    }
+
+    .search-container input{
+        width: 100%;
+    height: 60px;
+    }
+</style>
+<nav class="navbar navbar-expand-lg shadow-white position-relative">
+    <div class="container-fluid" id="nav-container">
+
+        <div class="search-container position-absolute top-0 w-100">
+            <form method="GET" action="/movies/">
+                <input type="text" class="px-3" value="{{ request.GET.q }}" name="q" placeholder="بحث...">
+                <button type="button" class="btn position-absolute fs-2 end-0" id="close-btn">x</button>
+            </form>
+        </div>
+
+
         <a class="navbar-brand" href="/">
             <img width="35px" height="35px" src="{% static 'img/icon.svg' %}" alt="Freedaz">
         </a>
-        <a href='/menu' class="navbar-toggler fs-2 text-white" type="button">
+        <button class="navbar-toggler fs-2 text-white" id="search-icon" type="button">
+            <i class="bi bi-search"></i>
+        </button>
+        <a href="/menu" class="navbar-toggler fs-2 text-white" type="button">
             <i class="bi bi-list"></i>
         </a>
+   
         <div class="collapse navbar-collapse d-flex justify-content-between d-none">
             <div>
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -59,3 +83,19 @@
         </div>
     </div>
 </nav>
+
+<script>
+    var searchIcon = document.getElementById('search-icon');
+    var searchContainer = document.querySelector('.search-container');
+    var closeBtn = document.getElementById('close-btn');
+
+    searchIcon.addEventListener('click', function() {
+        searchContainer.style.display = 'block';
+        document.getElementById('nav-container').classList.add('p-0')
+    });
+
+    closeBtn.addEventListener('click', function() {
+        searchContainer.style.display = 'none';
+        document.getElementById('nav-container').classList.remove('p-0')
+    });
+</script>

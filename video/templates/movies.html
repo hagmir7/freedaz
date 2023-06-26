@@ -3,6 +3,11 @@
 
 {% block content %}
 <div class="container-fluid mt-2">
+    <div class="p-2 text-white">
+        {% if request.GET.q %}
+        نتائج البحث عن ({{ request.GET.q }})
+        {% endif %}
+    </div>
   <div class="row">
     {% for movie in movies %}
         <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
@@ -12,7 +17,7 @@
                     {% if movie.image %}
                         <img width="100%" class="cover movie-image lazy" src='{% static "img/lazy.svg" %}' data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
                     {% else %}
-                        <img width="100%" src="{% static "img/lazy.svg" %}"  alt="{{ movie.title }}">      
+                        <img width="100%" src="{% static 'img/lazy.svg' %}"  alt="{{ movie.title }}" />      
                     {% endif %}
                  </a>
                  <div class="movie-card-shadow"> </div>
@@ -22,13 +27,13 @@
              </div>
              <div class="rounded p-0 overflow-hidden pt-2">
                 <a href="/movie/{{ movie.slug }}" class="text-white">
-                    <h2 class="card-title mb-0" dir='auto'> مشاهدة وتحميل {{ movie.title|truncatechars:70  }} </h2>
+                    <h2 class="card-title mb-0" dir="auto"> مشاهدة وتحميل {{ movie.title|truncatechars:70  }} </h2>
                 </a>
              </div>
             </div>
          </div>
         {% empty %}
-        <h1 class="text-center h3 text-white my-5">لا توجد فلم </h1>
+        <h1 class="text-center h3 text-white my-5">لا توجد نتائج </h1>
         {% endfor %}
   </div>
 </div>

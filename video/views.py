@@ -218,7 +218,8 @@ def video_upload(request, slug):
             video = form.save(commit=False)
             video.movie = movie
             video.save()
-            return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
+            messages.success(request, "تم إنشاء المسلسل بنجاح")
+            return redirect('create_episode')
     else:
         form = VideoForm()
     context = {
