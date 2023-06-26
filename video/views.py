@@ -39,6 +39,7 @@ def download_and_save_file(url, quality, slug):
         with open(file_temp.name, 'rb') as file:
             video.video_file.save('file_name.mp4', File(file))
             video.quality = quality
+            video.save()
 
             
 
@@ -215,14 +216,9 @@ def video_upload(request, slug):
         form = VideoForm(request.POST, request.FILES)
         if form.is_valid():
             video = form.save(commit=False)
-            if(video.url):
-                download_and_save_file(video.url, video.quality, slug)
-                return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
-
-            else:
-                video.movie = movie
-                video.save()
-                return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
+            video.movie = movie
+            video.save()
+            return JsonResponse({'messsage': "تم تحميل الفيديو بنجاح."})
     else:
         form = VideoForm()
     context = {
