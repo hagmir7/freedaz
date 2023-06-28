@@ -135,7 +135,7 @@ def getItem(url, image):
 
 
 def wecima(request):
-    for page in range(323, 0, -1):
+    for page in range(309, 0, -1):
         url = f"https://weciimaa.online/movies/page/{page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
