@@ -108,11 +108,11 @@ def getItem(url, image):
             "image": image,
             "quality": quality
         }
-    
+
     if not Movie.objects.filter(title=data.get('name')).exists():
         movie = Movie.objects.create(
             user = User.objects.get(id=1),
-            title = data.get('name'),
+            title = re.sub(r'\(مشاهدة\)', '', data.get('name')),
             description = data.get('description'),
             tags = data.get('tags'),
             scraping_url = url
