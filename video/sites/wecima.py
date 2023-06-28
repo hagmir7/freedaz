@@ -82,32 +82,35 @@ def download_video(url, id):
 
 
 def getItem(url, image):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    movie_content = soup.find('div', {'class': 'Download--Wecima--Single'})
-    movies = movie_content.find_all('a', {'class': 'hoverable'})
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+        movie_content = soup.find('div', {'class': 'Download--Wecima--Single'})
+        movies = movie_content.find_all('a', {'class': 'hoverable'})
 
-    name = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
-    description = soup.find('div', {'class': 'StoryMovieContent'})
-    if description:
-        description = description.text
+        name = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
+        description = soup.find('div', {'class': 'StoryMovieContent'})
+        if description:
+            description = description.text
 
-    tags = soup.find('span', {'class': 'mpaadesc'})
-    if tags:
-        tags = tags.text
+        tags = soup.find('span', {'class': 'mpaadesc'})
+        if tags:
+            tags = tags.text
 
-    quality = {}
-    for movie in movies:
-        if len(re.findall(r"(.*?)\.html", movie['href'])) > 0:
-            quality[movie.find('resolution').text] =  re.findall(r"(.*?)\.html", movie['href'])[0]
+        quality = {}
+        for movie in movies:
+            if len(re.findall(r"(.*?)\.html", movie['href'])) > 0:
+                quality[movie.find('resolution').text] =  re.findall(r"(.*?)\.html", movie['href'])[0]
 
-    data = {
-            "name": str(name),
-            "description": description if description else " ",
-            "tags": tags,
-            "image": image,
-            "quality": quality
-        }
+        data = {
+                "name": str(name),
+                "description": description if description else " ",
+                "tags": tags,
+                "image": image,
+                "quality": quality
+            }
+    except:
+        pass
 
     if not Movie.objects.filter(title=data.get('name')).exists():
         movie = Movie.objects.create(
