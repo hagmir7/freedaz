@@ -98,9 +98,8 @@ def getItem(url, image):
 
     quality = {}
     for movie in movies:
-
-        # if len(re.findall(r"(.*?)\.html", movie['href'])) > 0:
-        quality[movie.find('resolution').text] = movie['href'] # re.findall(r"(.*?)\.html", movie['href'])[0]
+        if len(re.findall(r"(.*?)\.html", movie['href'])) > 0:
+            quality[movie.find('resolution').text] =  re.findall(r"(.*?)\.html", movie['href'])[0]
 
     data = {
             "name": str(name),
@@ -113,18 +112,18 @@ def getItem(url, image):
     if not Movie.objects.filter(title=data.get('name')).exists():
         movie = Movie.objects.create(
             user = User.objects.get(id=1),
-            title= data.get('name'),
+            title = data.get('name'),
             description = data.get('description'),
-            tags= data.get('tags'),
+            tags = data.get('tags'),
+            scraping_url = url
         )
         download_file(image, movie.id)
         for key, value in data.get('quality').items():
-            video = Video.objects.create(
+            Video.objects.create(
                 quality = key,
                 url = value,
                 movie = movie
             )
-            download_video(video.url, video.id)
     else:
         print("Movie is exists....")
     print("--------------------------------------------")

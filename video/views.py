@@ -236,12 +236,40 @@ def video_upload(request, slug):
 
 
 
-
+from bs4 import BeautifulSoup
+import re
 
 def getLocaction(ip):
     url = f"https://api.ipgeolocation.io/ipgeo?apiKey=2df9c865ff864fb4bcbf81ebbe0386eb&ip={ip}"
     response = requests.get(url)
     return response.json()
+
+
+
+def getItem(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    movie_content = soup.find('div', {'class': 'Download--Wecima--Single'})
+    movies = movie_content.find_all('a', {'class': 'hoverable'})
+
+   
+
+    quality = []
+    for movie in movies:
+        quality.append({
+            'quality' : movie.find('resolution').text,
+            'url' : movie['href']
+        })
+
+
+    return quality
+    for key, value in quality.items():
+        video = Video.objects.create(
+                quality = key,
+                url = value,
+                movie = movie
+        )
+    
 
 
 def video(request, slug):
@@ -279,16 +307,22 @@ def video(request, slug):
     except:
         pass
 
+    if(movie.scraping_url):
+        quality = getItem(movie.scraping_url)
+    else:
+        quality = False
+
     context = {
         'movie' : movie,
         'movies' : movies,
         'title': movie.title,
         'videos': videos,
         'episodes' : episodes,
-        'categories' : categories
+        'categories' : categories,
+        'quality' : quality
     }
-    
-    return render(request, 'video/show.html', context)
+   
+    return render (request, 'video/show.html', context)
 
 
 

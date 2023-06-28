@@ -126,6 +126,7 @@ class Movie(models.Model):
     subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True, verbose_name='الشركة المنتجة')
     episode = models.IntegerField(null=True, blank=True, verbose_name="لاحلقة")
     is_last = models.BooleanField(null=True, default=False, verbose_name="الحلقة الأخيرة")
+    scraping_url = models.CharField(max_length=1000, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
 
 
@@ -138,6 +139,22 @@ class Movie(models.Model):
             self.slug = uuid.uuid4().hex
         return super(Movie, self).save(*args, **kwargs)  
     
+@receiver(pre_delete, sender=Movie)
+def delete_image(sender, instance, **kwargs):
+    # Delete the image file when the model instance is deleted
+    instance.image.delete(save=False)
+
+@receiver(pre_save, sender=Movie)
+def delete_old_image(sender, instance, **kwargs):
+    if instance.pk:
+        # Retrieve the existing instance from the database
+        existing_instance = sender.objects.get(pk=instance.pk)
+
+        if existing_instance.image and existing_instance.image != instance.image:
+            # Delete the old image file
+            existing_instance.image.delete(save=False)
+    
+
 
 class Video(models.Model):
     quality = models.CharField(max_length=100, verbose_name=" الجودة")
@@ -174,6 +191,7 @@ def delete_old_image(sender, instance, **kwargs):
         if existing_instance.video_file and existing_instance.video_file != instance.video_file:
             # Delete the old video_file file
             existing_instance.video_file.delete(save=False)
+
     
 
 
