@@ -59,19 +59,33 @@
                     <a class="page-link bg-card" href="?page={{ videos.previous_page_number }}">السابق</a>
                 </li>
             {% endif %}
-
+    
             {% for num in videos.paginator.page_range %}
-                {% if videos.number == num %}
-                    <li class="page-item active">
-                        <a class="page-link bg-card" href="#">{{ num }}</a>
-                    </li>
-                {% else %}
+                {% if num > videos.number|add:'-4' and num < videos.number %}
                     <li class="page-item">
                         <a class="page-link bg-card" href="?page={{ num }}">{{ num }}</a>
                     </li>
                 {% endif %}
+    
+                {% if videos.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link bg-card" href="#">{{ num }}</a>
+                    </li>
+                {% endif %}
+    
+                {% if num > videos.number and num <= videos.number|add:'4' %}
+                    <li class="page-item">
+                        <a class="page-link bg-card" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+    
+                {% if num == videos.paginator.num_pages|add:'-1' and num < videos.number|add:'5' %}
+                    <li class="page-item">
+                        <a class="page-link bg-card" href="?page={{ num }}">...</a>
+                    </li>
+                {% endif %}
             {% endfor %}
-
+    
             {% if videos.has_next %}
                 <li class="page-item">
                     <a class="page-link bg-card" href="?page={{ videos.next_page_number }}">التالي</a>
@@ -79,5 +93,12 @@
             {% endif %}
         </ul>
     </main>
+    
+    
+    
+    
+    
+    
+    
 </div>
 {% endblock content %}
