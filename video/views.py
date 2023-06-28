@@ -12,6 +12,10 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 
+import requests
+from django.core.files import File
+from django.core.files.temp import NamedTemporaryFile
+
 def superuser_required(user):
     if not user.is_superuser:
         raise PermissionDenied
@@ -20,9 +24,8 @@ def superuser_required(user):
 
 
 
-import requests
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
+
+
 
 def download_and_save_file(url, quality, slug):
     try:
@@ -59,7 +62,7 @@ def file(request):
 
 def index(request):
     list = Movie.objects.all().order_by('-uploaded_at')
-    paginator = Paginator(list, 24) 
+    paginator = Paginator(list, 60) 
     page_number = request.GET.get("page")
     videos = paginator.get_page(page_number)
 

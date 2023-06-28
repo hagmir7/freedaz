@@ -57,16 +57,16 @@
             <div class="my-3">
                 {% for video in videos  %}
                     {% if video.video_file %}
-                    <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                    <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill mt-2" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
                     {% else %}
-                    <a href="{{ video.url }}" class="btn btn-success rounded-pill" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                    <a href="{{ video.url }}" class="btn btn-success rounded-pill mt-2" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
                     {% endif %}
                 {% endfor %}
-                <button class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button class="btn btn-primary rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                     <i class="bi bi-share"></i> &#xa0; مشاركة
                 </button>
                 {% if user.is_superuser %}
-                <a href="{% url 'movie-update' movie.slug %}" class="btn btn-info rounded-pill text-white"><i class="bi bi-pen"></i> &#xa0; تعديل</a>
+                <a href="{% url 'movie-update' movie.slug %}" class="btn btn-info rounded-pill mt-2 text-white"><i class="bi bi-pen"></i> &#xa0; تعديل</a>
                 {% endif %}
             </div>
             <div class="d-block d-md-none ">

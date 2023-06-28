@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import *
-
+from .sites.wecima import *
 
 
 
@@ -39,6 +39,7 @@ urlpatterns = [
 
     path('episode/create', create_episode, name="create_episode"),
 
-    path('file', file)
+    path('file', file),
+    path('wecima', wecima)
 
 ]

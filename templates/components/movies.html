@@ -9,7 +9,12 @@
                     {% if movie.list %}
                         <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
                     {% else%}
+                        {% if movie.image %}
                         <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+
+                        {% else %}
+                        <img width="100%" class="cover movie-image" src="{% static 'img/lazy.svg' %}"  alt="{{ movie.title }}">
+                        {% endif %}
                     {% endif %}
                     </a>
                     <div class="movie-card-shadow"> </div>
