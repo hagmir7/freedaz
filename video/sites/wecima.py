@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.contrib.auth.models import User
+import os
 
 
 pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside parentheses
@@ -64,6 +65,8 @@ def download_video(url, id):
             file_temp.write(response.content)
             file_temp.flush()
 
+            size = os.path.getsize(file_temp)
+            print(size)
             video = Video.objects.get(id=id)  # Instantiate your model object
             with open(file_temp.name, 'rb') as file:
                 video.video_file.save("image.mp4", File(file))
@@ -129,7 +132,7 @@ def getItem(url, image):
 
 
 def wecima(request):
-    for page in range(200, 0, -1):
+    for page in range(10, 0, -1):
         url = f"https://weciimaa.online/movies/page/{page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
