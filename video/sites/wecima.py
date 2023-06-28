@@ -109,28 +109,29 @@ def getItem(url, image):
                 "image": image,
                 "quality": quality
             }
+    
+
+        if not Movie.objects.filter(title=data.get('name')).exists():
+            movie = Movie.objects.create(
+                user = User.objects.get(id=1),
+                title = re.sub(r'\(مشاهدة\)', '', data.get('name')),
+                description = data.get('description'),
+                tags = data.get('tags'),
+                scraping_url = url
+            )
+            download_file(image, movie.id)
+            for key, value in data.get('quality').items():
+                Video.objects.create(
+                    quality = key,
+                    url = value,
+                    movie = movie
+                )
+        else:
+            print("Movie is exists....")
+        print("--------------------------------------------")
+        return data
     except:
         pass
-
-    if not Movie.objects.filter(title=data.get('name')).exists():
-        movie = Movie.objects.create(
-            user = User.objects.get(id=1),
-            title = re.sub(r'\(مشاهدة\)', '', data.get('name')),
-            description = data.get('description'),
-            tags = data.get('tags'),
-            scraping_url = url
-        )
-        download_file(image, movie.id)
-        for key, value in data.get('quality').items():
-            Video.objects.create(
-                quality = key,
-                url = value,
-                movie = movie
-            )
-    else:
-        print("Movie is exists....")
-    print("--------------------------------------------")
-    return data
 
 
 def wecima(request):
