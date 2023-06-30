@@ -219,7 +219,7 @@ def getItem(url, image, title):
 
 
 def best(request):
-    for page in range(87, 0, -1):
+    for page in range(82, 0, -1):
         url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
