@@ -34,8 +34,9 @@ def remove_all_extra_spaces(string):
 
 def download_image_serie(**kwargs):
     try:
-        
-        if not 'mycima.pw' in kwargs.get('image_url') or not 'mycima.tube' in kwargs.get('image_url'):
+        mycimapw = 'mycima.pw'
+        mycimatube = 'mycima.tube'
+        if not 'mycima.pw' in kwargs.get('image_url') and not 'mycima.tube' in kwargs.get('image_url'):
             response = requests.get(kwargs.get('image_url'))
             if response.status_code == 200:
                 response.raise_for_status() 
@@ -54,7 +55,7 @@ def download_image_serie(**kwargs):
 
 
 def download_image_list(**kwargs):
-    if not 'mycima.pw' in kwargs.get('image_url') or not 'mycima.tube' in kwargs.get('image_url'):
+    if not 'mycima.pw' in kwargs.get('image_url') and not 'mycima.tube' in kwargs.get('image_url'):
         response = requests.get(kwargs.get('image_url'))
         if response.status_code == 200:
             response.raise_for_status() 
