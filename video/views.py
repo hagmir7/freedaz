@@ -295,7 +295,7 @@ def playLists(request, slug):
         list.save()
     
     ListMovies = Movie.objects.filter(list=list)
-    paginator = Paginator(ListMovies, 25) 
+    paginator = Paginator(ListMovies, 30) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
     context = {
@@ -324,8 +324,8 @@ def playListCreate(request):
 
 
 def lists(request):
-    list = PlayList.objects.all()
-    paginator = Paginator(list, 25) 
+    list = PlayList.objects.all().order_by('-created_at')
+    paginator = Paginator(list, 30) 
     page_number = request.GET.get("page")
     lists = paginator.get_page(page_number)
     context = {
