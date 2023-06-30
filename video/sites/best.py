@@ -160,7 +160,7 @@ def getItem(url, image, title):
             pass
     else:
         season_list = is_season.find_all('a')
-        if not Serie.objects.filter(title=title):
+        if not Serie.objects.filter(title=title).exists():
             serie = Serie.objects.create(
                 title = title,
                 user = User.objects.get(id=1)
