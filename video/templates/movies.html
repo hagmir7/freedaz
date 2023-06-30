@@ -13,6 +13,30 @@
         {% endif %}
     </div>
   <div class="row">
+    {% for list in lists %}
+          <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
+            <div class="movie-card">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/play-list/{{ list.slug }}">
+                    {% if list.image %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ list.list.image.url }}"  alt="{{ list.title }}">
+                    {% else %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ list.title }}">
+                    {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+                 <div class="movie-card-badg">مسلسل</div>
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                <a href="/play-list/{{ list.slug }}" class="text-white">
+                    <h2 class="card-title mb-0" dir="auto">{{ list.title|truncatechars:70  }} </h2>
+                </a>
+             </div>
+            </div>
+         </div>
+    {% endfor %}
+
+
     {% for movie in movies %}
         <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
             <div class="movie-card">

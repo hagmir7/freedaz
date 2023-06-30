@@ -100,6 +100,7 @@ class PlayList(models.Model):
     season = models.IntegerField(null=True, blank=True, verbose_name="موسم")
     created_at = models.DateTimeField(auto_now_add=True)
     save = models.ManyToManyField(User, related_name='play_list_save', blank=True)
+    tags = models.CharField(max_length=200, null=True, blank=True, verbose_name="علامات")
     subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True, verbose_name="الشركة المنتجة ")
     slug = models.SlugField(null=True, blank=True)
 

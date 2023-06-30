@@ -48,14 +48,18 @@ def new_movies(request):
     q = Q()
     if keywords:
         q &= (Q(title__icontains=keywords) | Q(description__icontains=keywords) | Q(tags__icontains=keywords))
-        list = Movie.objects.filter(q)
+        list = Movie.objects.filter(q, episode__isnull=True)
+        playList = PlayList.objects.filter(q)
     else:
         list = Movie.objects.filter(episode__isnull=True)
+        playList = []
+        
     paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
     context = {
         'movies' : movies,
+        'lists' : playList
     }
     return render(request, 'movies.html', context)
 

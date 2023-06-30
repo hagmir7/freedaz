@@ -33,19 +33,22 @@ def remove_all_extra_spaces(string):
 
 
 def download_image_serie(**kwargs):
-    response = requests.get(kwargs.get('image_url'))
-    if response.status_code == 200:
-        response.raise_for_status() 
+    try:
+        response = requests.get(kwargs.get('image_url'))
+        if response.status_code == 200:
+            response.raise_for_status() 
 
-        file_temp = NamedTemporaryFile()
-        file_temp.write(response.content)
-        file_temp.flush()
-        serie = Serie.objects.get(id=kwargs.get('serie_id'))  # Instantiate your model object
-        if not serie.image:
-            with open(file_temp.name, 'rb') as file:
-                serie.image.save("image.png", File(file))
-            print("File saved successfully.")
-        return file_temp.name
+            file_temp = NamedTemporaryFile()
+            file_temp.write(response.content)
+            file_temp.flush()
+            serie = Serie.objects.get(id=kwargs.get('serie_id'))  # Instantiate your model object
+            if not serie.image:
+                with open(file_temp.name, 'rb') as file:
+                    serie.image.save("image.png", File(file))
+                print("File saved successfully.")
+            return file_temp.name
+    except:
+        pass
 
 
 def download_image_list(**kwargs):
