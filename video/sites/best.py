@@ -153,7 +153,7 @@ def getItem(url, image, title):
         try:
             for item in range(len(list_items) - 1, -1, -1):
                 newUrl = list_items[item]
-                season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
+                season = re.search(r'\d+', newUrl.find('episodetitle').text).group()
                 getNewItem(newUrl['href'], season, playList.id)
         except:
             pass
@@ -204,12 +204,14 @@ def getItem(url, image, title):
  
 
                 # Get حلقة
-
-            for item in range(len(list_items) - 1, -1, -1):
-                print("الحلقة")
-                newUrl = list_items[item]
-                season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
-                getNewItem(newUrl['href'], season, playList.id)
+            try:
+                for item in range(len(list_items) - 1, -1, -1):
+                    print("الحلقة")
+                    newUrl = list_items[item]
+                    season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
+                    getNewItem(newUrl['href'], season, playList.id)
+            except:
+                pass
  
 
 
