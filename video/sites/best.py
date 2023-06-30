@@ -64,37 +64,41 @@ def download_image_list(**kwargs):
         return file_temp.name
 
 def getNewItem(url, season, list_id):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, "html.parser")
+        title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
+            
 
-    getTagsContent = soup.find('ul', {'class': 'Terms--Content--Single-begin'})
-    plainTags = []
-    getTagsList = getTagsContent.find_all('a')
-    for tag in getTagsList:
-        plainTags.append(tag.text)
+        getTagsContent = soup.find('ul', {'class': 'Terms--Content--Single-begin'})
+        plainTags = []
+        getTagsList = getTagsContent.find_all('a')
+        for tag in getTagsList:
+            plainTags.append(tag.text)
 
-    tags = ",".join(plainTags)[0:100]
+        tags = ",".join(plainTags)[0:100]
 
-    description = soup.find('div', {'class': 'StoryMovieContent'})
-    if description:
-        description = description.text
-    else:
-        description = ' '
-    
-    if not Movie.objects.filter(episode=season, list=PlayList.objects.get(id=list_id)).exists():
-        Movie.objects.create(
-            user = User.objects.get(id=1),
-            title = title,
-            tags = tags,
-            description = description,
-            episode = season,
-            list = PlayList.objects.get(id=list_id),
-            scraping_url = url
-        )
-        print("Created successfully...")
-    else:
-        print("Movie is exists...")
+        description = soup.find('div', {'class': 'StoryMovieContent'})
+        if description:
+            description = description.text
+        else:
+            description = ' '
+        
+        if not Movie.objects.filter(episode=season, list=PlayList.objects.get(id=list_id)).exists():
+            Movie.objects.create(
+                user = User.objects.get(id=1),
+                title = title,
+                tags = tags,
+                description = description,
+                episode = season,
+                list = PlayList.objects.get(id=list_id),
+                scraping_url = url
+            )
+            print("Created successfully...")
+        else:
+            print("Movie is exists...")
+    except:
+        pass
 
 
 

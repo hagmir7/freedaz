@@ -209,7 +209,7 @@ def getItem(url, image, title):
 
 def top(request):
     for page in range(99, 0, -1):
-        url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
+        url = f"https://weciimaa.online/seriestv/top/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
