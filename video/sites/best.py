@@ -34,6 +34,27 @@ def remove_all_extra_spaces(string):
 
 def download_image_serie(**kwargs):
     try:
+        
+        if not 'mycima.pw' in kwargs.get('image_url'):
+            response = requests.get(kwargs.get('image_url'))
+            if response.status_code == 200:
+                response.raise_for_status() 
+
+                file_temp = NamedTemporaryFile()
+                file_temp.write(response.content)
+                file_temp.flush()
+                serie = Serie.objects.get(id=kwargs.get('serie_id'))  # Instantiate your model object
+                if not serie.image:
+                    with open(file_temp.name, 'rb') as file:
+                        serie.image.save("image.png", File(file))
+                    print("File saved successfully.")
+                return file_temp.name
+    except:
+        pass
+
+
+def download_image_list(**kwargs):
+    if not 'mycima.pw' in kwargs.get('image_url'):
         response = requests.get(kwargs.get('image_url'))
         if response.status_code == 200:
             response.raise_for_status() 
@@ -41,30 +62,12 @@ def download_image_serie(**kwargs):
             file_temp = NamedTemporaryFile()
             file_temp.write(response.content)
             file_temp.flush()
-            serie = Serie.objects.get(id=kwargs.get('serie_id'))  # Instantiate your model object
-            if not serie.image:
+            playList = PlayList.objects.get(id=kwargs.get('list_id'))  # Instantiate your model object
+            if not playList.image:
                 with open(file_temp.name, 'rb') as file:
-                    serie.image.save("image.png", File(file))
+                    playList.image.save("image.png", File(file))
                 print("File saved successfully.")
             return file_temp.name
-    except:
-        pass
-
-
-def download_image_list(**kwargs):
-    response = requests.get(kwargs.get('image_url'))
-    if response.status_code == 200:
-        response.raise_for_status() 
-
-        file_temp = NamedTemporaryFile()
-        file_temp.write(response.content)
-        file_temp.flush()
-        playList = PlayList.objects.get(id=kwargs.get('list_id'))  # Instantiate your model object
-        if not playList.image:
-            with open(file_temp.name, 'rb') as file:
-                playList.image.save("image.png", File(file))
-            print("File saved successfully.")
-        return file_temp.name
 
 def getNewItem(url, season, list_id):
     try:
@@ -217,7 +220,7 @@ def getItem(url, image, title):
 
 
 def best(request):
-    for page in range(92, 0, -1):
+    for page in range(93, 0, -1):
         url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
