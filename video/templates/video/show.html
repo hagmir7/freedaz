@@ -15,6 +15,7 @@
 
         
         <div class="col-12 col-md-7">
+        {% if not movie.scraping_url %}
             <video controls crossorigin playsinline poster="{% static 'img/background.svg' %}" id="player" class="border w-100">
                 <!-- movie files -->
                 {% for video in videos  %}
@@ -29,6 +30,30 @@
                 {% endfor %}
                 <!-- Fallback for browsers that don't support the <video> element -->
             </video>
+            {% else %}
+
+            <div class="div">
+                <div class="d-flex justify-content-center mb-3">
+                    <div class="card shadow-sm overflow-hidden col-8 col-md-6 col-lg-5 col-xl-4 p-0">
+                      {% if movie.list %}
+                        {% if movie.list.image %}
+                            <img class="book-detail-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">
+                        {% else %}
+                            <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
+                        {% endif %}
+                      {% else %}
+                      {% if movie.image %}
+                        <img class="book-detail-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{movie.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">
+                        {% else %}
+                            <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
+                        {% endif %} 
+                      {% endif %}
+                      
+                    </div>
+                  </div>
+            </div>
+
+            {% endif %}
 
             <h1 class="h5 m-0 fw-bold text-white">{{ movie.title }}</h1>
             <p class="p-0 m-0 text-mut">{{ movie.views.all.count}} مشاهدات - {{ movie.uploaded_at|naturaltime }}</p>
@@ -74,6 +99,8 @@
                 </button>
                 {% if user.is_superuser %}
                 <a href="{% url 'movie-update' movie.slug %}" class="btn btn-info rounded-pill mt-2 text-white"><i class="bi bi-pen"></i> &#xa0; تعديل</a>
+                <a href="{% url 'delete_movie' movie.id %}" onclick="return confirm('هل أنت متأكد من حذف الفيلم.')" class="btn btn-danger rounded-pill mt-2"><i class="bi bi-trash3"></i> &#xa0; حذف</a>
+
                 {% endif %}
             </div>
             <div class="d-block d-md-none ">

@@ -10,6 +10,7 @@ admin.site.register(Comment)
 admin.site.register(PlayList)
 admin.site.register(Location)
 admin.site.register(Movie)
+admin.site.register(Serie)
 
 
 # Register your models here.

@@ -3,7 +3,6 @@ from django_user_agents.utils import get_user_agent
 from .forms import *
 from .models import *
 from django.http import JsonResponse
-import requests
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.views import View
@@ -11,10 +10,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-
 import requests
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
+from django.db.models import Count
+
+
+
 
 def superuser_required(user):
     if not user.is_superuser:
@@ -23,57 +25,25 @@ def superuser_required(user):
 
 
 
-
-
-
-
-def download_and_save_file(url, quality, slug):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Check for any errors during the request
-
-        file_temp = NamedTemporaryFile()
-        file_temp.write(response.content)
-        file_temp.flush()
-
-
-        video = Video.objects.create(movie=Movie.objects.get(slug=slug))
-
-        with open(file_temp.name, 'rb') as file:
-            video.video_file.save('file_name.mp4', File(file))
-            video.quality = quality
-            video.save()
-
-            
-
-        return video
-    except requests.exceptions.RequestException as e:
-        print(f"Error occurred while downloading the file: {e}")
-        return None
-
-def file(request):
-    url = request.GET.get('url')
-    result = download_and_save_file(url)
-    if result:
-        return JsonResponse({"Success": "File Uploaded successfully."})
-    else:
-        return JsonResponse({"Error": "Fail to Upload File."})
-
-
 def index(request):
     list = Movie.objects.all().order_by('-uploaded_at')
     paginator = Paginator(list, 60) 
     page_number = request.GET.get("page")
     videos = paginator.get_page(page_number)
 
+    best_series = PlayList.objects.annotate(views_count=Count('views')).order_by('-views_count')[0:6]
+    best_movies = Movie.objects.filter(episode__isnull=True).annotate(views_count=Count('views')).order_by('-views_count')[0:6]
+
     context = {
         'videos' : videos,
+        'best_series' : best_series,
+        'best_movies' : best_movies
     }
     return render(request, 'video/index.html', context)
 
 
 
-def movies(request):
+def new_movies(request):
     keywords = request.GET.get('q')
     q = Q()
     if keywords:
@@ -81,8 +51,6 @@ def movies(request):
         list = Movie.objects.filter(q)
     else:
         list = Movie.objects.filter(episode__isnull=True)
-
-
     paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
@@ -90,6 +58,24 @@ def movies(request):
         'movies' : movies,
     }
     return render(request, 'movies.html', context)
+
+
+
+def best_movies(request):
+    list = Movie.objects.filter(episode__isnull=True).annotate(views_count=Count('views')).order_by('-views_count')
+    paginator = Paginator(list, 24) 
+    page_number = request.GET.get("page")
+    movies = paginator.get_page(page_number)
+    context = {
+        'movies' : movies,
+    }
+    return render(request, 'movies.html', context)
+
+
+
+
+
+
 
 
 
@@ -127,60 +113,7 @@ def deleteVideo(request, id):
     return redirect(request.META.get('HTTP_REFERER'))
 
 
-def series(request):
-    list = PlayList.objects.filter(category__name='Movis')
-    paginator = Paginator(list, 25) 
-    page_number = request.GET.get("page")
-    series = paginator.get_page(page_number)
-    context = {
-        'series' : series,
-    }
-    return render(request, 'series.html', context)
 
-
-def anime(request):
-    list = Video.objects.filter(category__name='Anime')
-    paginator = Paginator(list, 25) 
-    page_number = request.GET.get("page")
-    animes = paginator.get_page(page_number)
-    context = {
-        'animes' : animes,
-    }
-    return render(request, 'anime.html', context)
-
-def anime_series(request):
-    list = PlayList.objects.filter(category__name='Anime')
-    paginator = Paginator(list, 25) 
-    page_number = request.GET.get("page")
-    series = paginator.get_page(page_number)
-    context = {
-        'series' : series,
-    }
-    return render(request, 'anime-serise.html', context)
-
-
-
-
-def course(request):
-    list = Video.objects.filter(category__name='Course')
-    paginator = Paginator(list, 25) 
-    page_number = request.GET.get("page")
-    series = paginator.get_page(page_number)
-    context = {
-        'series' : series,
-    }
-    return render(request, 'anime-serise.html', context)
-
-
-def course_list(request):
-    list = PlayList.objects.filter(category__name='Course')
-    paginator = Paginator(list, 25) 
-    page_number = request.GET.get("page")
-    series = paginator.get_page(page_number)
-    context = {
-        'series' : series,
-    }
-    return render(request, 'anime-serise.html', context)
 
 
 @user_passes_test(superuser_required)
@@ -195,6 +128,15 @@ def create_movie(request):
     else:
         form = MovieForm()
     return render(request, 'video/create.html', {'form': form})
+
+
+@user_passes_test(superuser_required)
+def delete_movie(request, id):
+    movie = get_object_or_404(Movie, id=id)
+    movie.delete()
+    messages.success(request, "تم حذف الفلم بنجاج.")
+    return redirect('/')
+
 
 
 @user_passes_test(superuser_required)
@@ -260,24 +202,22 @@ def getItem(url):
             'quality' : movie.find('resolution').text,
             'url' : movie['href']
         })
-
-
     return quality
-    for key, value in quality.items():
-        video = Video.objects.create(
-                quality = key,
-                url = value,
-                movie = movie
-        )
+
     
 
 
 def video(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
-    movies = Movie.objects.all().order_by('-uploaded_at')[0:18]
     episodes = Movie.objects.filter(list=movie.list)
 
     videos = Video.objects.filter(movie=movie.id)
+
+    list = Movie.objects.annotate(views_count=Count('views')).order_by('-views_count')
+    paginator = Paginator(list, 24) 
+    page_number = request.GET.get("page")
+    movies = paginator.get_page(page_number)
+
     categories = Category.objects.all()
 
     agent = get_user_agent(request)
@@ -287,30 +227,35 @@ def video(request, slug):
     else:
         ip = request.META.get('REMOTE_ADDR')
     
-    try:
-        if not Location.objects.filter(ip=ip).exists():
-            location = Location.objects.create(
-                ip=ip,
-                user = movie.user,
-                os=agent.os[0],
-                browser=agent.browser[0],
-                country=getLocaction(ip).get('country_name'),
-                country_flag=getLocaction(ip).get("country_flag"),
-                country_code=getLocaction(ip).get("country_code3"),
-                city=getLocaction(ip).get("city"),
-            )
-        else:
-            location = Location.objects.get(ip=ip)
-
+    if not Location.objects.filter(ip=ip).exists():
+        location = Location.objects.create(
+            ip=ip,
+            user = movie.user,
+            os=agent.os[0],
+            browser=agent.browser[0],
+        )
+    else:
+        location = Location.objects.get(ip=ip)
+    if not location in movie.views.all():
         movie.views.add(location)
         movie.save()
-    except:
-        pass
 
+    # Scraping Downlaod urls
     if(movie.scraping_url):
         quality = getItem(movie.scraping_url)
     else:
         quality = False
+    
+    # Get image 
+    if movie.image:
+        image = movie.image
+    elif movie.list:
+        if movie.list.image:
+            image = movie.list.image
+        else:
+            image = False
+    else:
+        image = False
 
     context = {
         'movie' : movie,
@@ -319,7 +264,8 @@ def video(request, slug):
         'videos': videos,
         'episodes' : episodes,
         'categories' : categories,
-        'quality' : quality
+        'quality' : quality,
+        'image' : image
     }
    
     return render (request, 'video/show.html', context)
@@ -328,6 +274,25 @@ def video(request, slug):
 
 def playLists(request, slug):
     list = get_object_or_404(PlayList, slug=slug)
+    
+    agent = get_user_agent(request)
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    
+    if not Location.objects.filter(ip=ip).exists():
+        location = Location.objects.create(
+            ip=ip,
+            os=agent.os[0],
+            browser=agent.browser[0],
+        )
+    else:
+        location = Location.objects.get(ip=ip)
+    if not location in list.views.all():
+        list.views.add(location)
+        list.save()
     
     ListMovies = Movie.objects.filter(list=list)
     paginator = Paginator(ListMovies, 25) 

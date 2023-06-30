@@ -75,7 +75,6 @@ def download_video(url, id):
         else:
             print("Failed to download the file.")
     except:
-        print(url)
         print("Video Downlod Error.")
 
 
@@ -135,7 +134,7 @@ def getItem(url, image):
 
 
 def wecima(request):
-    for page in range(51, 0, -1):
+    for page in range(5, 0, -1):
         url = f"https://weciimaa.online/movies/page/{page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")

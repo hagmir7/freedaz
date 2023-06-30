@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import *
 from .sites.wecima import *
-
+from .sites.top import *
+from .sites.best import *
+from .sites.new import *
 
 
 
@@ -12,7 +14,9 @@ urlpatterns = [
     path('upload/<str:slug>', video_upload, name='video_upload'),
     path('movie/<str:slug>', video, name='show'),
     path('movie/create/', create_movie, name='create-movie'),
-    path('movies/', movies, name='movies'),
+    path('movies/new/', new_movies, name='movies_new'),
+    path('movies/best', best_movies, name='movies_best'),
+    path('movie/delete/<int:id>', delete_movie, name='delete_movie'),
 
 
 
@@ -39,7 +43,9 @@ urlpatterns = [
 
     path('episode/create', create_episode, name="create_episode"),
 
-    path('file', file),
-    path('wecima', wecima)
+    path('wecima', wecima),
+    path('top', top),
+    path('best', best),
+    path('new', new)
 
 ]

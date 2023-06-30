@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if title %} {{ title }} {% else %} Freedaz - Dwonload Videos, Course, Tutorils, Movis {% endif %}</title>
+    <title>{% if title %} {{ title }} {% else %} تحمل ومشاهدة أخر الأفلام والمسلسلات {% endif %}</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
     {% block head %}{% endblock head %}
     <!-- Bootsrap rtl -->
@@ -17,6 +17,7 @@
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="icon" href="{% static 'img/icon.svg' %}" type="image/png">
+    <meta itemprop="image" content="{% if image %}{{ image.url }}{% else %}{% static 'img/icon.svg' %}{% endif %}">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6043226569102012" crossorigin="anonymous"></script>
     <meta name="google-site-verification" content="bqCihIwpLM99nwLxh9mZZYTY7x0rbeXPgbjwM98i_bw" />
 </head>

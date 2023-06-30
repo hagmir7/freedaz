@@ -16,7 +16,84 @@
 </div>
 
 <div class="container-fluid mt-2">
-
+    <div class="card bg-card mb-2">
+        <h2 class="h4 text-white p-2 m-0">أفظل الأفلام</h2>
+    </div>
+    <div class="row">
+        {% for movie in best_movies %}
+        <div class="m-0 mb-3 col-md-2 col-6 p-1">
+            <div class="movie-card m-0">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/movie/{{ movie.slug }}">
+                    {% if movie.list %}
+                        {% if movie.list.image %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
+                        {% else %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ movie.title }}">
+                        {% endif %}
+                    {% else%}
+                        {% if movie.image %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                        {% else %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ movie.title }}">
+                        {% endif %}
+                    {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+                 {% if movie.episode %}
+                 <div class="movie-card-badg">الحلقة {{ movie.episode }}</div>
+                 {% endif %}
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                <a href="/movie/{{ movie.slug }}" class="text-white">
+                    <h2 class="card-title mb-0" dir="auto"> مشاهدة وتحميل {{ movie.title|truncatechars:70  }} </h2>
+                </a>
+             </div>
+            </div>
+         </div>
+        {% empty %}
+        <h1 class="text-center my-5 text-white h3">لا توجد أفلام</h1>
+        {% endfor %}
+    </div>
+    <div class="card bg-card mb-2">
+        <h2 class="h4 text-white p-2 m-0">أفظل المسلسلات</h2>
+    </div>
+    <div class="row">
+        {% for serie in best_series %}
+        <div class="m-0 mb-3 col-md-2 col-6 p-1">
+            <div class="movie-card m-0">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/play-list/{{ serie.slug }}">
+                    {% if serie.list %}
+                        {% if serie.list.image %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ serie.list.image.url }}"  alt="{{ serie.title }}">
+                        {% else %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ serie.title }}">
+                        {% endif %}
+                    {% else%}
+                        {% if serie.image %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ serie.image.url }}"  alt="{{ serie.title }}">
+                        {% else %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ serie.title }}">
+                        {% endif %}
+                    {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+                 {% if serie.episode %}
+                 <div class="movie-card-badg">الحلقة {{ serie.episode }}</div>
+                 {% endif %}
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                <a href="/play-list/{{ serie.slug }}" class="text-white">
+                    <h2 class="card-title mb-0" dir="auto"> مشاهدة وتحميل {{ serie.title|truncatechars:70  }} </h2>
+                </a>
+             </div>
+            </div>
+         </div>
+        {% empty %}
+        <h1 class="text-center my-5 text-white h3">لا توجد أفلام</h1>
+        {% endfor %}
+    </div>
     <div class="card bg-card mb-2">
         <h2 class="h4 text-white p-2 m-0">أخر الأفلام والمسلسلات</h2>
     </div>
@@ -27,7 +104,11 @@
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ video.slug }}">
                     {% if video.list %}
-                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ video.list.image.url }}"  alt="{{ video.title }}">
+                        {% if video.list.image %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ video.list.image.url }}"  alt="{{ video.title }}">
+                        {% else %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ video.title }}">
+                        {% endif %}
                     {% else%}
                         {% if video.image %}
                         <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ video.image.url }}"  alt="{{ video.title }}">
