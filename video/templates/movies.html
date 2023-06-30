@@ -19,7 +19,7 @@
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/play-list/{{ list.slug }}">
                     {% if list.image %}
-                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ list.list.image.url }}"  alt="{{ list.title }}">
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ list.image.url }}"  alt="{{ list.title }}">
                     {% else %}
                         <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ list.title }}">
                     {% endif %}
