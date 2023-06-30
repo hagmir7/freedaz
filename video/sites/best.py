@@ -129,7 +129,6 @@ def getItem(url, image, title):
             )
         else:
             serie = Serie.objects.filter(title=title)[0]
-
         if not PlayList.objects.filter(title=sub_title).exists():
             playList = PlayList.objects.create(
                 title = sub_title,

@@ -42,6 +42,7 @@ urlpatterns = [
     path('serie/<slug:slug>/', serie, name='serie_detail'),
 
     path('episode/create', create_episode, name="create_episode"),
+    path('movies/duplicated', duplicated_movies),
 
     path('wecima', wecima),
     path('top', top),

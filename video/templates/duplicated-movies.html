@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-2">
+    <div class="bg-card p-2 mb-2 d-flex">
+        <a href="{% url 'movies_new' %}" class="px-2">أفلام جديدة</a>
+        <a href="{% url 'movies_best' %}" class="px-2">أفلام شائعة</a>
+    </div>
+  <div class="row">
+    {% for movie in movies %}
+        <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
+            <div class="movie-card">
+             <div class="rounded p-0 overflow-hidden border position-relative">
+                 <a href="/movie/{{ movie.slug }}">
+                 {% if movie.list %}
+                        {% if movie.list.image %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ movie.list.image.url }}"  alt="{{ movie.title }}">
+                        {% else %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ movie.title }}">
+                        {% endif %}
+                    {% else%}
+                        {% if movie.image %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                        {% else %}
+                        <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ movie.title }}">
+                        {% endif %}
+                    {% endif %}
+                 </a>
+                 <div class="movie-card-shadow"> </div>
+                 {% if movie.episode %}
+                 <div class="movie-card-badg">الحلقة {{ movie.episode }}</div>
+                 {% endif %}
+             </div>
+             <div class="rounded p-0 overflow-hidden pt-2">
+                <a href="/movie/{{ movie.slug }}" class="text-white">
+                    <h2 class="card-title mb-0" dir="auto">{{ movie.title|truncatechars:70  }} </h2>
+                </a>
+             </div>
+            </div>
+         </div>
+        {% empty %}
+        <h1 class="text-center h3 text-white my-5">لا توجد نتائج </h1>
+        {% endfor %}
+            <main aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if movies.has_previous %}
+                <li class="page-item">
+                    <a class="page-link bg-card" href="?page={{ movies.previous_page_number }}">السابق</a>
+                </li>
+            {% endif %}
+    
+            {% for num in movies.paginator.page_range %}
+                {% if num > movies.number|add:'-4' and num < movies.number %}
+                    <li class="page-item">
+                        <a class="page-link bg-card" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+    
+                {% if movies.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link bg-card" href="#">{{ num }}</a>
+                    </li>
+                {% endif %}
+    
+                {% if num > movies.number and num <= movies.number|add:'4' %}
+                    <li class="page-item">
+                        <a class="page-link bg-card" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+    
+                {% if num == movies.paginator.num_pages|add:'-1' and num < movies.number|add:'5' %}
+                    <li class="page-item">
+                        <a class="page-link bg-card" href="?page={{ num }}">...</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+    
+            {% if movies.has_next %}
+                <li class="page-item">
+                    <a class="page-link bg-card" href="?page={{ movies.next_page_number }}">التالي</a>
+                </li>
+            {% endif %}
+        </ul>
+    </main>
+  </div>
+</div>
+{% endblock content %}
