@@ -146,11 +146,13 @@ def getItem(url, image, title):
             image_url = image,
             serie_id = serie.id,
         )
-
-        for item in range(len(list_items) - 1, -1, -1):
-            newUrl = list_items[item]
-            season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
-            getNewItem(newUrl['href'], season, playList.id)
+        try:
+            for item in range(len(list_items) - 1, -1, -1):
+                newUrl = list_items[item]
+                season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
+                getNewItem(newUrl['href'], season, playList.id)
+        except:
+            pass
     else:
         season_list = is_season.find_all('a')
         if not Serie.objects.filter(title=title):
