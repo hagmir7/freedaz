@@ -31,12 +31,10 @@ def remove_all_spaces(string):
 def remove_all_extra_spaces(string):
     return " ".join(string.split())
 
-
+urls = ['mycima.pw', 'mycimaa.monster', 'mycima.tube']
 def download_image_serie(**kwargs):
     try:
-        mycimapw = 'mycima.pw'
-        mycimatube = 'mycima.tube'
-        if not 'mycima.pw' in kwargs.get('image_url') and not 'mycima.tube' in kwargs.get('image_url'):
+        if not any(substring in kwargs.get('image_url') for substring in urls):
             response = requests.get(kwargs.get('image_url'))
             if response.status_code == 200:
                 response.raise_for_status() 
@@ -55,7 +53,7 @@ def download_image_serie(**kwargs):
 
 
 def download_image_list(**kwargs):
-    if not 'mycima.pw' in kwargs.get('image_url') and not 'mycima.tube' in kwargs.get('image_url'):
+    if not any(substring in kwargs.get('image_url') for substring in urls):
         response = requests.get(kwargs.get('image_url'))
         if response.status_code == 200:
             response.raise_for_status() 
@@ -221,7 +219,7 @@ def getItem(url, image, title):
 
 
 def best(request):
-    for page in range(92, 0, -1):
+    for page in range(91, 0, -1):
         url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
