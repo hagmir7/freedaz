@@ -24,22 +24,6 @@ def superuser_required(user):
     return True
 
 
-def duplicated_movies(request):
-    # Assuming you have a model named 'YourModel' with a 'title' field
-    duplicated_data = PlayList.objects.values('title').annotate(title_count=Count('title')).filter(title_count__gt=1)
-    for item in duplicated_data:
-            title = item['title']
-            duplicates = PlayList.objects.filter(title=title)[1:]  # Exclude the first occurrence
-            
-            for duplicate in duplicates:
-                duplicate.delete()
-    context = {
-        'movies' : duplicated_data
-    }
-    return render(request, 'duplicated-movies.html', context)
-
-
-
 
 def index(request):
     list = Movie.objects.all().order_by('-uploaded_at')
@@ -478,3 +462,48 @@ def serie_list(request):
 
 
 
+# Remove duplicated
+
+def duplicated_movies(request):
+    # Assuming you have a model named 'YourModel' with a 'title' field
+    duplicated_data = Movie.objects.values('title').annotate(title_count=Count('title')).filter(title_count__gt=1)
+    for item in duplicated_data:
+            title = item['title']
+            duplicates = Movie.objects.filter(title=title)[1:]  # Exclude the first occurrence
+            
+            for duplicate in duplicates:
+                duplicate.delete()
+    context = {
+        'movies' : duplicated_data
+    }
+    return render(request, 'duplicated-movies.html', context)
+
+
+def duplicated_lists(request):
+    # Assuming you have a model named 'YourModel' with a 'title' field
+    duplicated_data = PlayList.objects.values('title').annotate(title_count=Count('title')).filter(title_count__gt=1)
+    for item in duplicated_data:
+            title = item['title']
+            duplicates = PlayList.objects.filter(title=title)[1:]  # Exclude the first occurrence
+            
+            for duplicate in duplicates:
+                duplicate.delete()
+    context = {
+        'movies' : duplicated_data
+    }
+    return render(request, 'duplicated-movies.html', context)
+
+
+def duplicated_series(request):
+    # Assuming you have a model named 'YourModel' with a 'title' field
+    duplicated_data = Serie.objects.values('title').annotate(title_count=Count('title')).filter(title_count__gt=1)
+    for item in duplicated_data:
+            title = item['title']
+            duplicates = Serie.objects.filter(title=title)[1:]  # Exclude the first occurrence
+            
+            for duplicate in duplicates:
+                duplicate.delete()
+    context = {
+        'movies' : duplicated_data
+    }
+    return render(request, 'duplicated-movies.html', context)
