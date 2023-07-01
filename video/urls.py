@@ -43,6 +43,8 @@ urlpatterns = [
 
     path('episode/create', create_episode, name="create_episode"),
     path('movies/duplicated', duplicated_movies),
+    path('lists/duplicated', duplicated_lists),
+    path('series/duplicated', duplicated_series),
 
     path('wecima', wecima),
     path('top', top),
