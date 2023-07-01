@@ -53,20 +53,23 @@ def download_image_serie(**kwargs):
 
 
 def download_image_list(**kwargs):
-    if not any(substring in kwargs.get('image_url') for substring in urls):
-        response = requests.get(kwargs.get('image_url'))
-        if response.status_code == 200:
-            response.raise_for_status() 
+    try:
+        if not any(substring in kwargs.get('image_url') for substring in urls):
+            response = requests.get(kwargs.get('image_url'))
+            if response.status_code == 200:
+                response.raise_for_status() 
 
-            file_temp = NamedTemporaryFile()
-            file_temp.write(response.content)
-            file_temp.flush()
-            playList = PlayList.objects.get(id=kwargs.get('list_id'))  # Instantiate your model object
-            if not playList.image:
-                with open(file_temp.name, 'rb') as file:
-                    playList.image.save("image.png", File(file))
-                print("File saved successfully.")
-            return file_temp.name
+                file_temp = NamedTemporaryFile()
+                file_temp.write(response.content)
+                file_temp.flush()
+                playList = PlayList.objects.get(id=kwargs.get('list_id'))  # Instantiate your model object
+                if not playList.image:
+                    with open(file_temp.name, 'rb') as file:
+                        playList.image.save("image.png", File(file))
+                    print("File saved successfully.")
+                return file_temp.name
+    except:
+        pass
 
 def getNewItem(url, season, list_id):
     try:
