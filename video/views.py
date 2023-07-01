@@ -26,10 +26,10 @@ def superuser_required(user):
 
 def duplicated_movies(request):
     # Assuming you have a model named 'YourModel' with a 'title' field
-    duplicated_data = Serie.objects.values('title').annotate(title_count=Count('title')).filter(title_count__gt=1)
+    duplicated_data = PlayList.objects.values('title').annotate(title_count=Count('title')).filter(title_count__gt=1)
     for item in duplicated_data:
             title = item['title']
-            duplicates = Serie.objects.filter(title=title)[1:]  # Exclude the first occurrence
+            duplicates = PlayList.objects.filter(title=title)[1:]  # Exclude the first occurrence
             
             for duplicate in duplicates:
                 duplicate.delete()

@@ -14,7 +14,7 @@
     <div class="container-fluid" id="nav-container">
 
         <div class="search-container position-absolute top-0 w-100">
-            <form method="GET" action="/movies/">
+            <form method="GET" action="{% url 'movies_new' %}">
                 <input type="text" class="px-3" value="{{ request.GET.q }}" name="q" placeholder="بحث...">
                 <button type="button" class="btn position-absolute fs-2 end-0" id="close-btn">x</button>
             </form>
