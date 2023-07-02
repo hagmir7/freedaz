@@ -8,7 +8,6 @@
         <div class="p-0 m-0 mb-3 col-md-2 p-1">
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
-  
                 <a href="/play-list/{{ list.slug }}">
                     {% if list.image %}
                         <img width="100%" class="cover movie-image lazy" src='{% static "img/lazy.svg" %}' data-src="{{ list.image.url }}"  alt="{{ list.title }}">
@@ -17,10 +16,11 @@
                     {% endif %}
                  </a>
                  <div class="movie-card-shadow"> </div>
+                 {% comment %} <div class="movie-card-badg">الموسم {{ list.season }}</div> {% endcomment %}
              </div>
              <div class="rounded p-0 overflow-hidden pt-2">
                  <h2 class="card-title mb-0">
-                     <a href="/play-list/{{ list.slug }}" class="text-white"> مشاهدة مسلسل {{ list.title|truncatechars:70  }}</a>
+                     <a href="/play-list/{{ list.slug }}" class="text-white">{{ list.title|truncatechars:70  }}</a>
                  </h2>
              </div>
             </div>
