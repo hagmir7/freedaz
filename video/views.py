@@ -51,7 +51,7 @@ def new_movies(request):
         list = Movie.objects.filter(q, episode__isnull=True)
         playList = PlayList.objects.filter(q)
     else:
-        list = Movie.objects.filter(episode__isnull=True)
+        list = Movie.objects.filter(episode__isnull=True).order_by('-uploaded_at')
         playList = []
         
     paginator = Paginator(list, 24) 

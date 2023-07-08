@@ -15,13 +15,14 @@
     </div>
 </div>
 
-<div class="container-fluid mt-2">
-    <div class="card bg-card mb-2">
-        <h2 class="h4 text-white p-2 m-0">أفظل الأفلام</h2>
+<div class="container-xxl mt-2">
+    <div class="bg-card mb-2 p-2 d-flex justify-content-between rounded">
+        <h2 class="h4 text-white m-0">أفظل الأفلام</h2>
+        <a href="{% url 'movies_best' %}">المزيد</a>
     </div>
     <div class="row">
         {% for movie in best_movies %}
-        <div class="m-0 mb-3 col-md-2 col-6 p-1">
+        <div class="m-0 mb-3 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ movie.slug }}">
@@ -55,12 +56,13 @@
         <h1 class="text-center my-5 text-white h3">لا توجد أفلام</h1>
         {% endfor %}
     </div>
-    <div class="card bg-card mb-2">
-        <h2 class="h4 text-white p-2 m-0">أفظل المسلسلات</h2>
+    <div class="bg-card mb-2 p-2 d-flex justify-content-between rounded">
+        <h2 class="h4 text-white m-0">أفظل المسلسلات</h2>
+        <a href="{% url 'movies_best' %}">المزيد</a>
     </div>
     <div class="row">
         {% for serie in best_series %}
-        <div class="m-0 mb-3 col-md-2 col-6 p-1">
+        <div class="m-0 mb-3 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/play-list/{{ serie.slug }}">
@@ -99,7 +101,7 @@
     </div>
     <div class="row">
         {% for video in videos %}
-        <div class="m-0 mb-3 col-md-2 col-6 p-1">
+        <div class="m-0 mb-3 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
             <div class="movie-card m-0">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/movie/{{ video.slug }}">

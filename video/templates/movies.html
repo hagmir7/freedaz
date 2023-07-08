@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid mt-2">
+<div class="container-xxl mt-2">
     <div class="bg-card p-2 mb-2 d-flex">
         <a href="{% url 'movies_new' %}" class="px-2">أفلام جديدة</a>
         <a href="{% url 'movies_best' %}" class="px-2">أفلام شائعة</a>
@@ -14,7 +14,7 @@
     </div>
   <div class="row">
     {% for list in lists %}
-          <div class="p-0 m-0 mb-3 col-md-2 col-6 p-1">
+          <div class="m-0 mb-3 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1">
             <div class="movie-card">
              <div class="rounded p-0 overflow-hidden border position-relative">
                  <a href="/play-list/{{ list.slug }}">
