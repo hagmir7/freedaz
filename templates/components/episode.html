@@ -34,7 +34,7 @@
         <a href="/category/{{ category.slug }}"
             class="rounded d-flex align-items-center text-white mb-1 category-movie">
             <div>
-                <img width="40px" height="40px" src="{{ category.image.url }}" />
+                <img width="40px" height="40px" alt={{ category.name }} src="{{ category.image.url }}" />
             </div>
             <div class="mx-3 fw-bold">
                 {{ category.name }}

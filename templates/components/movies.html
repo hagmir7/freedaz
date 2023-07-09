@@ -8,16 +8,16 @@
                     <a href="/movie/{{ movie.slug }}">
                     {% if movie.list %}
                         {% if movie.list.image %}
-                                <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image lazy" data-src="{{ movie.list.image.url }}"  alt="{{ video.title }}">
+                                <img width="100%" src="{% static 'img/lazy.svg' %}" width="auto" height="auto" class="cover movie-image lazy" data-src="{{ movie.list.image.url }}"  alt="{{ video.title }}">
                             {% else %}
-                                <img width="100%" src="{% static 'img/lazy.svg' %}" class="cover movie-image"  alt="{{ video.title }}">
+                                <img width="100%" src="{% static 'img/lazy.svg' %}" width="auto" height="auto" class="cover movie-image"  alt="{{ video.title }}">
                             {% endif %}
                         {% else%}
                         {% if movie.image %}
-                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
+                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" width="auto" height="auto" data-src="{{ movie.image.url }}"  alt="{{ movie.title }}">
 
                         {% else %}
-                        <img width="100%" class="cover movie-image" src="{% static 'img/lazy.svg' %}"  alt="{{ movie.title }}">
+                        <img width="100%" class="cover movie-image" src="{% static 'img/lazy.svg' %}" width="auto" height="auto"  alt="{{ movie.title }}">
                         {% endif %}
                     {% endif %}
                     </a>

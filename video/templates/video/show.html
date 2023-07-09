@@ -37,7 +37,7 @@
                     <div class="card shadow-sm overflow-hidden col-8 col-md-6 col-lg-5 col-xl-4 p-0">
                       {% if movie.list %}
                         {% if movie.list.image %}
-                            <img class="book-detail-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">
+                            <img class="book-detail-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title }}">
                         {% else %}
                             <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
                         {% endif %}
@@ -61,7 +61,7 @@
             <!-- Video Pulbisher -->
             <div class="my-2 d-flex justify-content-between">
                 <a href="{% url 'profile' movie.user.profile.slug %}" class="rounded-pill d-flex align-items-center text-white">
-                    <img width="40px" class="rounded-pill border" style="object-fit: cover;" height="40px" src="{{ movie.user.profile.avatar.url }}" alt="">
+                    <img width="40px" class="rounded-pill border" style="object-fit: cover;" height="40px" width="40px" src="{{ movie.user.profile.avatar.url }}" alt="{{ movie.user.first_name }}">
                     <div class="mx-3" style="line-height: 1;">
                         <p class="m-0 fw-bold">{{ movie.user.first_name }} {{ movie.user.last_name }}</p>
                         <small>{{ movie.user.profile.followers.all.count }} متابعون</small>
@@ -179,24 +179,32 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">مشاركة مع الأصدقاء</h1>
+          <div class="modal-title fs-5 h1" id="exampleModalLabel">مشاركة مع الأصدقاء</div>
         </div>
         <div class="modal-body">
         <ul class="d-flex justify-content-around p-3 list-unstyled">
             <li>
                 <a href="whatsapp://send/?text={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(37, 211, 102);">
                     <i class="bi bi-whatsapp"></i>
+                     <span class="d-none">whatsapp</span>
                 </a>
             </li>
             <li>
-                <a href="https://www.facebook.com/sharer/sharer.php?u={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(24, 119, 242);"> <i class="bi bi-facebook"></i> </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(24, 119, 242);">
+                     <i class="bi bi-facebook"></i> 
+                     <span class="d-none">facebook</span>
+                </a>
             </li>
             <li>
-                <a href="https://twitter.com/intent/tweet?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(29, 161, 242);"><i class="bi bi-twitter"></i></a>
+                <a href="https://twitter.com/intent/tweet?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(29, 161, 242);">
+                    <i class="bi bi-twitter"></i>
+                    <span class="d-none">twitter</span>
+                </a>
             </li>
             <li>
                 <a href="https://telegram.me/share/url?url={{ video.title }} {{ request.build_absolute_uri  }}" class="fs-1" target="_blank" style="color: rgb(0, 136, 204);">
                     <i class="bi bi-telegram"></i>
+                    <span class="d-none">telegram</span>
                 </a>
             </li>
         </ul>
