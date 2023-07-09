@@ -197,9 +197,6 @@ def getItem(url):
     soup = BeautifulSoup(response.content, "html.parser")
     movie_content = soup.find('div', {'class': 'Download--Wecima--Single'})
     movies = movie_content.find_all('a', {'class': 'hoverable'})
-
-   
-
     quality = []
     for movie in movies:
         quality.append({
@@ -245,10 +242,13 @@ def video(request, slug):
         movie.save()
 
     # Scraping Downlaod urls
-    if(movie.scraping_url):
-        quality = getItem(movie.scraping_url)
-    else:
-        quality = False
+    try:
+        if(movie.scraping_url):
+            quality = getItem(movie.scraping_url)
+        else:
+            quality = False
+    except:
+        quality = []
     
     # Get image 
     if movie.image:
