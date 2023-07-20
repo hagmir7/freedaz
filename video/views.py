@@ -357,7 +357,7 @@ def create_category(request):
 
 def category(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    list = Movie.objects.filter(category__id=category.id)
+    list = Movie.objects.filter(category__id=category.id).order_by('-uploaded_at')
     paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
