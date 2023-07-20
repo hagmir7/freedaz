@@ -98,14 +98,7 @@ class MovieUpdateView(View):
         }
         return render(request, self.template_name, context)
 
-    def post(self, request, slug):
-        movie = Movie.objects.get(slug=slug)
-        form = MovieForm(request.POST, request.FILES, instance=movie)
-        if form.is_valid():
-            form.save()
-            # Redirect to the movie detail page or wherever you want
-            return redirect(f'/movie/{movie.slug}')
-        return render(request, self.template_name, {'form': form, 'movie': movie})
+    
 
 
 

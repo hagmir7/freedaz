@@ -4,6 +4,7 @@ from .sites.wecima import *
 from .sites.top import *
 from .sites.best import *
 from .sites.new import *
+from .sites.anim import *
 
 
 
@@ -49,6 +50,7 @@ urlpatterns = [
     path('wecima', wecima),
     path('top', top),
     path('best', best),
-    path('new', new)
+    path('new', new),
+    path('anim', anim)
 
 ]

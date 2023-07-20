@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load static %}
 
 {% block content %}
 
@@ -6,6 +6,31 @@
     <div class="row justify-content-center mt-3">
         <div class="col-md-8 movie-card">
             <ul class="list-group">
+                <a href="/movies/new/">
+                    <li class="list-group-item bg-card category-movie">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="{% static 'img/movies.png' %}" width="40px" height="40px" alt="أفلام" class="img-fluid">
+                            </div>
+                            <div class="col">
+                                <h6>أفلام</h6>
+                            </div>
+                        </div>
+                    </li>
+                </a>
+                <a href="/play-lists"/>
+                    <li class="list-group-item bg-card category-movie">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="{% static 'img/series.png' %}" width="40px" height="40px" alt="مسلسلات" class="img-fluid">
+                            </div>
+                            <div class="col">
+                                <h6>مسلسلات</h6>
+                            </div>
+                        </div>
+
+                    </li>
+                </a>
                 {% for category in categories %}
                 <a href="/category/{{ category.slug }}">
                     <li class="list-group-item bg-card category-movie">

@@ -125,19 +125,16 @@
 
             <ul class="list-group">
                 {% if movie.episode %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center row m-0 px-2">
+                    <li class="list-group-item bg-card d-flex justify-content-between align-items-center row m-0 px-2">
                         <div class="col-6">مسلسل</div>
-                    
                         <div class="col-6 fw-bold">{{ movie.list.serie.title}} </div>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center row m-0 px-2">
+                    <li class="list-group-item bg-card d-flex justify-content-between align-items-center row m-0 px-2">
                         <div class="col-6">موسم</div>
-                    
                         <div class="col-6 fw-bold">{{ movie.list.title }} </div>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center row m-0 px-2">
+                    <li class="list-group-item bg-card d-flex justify-content-between align-items-center row m-0 px-2">
                         <div class="col-6">حلقة</div>
-                    
                         <div class="col-6 fw-bold">{{ movie.episode }} </div>
                     </li>
                 {% else %}

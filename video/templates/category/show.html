@@ -9,11 +9,20 @@
             <div class="movie-card">
                 <div class="rounded p-0 overflow-hidden border position-relative">
                     <a href="/movie/{{ movie.slug }}">
-                        {% if movie.image %}
-                        <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}" alt="{{ movie.title }}">
+                        {% if movie.list %}
+                          {% if movie.list.image %}
+                            <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}" alt="{{ movie.title }}">
+                            {% else %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
+                          {% endif %}
                         {% else %}
-                        <img width="100%" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
+                            {% if movie.image %}
+                            <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}" alt="{{ movie.title }}">
+                            {% else %}
+                            <img width="100%" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
+                            {% endif %}
                         {% endif %}
+                        
                     </a>
                     <div class="movie-card-shadow"> </div>
                     {% if movie.episode %}

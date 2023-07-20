@@ -15,7 +15,7 @@
 
         <div class="search-container position-absolute top-0 w-100">
             <form method="GET" action="{% url 'movies_new' %}">
-                <input type="text" class="px-3" value="{{ request.GET.q }}" name="q" placeholder="بحث...">
+                <input type="text" class="px-3 bg-white border" value="{{ request.GET.q }}" name="q" placeholder="بحث...">
                 <button type="button" class="btn position-absolute fs-2 end-0" id="close-btn">x</button>
             </form>
         </div>
@@ -34,39 +34,34 @@
         </a>
    
         <div class="collapse navbar-collapse d-flex justify-content-between d-none">
-            <div>
+            <div class="col-md-4">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+               
                     <li class="nav-item">
                         <a class="nav-link rounded fw-bold text-white" href="{% url 'movies_new' %}">أفلام</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link rounded fw-bold text-white" href="/play-lists/">مسلسلات</a>
                     </li>
-
+                    
                     {% if user.is_superuser %}
                     <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" href="{% url 'create-movie' %}">+ فلم جديد </a>
-                    </li>
+                       <div class="dropdown">
+                         <a class="nav-link rounded fw-bold text-white" type="button" data-bs-toggle="dropdown" aria-expanded="false">المزيد</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'create-movie' %}">+ فلم جديد </a></li>
+                                <li><a class="dropdown-item" href="{% url 'create-play-list' %}">+ موسم جديد </a></li>
+                                <li><a class="dropdown-item" href="{% url 'create-category' %}">+ صنف جديد </a></li>
+                                <li><a class="dropdown-item" href="{% url 'serie_list' %}">+ مسلسل جديد </a></li>
+                                <li><a class="dropdown-item" href="{% url 'create_episode' %}">+ حلقة جديد </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" href="{% url 'create-play-list' %}">+ موسم جديد </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" href="{% url 'create-category' %}">+ صنف جديد </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" href="{% url 'serie_list' %}">+ مسلسل جديد </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link rounded fw-bold text-white" href="{% url 'create_episode' %}">+ حلقة جديد </a>
-                    </li>
+                            </ul>
+                        </div>                    
+                    </li>   
                     {% endif %}
                 </ul>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <form class="d-flex" method='GET' action="{% url 'movies_new' %}" role="search">
                     <input class="form-control me-2 rounded-pill w-100" name='q' value="{{ request.GET.q }}" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
                 </form>
