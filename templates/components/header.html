@@ -15,7 +15,7 @@
 
         <div class="search-container position-absolute top-0 w-100">
             <form method="GET" action="{% url 'movies_new' %}">
-                <input type="text" class="px-3 bg-white border" value="{{ request.GET.q }}" name="q" placeholder="بحث...">
+                <input type="text" id='mobile-search' class="px-3 bg-white border" value="{{ request.GET.q }}" name="q" placeholder="بحث...">
                 <button type="button" class="btn position-absolute fs-2 end-0" id="close-btn">x</button>
             </form>
         </div>
@@ -64,7 +64,7 @@
                     {% endif %}
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <form class="d-flex" method='GET' action="{% url 'movies_new' %}" role="search">
                     <input class="form-control me-2 rounded-pill w-100" name='q' value="{{ request.GET.q }}" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
                 </form>
@@ -88,10 +88,12 @@
     var searchIcon = document.getElementById('search-icon');
     var searchContainer = document.querySelector('.search-container');
     var closeBtn = document.getElementById('close-btn');
+    const mobileSearch = document.getElementById('mobile-search');
 
     searchIcon.addEventListener('click', function() {
         searchContainer.style.display = 'block';
-        document.getElementById('nav-container').classList.add('p-0')
+        document.getElementById('nav-container').classList.add('p-0');
+        mobileSearch.focus();
     });
 
     closeBtn.addEventListener('click', function() {

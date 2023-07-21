@@ -13,9 +13,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()  # Or serializers.CharField() if it's a CharField in the model
     class Meta:
         model = Category
-        fields = 'image', 'name', 'id', 'slug'
+        fields = '__all__'
 
 
 
@@ -39,9 +40,8 @@ class SerieSerializer(serializers.ModelSerializer):
 
 class PlayListSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    category = CategorySerializer()
+    ctegory = CategorySerializer(many=True)
     subscription = SubscriptionSerializer()
-    # views = UserSerializer()
 
     class Meta:
         model = PlayList
@@ -51,9 +51,8 @@ class PlayListSerializer(serializers.ModelSerializer):
 
 class MovieSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    # views = UserSerializer()
     list = PlayListSerializer()
-    category = CategorySerializer()
+    category = CategorySerializer(many=True)
     subscription = SubscriptionSerializer()
 
     class Meta:
