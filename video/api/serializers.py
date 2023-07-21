@@ -40,7 +40,7 @@ class SerieSerializer(serializers.ModelSerializer):
 
 class PlayListSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    ctegory = CategorySerializer(many=True)
+    category = CategorySerializer(many=True)
     subscription = SubscriptionSerializer()
 
     class Meta:
