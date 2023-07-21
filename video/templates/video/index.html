@@ -247,9 +247,16 @@
                             <div className="movie-card m-0">
                                 <div className="rounded p-0 overflow-hidden border position-relative">
                                     <a href={`/movie/${movie.slug}`} >
-                                        <img width="100%" src={movie.image} className="cover movie-image" alt={movie.title} />
+                                        {
+                                            movie.episode ? <img width="100%" src={movie.list.image} className="cover movie-image" alt={movie.title} />
+                                            : <img width="100%" src={movie.image} className="cover movie-image" alt={movie.title} />
+                                        }
                                     </a>
                                     <div className="movie-card-shadow"> </div>
+                                    {
+                                        movie.episode ? <div className="movie-card-badg">الحلقة {movie.episode}</div>
+                                            : null
+                                    } 
                                 </div>
                                 <div className="rounded p-0 overflow-hidden pt-2">
                                     <a href={`/movie/${movie.slug}`} className="text-white">
