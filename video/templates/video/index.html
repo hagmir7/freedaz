@@ -188,7 +188,7 @@
         const [page, setPage] = React.useState(1);
         const targetRef = React.useRef(null); // Reference to the target element
 
-          const fetchMovies = (pageNumber) => {
+        const fetchMovies = (pageNumber) => {
             fetch(`/api/movies?page=${pageNumber}`)
                 .then((result) => result.json())
                 .then((response) => {
@@ -208,13 +208,10 @@
             }
         };
 
-        const handleScroll = () => {
-            const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
-            const isAtBottom = scrollTop + clientHeight >= scrollHeight;
-            if (isAtBottom) {
-                setPage((prevPage) => prevPage + 1);
-            }
-        };
+        // Load more movies when the page state changes
+        React.useEffect(() => {
+            fetchMovies(page);
+        }, [page]);
 
         React.useEffect(() => {
             const observer = new IntersectionObserver(handleObserver, {
@@ -234,9 +231,21 @@
             };
         }, [page]);
 
+        // Add the scroll event listener to handle continuous scrolling
+        const handleScroll = () => {
+            const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+            const isAtBottom = scrollTop + clientHeight >= scrollHeight;
+            if (isAtBottom) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        };
+
         React.useEffect(() => {
-            fetchMovies(page);
-        }, [page]);
+            window.addEventListener('scroll', handleScroll);
+            return () => {
+                window.removeEventListener('scroll', handleScroll);
+            };
+        }, []);
 
 
         return (
