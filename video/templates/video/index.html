@@ -203,15 +203,9 @@
         const handleObserver = (entries) => {
             const target = entries[0];
             if (target.isIntersecting) {
-                console.log('Load more movies!');
                 setPage((prevPage) => prevPage + 1);
             }
         };
-
-        // Load more movies when the page state changes
-        React.useEffect(() => {
-            fetchMovies(page);
-        }, [page]);
 
         React.useEffect(() => {
             const observer = new IntersectionObserver(handleObserver, {
@@ -231,21 +225,15 @@
             };
         }, [page]);
 
-        // Add the scroll event listener to handle continuous scrolling
-        const handleScroll = () => {
-            const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
-            const isAtBottom = scrollTop + clientHeight >= scrollHeight;
-            if (isAtBottom) {
-                setPage((prevPage) => prevPage + 1);
-            }
+        // Load more movies when the page state changes
+        React.useEffect(() => {
+            fetchMovies(page);
+        }, [page]);
+
+        const handleLoadMore = () => {
+            setPage((prevPage) => prevPage + 1);
         };
 
-        React.useEffect(() => {
-            window.addEventListener('scroll', handleScroll);
-            return () => {
-                window.removeEventListener('scroll', handleScroll);
-            };
-        }, []);
 
 
         return (
@@ -277,6 +265,7 @@
                     )
                 }))}
                 <div ref={targetRef}></div>
+                <button onClick={handleLoadMore}>Load More</button>
             </>
         )
     }
