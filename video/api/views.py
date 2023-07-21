@@ -39,7 +39,7 @@ class PlayListView(generics.ListAPIView):
     pagination_class = CustomPagination
 
 class MovieListView(generics.ListAPIView):
-    queryset = Movie.objects.all()
+    queryset = Movie.objects.all().order_by('-uploaded_at')
     serializer_class = MovieSerializer
     pagination_class = CustomPagination
 
