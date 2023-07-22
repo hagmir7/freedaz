@@ -50,6 +50,10 @@ def new_movies(request):
         q &= (Q(title__icontains=keywords) | Q(description__icontains=keywords) | Q(tags__icontains=keywords))
         list = Movie.objects.filter(q, episode__isnull=True)
         playList = PlayList.objects.filter(q)
+        try:
+            Query.objects.create(name=keywords)
+        except:
+            pass
     else:
         list = Movie.objects.filter(episode__isnull=True).order_by('-uploaded_at')
         playList = []

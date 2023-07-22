@@ -19,7 +19,12 @@ def filename(instance, filename):
     
     return file
 
+class Query(models.Model):
+    name = models.CharField(max_length=300)
 
+    def __str__(self):
+        return self.name
+    
 class Location(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     ip = models.CharField(max_length=100)

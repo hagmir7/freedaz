@@ -11,6 +11,7 @@ admin.site.register(PlayList)
 admin.site.register(Location)
 admin.site.register(Movie)
 admin.site.register(Serie)
+admin.site.register(Query)
 
 
 # Register your models here.
