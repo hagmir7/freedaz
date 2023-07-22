@@ -31,13 +31,13 @@ class PlayListForm(forms.ModelForm):
 class MovieForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['title','image', 'description', 'tags', 'subscription', 'category']
+        fields = ['title','image', 'description', 'tags', 'subscription', 'category', 'scraping_url']
 
 
 class EpisodeForm(forms.ModelForm):
     class Meta:
         model = Movie
-        fields = ['title', 'list', 'tags', 'episode', 'is_last']
+        fields = ['title', 'list', 'tags', 'episode', 'is_last', 'scraping_url']
 
 
 
