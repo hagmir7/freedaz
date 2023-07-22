@@ -227,7 +227,7 @@ def best(request):
         pages = request.GET.get('pages')
     else:
         pages = 1
-    for page in range(pages, 0, -1):
+    for page in range(int(pages), 0, -1):
         url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
