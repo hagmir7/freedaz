@@ -171,7 +171,8 @@
                                 <div className="rounded p-0 overflow-hidden border position-relative">
                                     <a href={`/movie/${movie.slug}`} >
                                         {
-                                            movie.episode ? <img width="100%" src={movie.list.image} className="cover movie-image" alt={movie.title} />
+                                            movie.episode ? movie.list.image ? <img width="100%" src={movie.list.image} className="cover movie-image" alt={movie.title} />
+                                            : <img width="100%" src='{% static 'img/lazy.svg' %}' className="cover movie-image" alt={movie.title} />
                                             : movie.image ? <img width="100%" src={movie.image} className="cover movie-image" alt={movie.title} />
                                             : <img width="100%" src='{% static 'img/lazy.svg' %}' className="cover movie-image" alt={movie.title} />
 
