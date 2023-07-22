@@ -51,7 +51,8 @@ def new_movies(request):
         list = Movie.objects.filter(q, episode__isnull=True)
         playList = PlayList.objects.filter(q)
         try:
-            Query.objects.create(name=keywords)
+            if not request.user.is_superuser:
+                Query.objects.create(name=keywords)
         except:
             pass
     else:
