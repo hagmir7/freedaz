@@ -117,8 +117,8 @@ def getItem(url, image, title):
     sub_title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
     is_season = soup.find('div', {'class': 'List--Seasons--Episodes'})
     load_btn = soup.find('div', {'class': 'MoreEpisodes--Button'})
-    if load_btn:
-        return 0
+    # if load_btn:
+    #     return 0
     if not is_season:
         print("No season👽")
         list_content = soup.find('div', {'class' : 'Seasons--Episodes'})
@@ -223,7 +223,7 @@ def getItem(url, image, title):
 
 
 def best(request):
-    for page in range(2, 0, -1):
+    for page in range(100, 0, -1):
         url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
