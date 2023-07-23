@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block content %}
+<h1 class='d-none'> {{ category.name}} </h1>
 <div class="container-fluid mt-2">
     <div class="row">
         {% for movie in movies %}
@@ -13,13 +14,13 @@
                           {% if movie.list.image %}
                             <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.list.image.url }}" alt="{{ movie.title }}">
                             {% else %}
-                            <img width="100%" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
+                            <img width="100%" class="movie-image cover" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
                           {% endif %}
                         {% else %}
                             {% if movie.image %}
                             <img width="100%" class="cover movie-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{ movie.image.url }}" alt="{{ movie.title }}">
                             {% else %}
-                            <img width="100%" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
+                            <img width="100%" class="movie-image cover" src="{% static 'img/lazy.svg' %}" alt="{{ movie.title }}" />
                             {% endif %}
                         {% endif %}
                     </a>

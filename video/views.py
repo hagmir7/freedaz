@@ -213,7 +213,7 @@ def getItem(url):
 
 def video(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
-    episodes = Movie.objects.filter(list=movie.list)
+    episodes = Movie.objects.filter(list=movie.list).order_by('episode')
 
     videos = Video.objects.filter(movie=movie.id)
 
@@ -305,9 +305,17 @@ def playLists(request, slug):
     paginator = Paginator(ListMovies, 30) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
+
+    # Get image 
+    if list.image:
+        image = list.image
+    else:
+        image = False
     context = {
         'list' : list,
-        'movies': movies
+        'movies': movies,
+        'title' : list.title,
+        'image' : image
     }
     return render(request, 'list/show.html', context)
 
@@ -323,6 +331,22 @@ def playListCreate(request):
             return JsonResponse({'message' : "Play list created successfully"})
     else: 
         form = PlayListForm()
+    context = {
+        'form' : form
+    }
+    return render(request, 'list/create.html', context)
+
+@user_passes_test(superuser_required)
+def playListUpdate(request, slug):
+    play_list = get_object_or_404(PlayList, slug=slug)
+    
+    if request.method == 'POST':
+        form = PlayListForm(request.POST, request.FILES, instance=play_list)
+        if form.is_valid():
+            form.save()
+            return redirect(f'/play-list/{play_list.slug}')
+    else: 
+        form = PlayListForm(instance=play_list)
     context = {
         'form' : form
     }
@@ -371,7 +395,12 @@ def category(request, slug):
     paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
     movies = paginator.get_page(page_number)
-    return render(request, 'category/show.html', {'category': category, 'movies': movies})
+    context =  {
+        'category': category, 
+        'movies': movies,
+        'title' : category.name
+        }
+    return render(request, 'category/show.html', context)
 
 
 @user_passes_test(superuser_required)
@@ -452,9 +481,18 @@ def delete_serie(request, id):
 
 
 def serie_list(request):
-    lsit_series = Serie.objects.all()
+    keywords = request.GET.get('q')
+    q = Q()
+    if keywords:
+        q &= (Q(title__icontains=keywords) |
+            Q(description__icontains=keywords) |
+            Q(slug__icontains=keywords) |
+            Q(id__icontains=keywords))
+        list_series = Serie.objects.filter(q)
+    else:
+        list_series = Serie.objects.all()
     form = SerieForm()
-    paginator = Paginator(lsit_series, 10)  # Display 10 series per page
+    paginator = Paginator(list_series, 30)  # Display 10 series per page
 
     page_number = request.GET.get('page')
     series = paginator.get_page(page_number)

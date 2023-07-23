@@ -101,7 +101,7 @@ class PlayList(models.Model):
     image = models.ImageField(upload_to=filename, null=True, blank=True, verbose_name="صورة")
     views = models.ManyToManyField(Location, related_name='paly_list_views')
     category = models.ManyToManyField(Category, related_name='play_list_category', blank=True, verbose_name="صنف")
-    serie = models.ForeignKey(Serie, on_delete=models.CASCADE, null=True, blank=True, verbose_name="تحديد المسلسل")
+    serie = models.ForeignKey(Serie, on_delete=models.CASCADE, null=True, blank=True, related_name="play_list_serie", verbose_name="تحديد المسلسل")
     season = models.IntegerField(null=True, blank=True, verbose_name="موسم")
     created_at = models.DateTimeField(auto_now_add=True)
     save = models.ManyToManyField(User, related_name='play_list_save', blank=True)

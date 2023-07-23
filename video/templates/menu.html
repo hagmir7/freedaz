@@ -6,6 +6,18 @@
     <div class="row justify-content-center mt-3">
         <div class="col-md-8 movie-card">
             <ul class="list-group">
+                <a href="{% url 'login' %}">
+                    <li class="list-group-item bg-card category-movie">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="{% static 'img/login.png' %}" width="40px" height="40px" alt="تسجيل الدخول" class="img-fluid">
+                            </div>
+                            <div class="col">
+                                <h6>تسجيل الدخول</h6>
+                            </div>
+                        </div>
+                    </li>
+                </a>
                 <a href="/movies/new/">
                     <li class="list-group-item bg-card category-movie">
                         <div class="row align-items-center">

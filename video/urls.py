@@ -21,9 +21,11 @@ urlpatterns = [
 
 
 
-    path('play-list/<str:slug>', playLists, name='play-list'),
+    
     path('play-list/create/', playListCreate, name='create-play-list'),
+    path('play-list/update/<str:slug>', playListUpdate, name='update-play-list'),
     path('play-lists/', lists, name='lists'),
+    path('play-list/<str:slug>', playLists, name='play-list'),
     path('movie/update/<str:slug>', MovieUpdateView.as_view(), name='movie-update'),
     path('video/delete/<int:id>', deleteVideo, name='delete-video'),
 
@@ -43,6 +45,8 @@ urlpatterns = [
     path('serie/<slug:slug>/', serie, name='serie_detail'),
 
     path('episode/create', create_episode, name="create_episode"),
+
+
     path('movies/duplicated', duplicated_movies),
     path('lists/duplicated', duplicated_lists),
     path('series/duplicated', duplicated_series),

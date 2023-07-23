@@ -4,16 +4,24 @@
 {% block content %}
 <div class="container">
     <div class="row d-flex justify-content-center mt-3">
-        <div class="col-md-8 movie-card">
+        <div class="col-md-8 row movie-card">
+          <div class="col-md-4 mb-2">
             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                + إضافة مسلسل
+              + إضافة مسلسل
             </button>
+          </div>
+            <div class="col-md-8 mb-2">
+            <form method="GET">
+              <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="بحث">
+            </form>
+            </div>
             {% if series %}
             <table class="table bg-card">
                 <thead class="bg-card">
                     <tr class="bg-card">
                         <th scope="col">#</th>
                         <th scope="col">الإسم</th>
+                        <th scope="col">مواسم</th>
                         <th scope="col">تفاعل</th>
                     </tr>
                 </thead>
@@ -22,6 +30,7 @@
                     <tr>
                         <th scope="row">{{ serie.id }}</th>
                         <td>{{ serie.title }}</td>
+                        <td>{{ serie.play_list_serie.all.count }} </td>
                         <td>
                             <a href="{% url 'serie_delete' serie.id %}" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من حذف الصنف؟')">Delete</a>
                             <a href="{% url 'serie_update' serie.id %}" class="btn btn-success btn-sm">Update</a>
@@ -33,6 +42,48 @@
             {% else %}
             <h6 class="text-center w-100 my-5">لا توجد مسلسلات</h6>
             {% endif %}
+
+           <main aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if series.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link bg-card" href="?page={{ series.previous_page_number }}">السابق</a>
+                        </li>
+                    {% endif %}
+            
+                    {% for num in series.paginator.page_range %}
+                        {% if num > series.number|add:'-4' and num < series.number %}
+                            <li class="page-item">
+                                <a class="page-link bg-card" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+            
+                        {% if series.number == num %}
+                            <li class="page-item active">
+                                <a class="page-link bg-card" href="#">{{ num }}</a>
+                            </li>
+                        {% endif %}
+            
+                        {% if num > series.number and num <= series.number|add:'4' %}
+                            <li class="page-item">
+                                <a class="page-link bg-card" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+            
+                        {% if num == series.paginator.num_pages|add:'-1' and num < series.number|add:'5' %}
+                            <li class="page-item">
+                                <a class="page-link bg-card" href="?page={{ num }}">...</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+            
+                    {% if series.has_next %}
+                        <li class="page-item">
+                            <a class="page-link bg-card" href="?page={{ series.next_page_number }}">التالي</a>
+                        </li>
+                    {% endif %}
+            </ul>
+        </main>
         </div>
     </div>
 </div>

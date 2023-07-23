@@ -1,6 +1,11 @@
-<div class=" bg-card sticky overflow-auto mb-4">
+{% load static %}<div class=" bg-card sticky overflow-auto mb-4">
     {% if movie.episode %}
-    {{ movie.list.title }}
+    <h2 class="h5"> مسلسل {{ movie.list.title }} <small class="fs-6">({{ movie.list.views.all.count }} مشاهدات)</small></h2>
+    {% if user.is_superuser %}
+     <a href="{% url 'update-play-list' movie.list.slug %}" class="btn btn-success btn-sm my-2">تعديل</a>
+     <a href="" class="btn btn-danger btn-sm my-2">حذف</a>
+     <a href="/play-list/{{  movie.list.slug }}" class="btn btn-info btn-sm my-2">مشاهدة</a>
+    {% endif %}
     <div class="row p-0 m-0">
         {% for episode in episodes %}
         <div class=" col-6">
@@ -30,11 +35,27 @@
     </div>
         {% else %}
 
-        {% for category in categories %}
-        <a href="/category/{{ category.slug }}"
-            class="rounded d-flex align-items-center text-white mb-1 category-movie">
+        <a href="/movies/new/" class="rounded d-flex align-items-center text-white mb-1 category-movie">
             <div>
-                <img width="40px" height="40px" alt={{ category.name }} src="{{ category.image.url }}" />
+                <img src="{% static 'img/movies.png' %}" width="40px" height="40px" alt="أفلام">
+            </div>
+            <div class="mx-3 fw-bold">
+                <h6>أفلام</h6>
+            </div>
+        </a>
+        <a href="/play-lists" class="rounded d-flex align-items-center text-white mb-1 category-movie">
+            <div>
+                <img src="{% static 'img/series.png' %}" width="40px" height="40px" alt="مسلسلات">
+            </div>
+            <div class="mx-3 fw-bold">
+                <h6>مسلسلات</h6>
+            </div>
+        </a>
+
+        {% for category in categories %}
+        <a href="/category/{{ category.slug }}" class="rounded d-flex align-items-center text-white mb-1 category-movie">
+            <div>
+                <img width="40px" height="40px" alt="{{ category.name }}" src="{{ category.image.url }}" />
             </div>
             <div class="mx-3 fw-bold">
                 {{ category.name }}
