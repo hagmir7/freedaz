@@ -233,7 +233,7 @@ def best(request):
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
-        print(card_content)
+        print(soup)
         results = card_content.find_all("div", {'class': 'GridItem'})
         print(f"Page ==== {page}")
         for item in results: 
