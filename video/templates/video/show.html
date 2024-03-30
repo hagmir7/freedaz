@@ -35,48 +35,34 @@
         <!-- Video  -->
 
 
-        {% if not movie.scraping_url %}
-            <video controls crossorigin playsinline poster="{% static 'img/background.svg' %}" id="player" class="border w-100">
-                <!-- movie files -->
-                {% for video in videos  %}
+            <div id="image-content">
+                {% if not movie.scraping_url %}
+                <video controls crossorigin playsinline poster="{% static 'img/background.svg' %}" id="player" class="border w-100">
+                    <!-- movie files -->
+                    {% for video in videos %}
                     {% if forloop.first %}
-                        {% if video.video_file %}
-                        <source src="{{ video.video_file.url }}"  type="video/mp4" size="720">
-                        {% else %}
-                        <source src="{{ video.url }}"  type="video/mp4" size="720">
-                        {% endif %}
+                    {% if video.video_file %}
+                    <source src="{{ video.video_file.url }}" type="video/mp4" size="720">
+                    {% else %}
+                    <source src="{{ video.url }}" type="video/mp4" size="720">
+                    {% endif %}
                     {% else %}
                     {% endif %}
-                {% endfor %}
-                <!-- Fallback for browsers that don't support the <video> element -->
-            </video>
-            {% else %}
-
-            <!-- Movie image -->
-            <!-- <div class="div">
-                <div class="d-flex justify-content-center mb-3">
-                    <div class="card shadow-sm overflow-hidden col-8 col-md-6 col-lg-5 col-xl-4 p-0">
-                      {% if movie.list %}
-                        {% if movie.list.image %}
-                            <img class="book-detail-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title }}">
-                        {% else %}
-                            <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
-                        {% endif %}
-                      {% else %}
-                      {% if movie.image %}
-                        <img class="book-detail-image lazy" src="{% static 'img/lazy.svg' %}" data-src="{{movie.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">
-                        {% else %}
-                            <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
-                        {% endif %} 
-                      {% endif %}
-                    </div>
-                  </div>
-            </div> -->
-           
-            <div class="plyr__video-embed overflow-hidden rounded d-flex justify-content-center" id="ply">
-                <div id="loading" class="mt-5"></div>
+                    {% endfor %}
+                    <!-- Fallback for browsers that don't support the <video> element -->
+                </video>
+                {% else %}
+                
+                
+                
+                <!-- Movie image -->
+                
+                
+                <div class="plyr__video-embed overflow-hidden rounded d-flex justify-content-center bg-card" id="ply">
+                    <div id="loading" class="mt-5"></div>
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
 
             <!-- Ttitle & time -->
             <h1 class="h5 m-0 fw-bold text-white mt-2">{{ movie.title }}</h1>
@@ -280,6 +266,28 @@
                     }
                 } else {
                     console.error("Error: 'qualities' data is missing or not in the expected format");
+
+                    document.getElementById('image-content').innerHTML = `
+                                <div class="div">
+                                    <div class="d-flex justify-content-center mb-3">
+                                        <div class="card shadow-sm overflow-hidden col-8 col-md-6 col-lg-5 col-xl-4 p-0">
+                                        {% if movie.list %}
+                                            {% if movie.list.image %}
+                                                <img class="book-detail-image" src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title }}">
+                                            {% else %}
+                                                <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
+                                            {% endif %}
+                                        {% else %}
+                                        {% if movie.image %}
+                                            <img class="book-detail-image" src="{{movie.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">
+                                            {% else %}
+                                                <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
+                                            {% endif %}
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                    `
                 }
             } catch (error) {
                 console.error("Error fetching data:", error);

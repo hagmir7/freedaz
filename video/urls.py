@@ -50,6 +50,7 @@ urlpatterns = [
     path('movies/duplicated', duplicated_movies),
     path('lists/duplicated', duplicated_lists),
     path('series/duplicated', duplicated_series),
+    path('update_scraping_url', update_scraping_url),
 
     path('wecima', wecima),
     path('top', top),

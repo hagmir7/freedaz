@@ -14,6 +14,7 @@ import requests
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db.models import Count
+from django.shortcuts import HttpResponse
 
 
 
@@ -514,3 +515,22 @@ def duplicated_series(request):
         'movies' : duplicated_data
     }
     return render(request, 'duplicated-movies.html', context)
+
+# update Scraing url
+
+
+
+
+def update_scraping_url(request):
+    try:
+        # Fetch all records containing the old URL
+        movies_to_update = Movie.objects.filter(scraping_url__contains='weciimaa.online')
+
+        # Update each record with the new URL
+        for movie in movies_to_update:
+            movie.scraping_url = movie.scraping_url.replace('weciimaa.online', 't4cce4ma.shop')
+            movie.save()
+
+        return HttpResponse("Scraping URLs updated successfully.")
+    except Exception as e:
+        return HttpResponse(f"An error occurred: {str(e)}")

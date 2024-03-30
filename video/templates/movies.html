@@ -76,7 +76,7 @@
         <ul class="pagination justify-content-center">
             {% if movies.has_previous %}
                 <li class="page-item">
-                    <a class="page-link bg-card" href="?page={{ movies.previous_page_number }}">{% trans "Previous" %}</a>
+                    <a class="page-link bg-card" href="?page={{ movies.previous_page_number }}">Previous</a>
                 </li>
             {% endif %}
     
@@ -108,7 +108,7 @@
     
             {% if movies.has_next %}
                 <li class="page-item">
-                    <a class="page-link bg-card" href="?page={{ movies.next_page_number }}">{% trans "Next" %}</a>
+                    <a class="page-link bg-card" href="?page={{ movies.next_page_number }}">التالي</a>
                 </li>
             {% endif %}
         </ul>
