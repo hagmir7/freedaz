@@ -106,13 +106,17 @@
 
             <!-- Download links -->
             <div class="my-3" id="download-btns">
-                {% for video in videos  %}
+                {% if not movie.scraping_url %}
+                    {% for video in videos %}
                     {% if video.video_file %}
-                        <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill mt-2" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                    <a href="{{ video.video_file.url }}" class="btn btn-success rounded-pill mt-2" download><i
+                            class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
                     {% else %}
-                        <a href="{{ video.url }}" class="btn btn-success rounded-pill mt-2" download><i class="bi bi-cloud-download"></i> &#xa0; {{ video.quality }}</a>
+                    <a href="{{ video.url }}" class="btn btn-success rounded-pill mt-2" download><i class="bi bi-cloud-download"></i> &#xa0;
+                        {{ video.quality }}</a>
                     {% endif %}
-                {% endfor %}
+                    {% endfor %}
+                {% endif  %}
 
                 <!-- Shear button -->
                 <button class="btn btn-primary rounded-pill mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
