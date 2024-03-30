@@ -8,8 +8,54 @@ from .serializers import *
 
 from rest_framework import generics
 from rest_framework.pagination import PageNumberPagination
+import requests
+from bs4 import BeautifulSoup
 
 
+
+def remove_first_end_spaces(string):
+    return "".join(string.rstrip().lstrip())
+
+def str_cleaner(string :str):
+    return string.replace("\r", '')
+
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
+def movie_detail(request, slug):
+    movie = get_object_or_404(Movie, slug=slug)
+    
+    try:
+        scrap = getItem(movie.scraping_url) if movie.scraping_url else []
+    except Exception as e:
+        scrap = []
+    
+    return Response(scrap)
+
+def getItem(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    movie_content = soup.find('div', {'class': 'Download--Wecima--Single'})
+    movies = movie_content.find_all('a', {'class': 'hoverable'})
+    
+    quality = []
+    for movie in movies:
+        quality.append({
+            'quality': remove_first_end_spaces(movie.find('resolution').text),
+            'url': movie['href']
+        })
+    
+    servers = soup.find('ul', {'class': 'WatchServersList'}).find_all("btn")
+    servers_array = []
+    for btn in servers:
+        servers_array.append({
+            'name': btn.find('strong').text,
+            'url': str_cleaner(btn["data-url"])
+        })
+    
+    return {
+        "qualities" : quality,
+        "servers": servers_array
+    }
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
@@ -25,6 +71,11 @@ class CustomPagination(PageNumberPagination):
     page_size = 10  # Number of objects to be returned per page
     page_size_query_param = 'page_size'
     max_page_size = 100
+
+
+
+
+
 
 
 # Create your list view

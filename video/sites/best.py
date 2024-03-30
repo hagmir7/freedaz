@@ -121,8 +121,8 @@ def getItem(url, image, title):
     #     return 0
     if not is_season:
         print("No season👽")
-        list_content = soup.find('div', {'class' : 'Seasons--Episodes'})
-        list_items = list_content.find_all('a')
+        # list_content = soup.find('div', {'class' : 'Full--Width'})
+        list_items = soup.find_all('a', {'class': "activable"})
 
         # Create Season
         if not Serie.objects.filter(title=title).exists():
@@ -228,11 +228,12 @@ def best(request):
     else:
         pages = 1
     for page in range(int(pages), 0, -1):
-        url = f"https://weciimaa.online/seriestv/best/?page_number={page}/"
+        # url = f"https://t4cce4ma.shop/seriestv/best/?page_number={page}/"
+        url = f"https://t4cce4ma.shop/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
-        results = card_content.find_all("div", {'class': 'Thumb--GridItem'})
+        results = card_content.find_all("div", {'class': 'GridItem'})
         print(f"Page ==== {page}")
         for item in results: 
             if item:
