@@ -223,6 +223,14 @@ def getItem(url, image, title):
 
 import time
 
+
+proxy_list = [
+    'http://ohekzdlm:es1g7jpw21uj@38.154.227.167:5868',
+    'http://ohekzdlm:es1g7jpw21uj@185.199.229.156:7492',
+    # Add more proxies as needed
+]
+
+
 def best(request):
     if request.GET.get('pages'):
         pages = request.GET.get('pages')
@@ -230,7 +238,7 @@ def best(request):
         pages = 1
     for page in range(int(pages), 0, -1):
         url = f"https://t4cce4ma.shop/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
-        html = requests.get(url, headers=headers, verify=False)
+        html = requests.get(url, headers=headers, proxies=proxy_list)
         time.sleep(5)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
