@@ -11,7 +11,7 @@ import os
 pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside parentheses
 
 
-
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
 
 proxy ={"http": "http://10.122.53.36:8080", "https": "http://10.122.53.36:8080"}
 
@@ -229,7 +229,7 @@ def best(request):
         pages = 1
     for page in range(int(pages), 0, -1):
         url = f"https://t4cce4ma.shop/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
-        html = requests.get(url, verify=False)
+        html = requests.get(url, headers=headers, verify=False)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
         print(soup)
