@@ -184,33 +184,6 @@ def video_upload(request, slug):
 
 
 
-
-from bs4 import BeautifulSoup
-import re
-
-def getLocaction(ip):
-    url = f"https://api.ipgeolocation.io/ipgeo?apiKey=2df9c865ff864fb4bcbf81ebbe0386eb&ip={ip}"
-    response = requests.get(url)
-    return response.json()
-
-
-
-def getItem(url):
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    movie_content = soup.find('div', {'class': 'Download--Wecima--Single'})
-    movies = movie_content.find_all('a', {'class': 'hoverable'})
-    quality = []
-    for movie in movies:
-        quality.append({
-            'quality' : movie.find('resolution').text,
-            'url' : movie['href']
-        })
-    return quality
-
-    
-
-
 def video(request, slug):
     movie = get_object_or_404(Movie, slug=slug)
     episodes = Movie.objects.filter(list=movie.list).order_by('episode')
@@ -244,14 +217,6 @@ def video(request, slug):
         movie.views.add(location)
         movie.save()
 
-    # Scraping Downlaod urls
-    try:
-        if(movie.scraping_url):
-            quality = getItem(movie.scraping_url)
-        else:
-            quality = False
-    except:
-        quality = []
     
     # Get image 
     if movie.image:
@@ -271,7 +236,6 @@ def video(request, slug):
         'videos': videos,
         'episodes' : episodes,
         'categories' : categories,
-        'quality' : quality,
         'image' : image
     }
    
