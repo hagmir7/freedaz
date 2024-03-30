@@ -228,9 +228,8 @@ def best(request):
     else:
         pages = 1
     for page in range(int(pages), 0, -1):
-        # url = f"https://t4cce4ma.shop/seriestv/best/?page_number={page}/"
         url = f"https://t4cce4ma.shop/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
-        html = requests.get(url)
+        html = requests.get(url, verify=False)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
         print(soup)
