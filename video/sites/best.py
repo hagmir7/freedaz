@@ -251,7 +251,7 @@ def best(request):
     else:
         pages = 1
     for page in range(int(pages), 0, -1):
-        url = f"https://mycima.wecima.show/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
+        url = f"https://mycima.wecima.show/seriestv/new/?page_number={page}/"
         html = requests.get(url)
         time.sleep(5)
         soup = BeautifulSoup(html.content, "html.parser")
