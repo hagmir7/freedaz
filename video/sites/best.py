@@ -7,6 +7,11 @@ from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.contrib.auth.models import User
 import os
+import time
+from itertools import cycle
+import cloudscraper
+scraper = cloudscraper.create_scraper()
+
 
 pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside parentheses
 
@@ -36,7 +41,7 @@ urls = ['mycima.pw', 'mycimaa.monster', 'mycima.tube', 'mycima.movie', 'wecima.a
 def download_image_serie(**kwargs):
     try:
         if not any(substring in kwargs.get('image_url') for substring in urls):
-            response = requests.get(kwargs.get('image_url'))
+            response = scraper.get(kwargs.get('image_url'))
             if response.status_code == 200:
                 response.raise_for_status() 
 
@@ -56,7 +61,7 @@ def download_image_serie(**kwargs):
 def download_image_list(**kwargs):
     try:
         if not any(substring in kwargs.get('image_url') for substring in urls):
-            response = requests.get(kwargs.get('image_url'))
+            response = scraper.get(kwargs.get('image_url'))
             if response.status_code == 200:
                 response.raise_for_status() 
 
@@ -74,7 +79,7 @@ def download_image_list(**kwargs):
 
 def getNewItem(url, season, list_id):
     try:
-        response = requests.get(url)
+        response = scraper.get(url)
         soup = BeautifulSoup(response.content, "html.parser")
         title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
             
@@ -113,7 +118,7 @@ def getNewItem(url, season, list_id):
 
 
 def getItem(url, image, title):
-    response = requests.get(url)
+    response = scraper.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
     sub_title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
     is_season = soup.find('div', {'class': 'List--Seasons--Episodes'})
@@ -180,7 +185,7 @@ def getItem(url, image, title):
         # Get season
         for item in season_list:
             print("الموسم")
-            response = requests.get(item['href'])
+            response = scraper.get(item['href'])
             soup = BeautifulSoup(response.content, "html.parser")
             image_style = soup.find('wecima', {'class': 'separated--top'})['style'] ##['data-lazy-style']
             
@@ -221,24 +226,26 @@ def getItem(url, image, title):
 
 
 
-import time
 
 
 proxy_list = [
-    'http://ohekzdlm:es1g7jpw21uj@38.154.227.167:5868',
-    'http://ohekzdlm:es1g7jpw21uj@185.199.229.156:7492',
-    # Add more proxies as needed
+    'ohekzdlm:es1g7jpw21uj@188.74.210.21:6100',
+    # 'http://ohekzdlm:es1g7jpw21uj@185.199.229.156:7492',
+    # # Add more proxies as needed
 ]
 
 
+proxy_pool = cycle(proxy_list)
+
 def best(request):
+    proxy = next(proxy_pool)
     if request.GET.get('pages'):
         pages = request.GET.get('pages')
     else:
         pages = 1
     for page in range(int(pages), 0, -1):
         url = f"https://t4cce4ma.shop/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
-        html = requests.get(url, headers=headers, proxies=proxy_list)
+        html = scraper.get(url)
         time.sleep(5)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
