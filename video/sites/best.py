@@ -8,9 +8,6 @@ from django.core.files.temp import NamedTemporaryFile
 from django.contrib.auth.models import User
 import os
 import time
-from itertools import cycle
-import cloudscraper
-scraper = cloudscraper.create_scraper()
 
 
 pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside parentheses
@@ -41,7 +38,7 @@ urls = ['mycima.pw', 'mycimaa.monster', 'mycima.tube', 'mycima.movie', 'wecima.a
 def download_image_serie(**kwargs):
     try:
         if not any(substring in kwargs.get('image_url') for substring in urls):
-            response = scraper.get(kwargs.get('image_url'))
+            response = requests.get(kwargs.get('image_url'))
             if response.status_code == 200:
                 response.raise_for_status() 
 
@@ -61,7 +58,7 @@ def download_image_serie(**kwargs):
 def download_image_list(**kwargs):
     try:
         if not any(substring in kwargs.get('image_url') for substring in urls):
-            response = scraper.get(kwargs.get('image_url'))
+            response = requests.get(kwargs.get('image_url'))
             if response.status_code == 200:
                 response.raise_for_status() 
 
@@ -79,7 +76,7 @@ def download_image_list(**kwargs):
 
 def getNewItem(url, season, list_id):
     try:
-        response = scraper.get(url)
+        response = requests.get(url)
         soup = BeautifulSoup(response.content, "html.parser")
         title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
             
@@ -118,7 +115,7 @@ def getNewItem(url, season, list_id):
 
 
 def getItem(url, image, title):
-    response = scraper.get(url)
+    response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
     sub_title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
     is_season = soup.find('div', {'class': 'List--Seasons--Episodes'})
@@ -185,7 +182,7 @@ def getItem(url, image, title):
         # Get season
         for item in season_list:
             print("الموسم")
-            response = scraper.get(item['href'])
+            response = requests.get(item['href'])
             soup = BeautifulSoup(response.content, "html.parser")
             image_style = soup.find('wecima', {'class': 'separated--top'})['style'] ##['data-lazy-style']
             
@@ -244,8 +241,8 @@ proxies = {"http": "172.16.0.1:8080", "https": "172.16.0.1:8080"}
 # driver.get('https://opensea.io/rankings/trending')
 
 def best(request):
-    # scraper = cloudscraper.create_scraper(delay=10, browser="chrome")
-    # scraper.proxies.update(proxies)
+    # requests = cloudrequests.create_requests(delay=10, browser="chrome")
+    # requests.proxies.update(proxies)
     if request.GET.get('pages'):
         pages = request.GET.get('pages')
     else:
@@ -256,7 +253,6 @@ def best(request):
         time.sleep(5)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
-        print("Title:", soup.title.text)
         results = card_content.find_all("div", {'class': 'GridItem'})
         print(f"Page ==== {page}")
         for item in results: 
