@@ -134,12 +134,13 @@ def getItem(url, image):
 
 
 def wecima(request):
-    for page in range(5, 0, -1):
-        if request.GET.get("start"):
-            page_nubmer = request.GET.get("start")
-        else:
-            page_nubmer = 5
-        url = f"https://mycima.wecima.show//movies/recent/page/{page_nubmer}/"
+    if request.GET.get("start"):
+        page_nubmer = request.GET.get("start")
+    else:
+        page_nubmer = 5
+    for page in range(page_nubmer, 0, -1):
+        
+        url = f"https://mycima.wecima.show//movies/recent/page/{page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
         results = soup.find_all("div", {'class': 'Thumb--GridItem'})
