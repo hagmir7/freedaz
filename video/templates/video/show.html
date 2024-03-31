@@ -3,29 +3,10 @@
 {% load humanize %}
 
 {% block head %}
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.4.6/plyr.css">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css">
     <script>
         window.console = window.console || function (t) { };
     </script>
-    <style>
-        #loading {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            -webkit-animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { -webkit-transform: rotate(360deg); }
-        }
-        @-webkit-keyframes spin {
-            to { -webkit-transform: rotate(360deg); }
-        }
-    </style>
 {% endblock %}
 
 {% block content %}
@@ -58,7 +39,7 @@
                 <!-- Movie image -->
                 
                 
-                <div class="plyr__video-embed overflow-hidden rounded d-flex justify-content-center bg-card" id="ply">
+                <div class="plyr__video-embed plyr__control overflow-hidden rounded d-flex justify-content-center bg-card"  id="player">
                     <div id="loading" class="mt-5"></div>
                 </div>
                 {% endif %}
@@ -229,71 +210,33 @@
 
 
 {% block footer %}
-    <script src="https://cdn.plyr.io/3.4.6/plyr.js"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="{% static 'script.js' %}"> </script>
     <script>
-        const getData = async () => {
-            try {
-                const response = await fetch("/api/movie/{{ movie.slug }}");
-                const data = await response.json();
+    const getData = async () => {
+        try {
+            const response = await fetch(`/api/movie/{{ movie.slug }}`);
+            const data = await response.json();
 
-                // Check if data.qualities is an array and has at least one element
-                if (Array.isArray(data.qualities) && data.qualities.length > 0) {
-                    // Check if data.qualities[1] exists and has a servers array with at least one element
-                    if (data.servers?.length > 0) {
-                        document.getElementById('ply').innerHTML = `
-                            <iframe
-                                src="${data.servers[0].url}"
-                                allowfullscreen
-                                allowtransparency
-                                allow="autoplay"
-                                >
-                            </iframe>
-                        `;
-                    }
-
-                    // Check if data.qualities has a url property
-                   
-                    if (data.qualities) {
-                        data.qualities.map(item =>{
-                            document.getElementById('download-btns').innerHTML += `
-                            <a href=${item.url} class="btn btn-success rounded-pill mt-2" target="_blank" download>
-                                <i class="bi bi-cloud-download"></i>
-                                &#xa0; ${item.quality}
-                            </a>`
-                        })
-                        
-                    }
-                } else {
-                    console.error("Error: 'qualities' data is missing or not in the expected format");
-
-                    document.getElementById('image-content').innerHTML = `
-                                <div class="div">
-                                    <div class="d-flex justify-content-center mb-3">
-                                        <div class="card shadow-sm overflow-hidden col-8 col-md-6 col-lg-5 col-xl-4 p-0">
-                                        {% if movie.list %}
-                                            {% if movie.list.image %}
-                                                <img class="book-detail-image" src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title }}">
-                                            {% else %}
-                                                <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
-                                            {% endif %}
-                                        {% else %}
-                                        {% if movie.image %}
-                                            <img class="book-detail-image" src="{{movie.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">
-                                            {% else %}
-                                                <img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">
-                                            {% endif %}
-                                        {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                    `
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
+            if (Array.isArray(data.qualities) && data.qualities.length > 0 && data.servers?.length > 0) {
+                document.getElementById('player').innerHTML = `<iframe src="${data.servers[0].url}" allowfullscreen allowtransparency allow="autoplay"></iframe>`;
             }
+
+            if (data.qualities) {
+                data.qualities.forEach(item => {
+                    document.getElementById('download-btns').innerHTML += `<a href="${item.url}" class="btn btn-success rounded-pill mt-2" target="_blank" download><i class="bi bi-cloud-download"></i>&#xa0;${item.quality}</a>`;
+                });
+            } else {
+                if ("{{ movie.scraping_url }}".length > 10) {
+                    document.getElementById('image-content').innerHTML = `{% if movie.list %}{% if movie.list.image %}<img class="book-detail-image" src="{{movie.list.image.url}}" height="auto" width="auto" alt="{{ movie.title }}">{% else %}<img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">{% endif %}{% else %}{% if movie.image %}<img class="book-detail-image" src="{{movie.image.url}}" height="auto" width="auto" alt="{{ movie.title}}">{% else %}<img class="book-detail-image" src="{% static 'img/lazy.svg' %}" height="auto" width="auto" alt="{{ movie.title}}">{% endif %}{% endif %}`;
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
         }
-        getData();
+    };
+
+    getData();
     </script>
 
 {% endblock footer %}

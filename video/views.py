@@ -190,7 +190,6 @@ def video(request, slug):
     episodes = Movie.objects.filter(list=movie.list).order_by('episode')
 
     videos = Video.objects.filter(movie=movie.id)
-
     list = Movie.objects.annotate(views_count=Count('views')).order_by('-views_count')
     paginator = Paginator(list, 24) 
     page_number = request.GET.get("page")
