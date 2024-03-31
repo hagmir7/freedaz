@@ -19,7 +19,7 @@ pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside pa
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
 }
-proxy ={"http": "http://10.122.53.36:8080", "https": "http://10.122.53.36:8080"}
+proxies ={"http": "http://172.16.0.1:8080", "https": "http://172.16.0.1:8080"}
 
 # Remove end spaces
 def remove_end_spaces(string):
@@ -233,7 +233,7 @@ def getItem(url, image, title):
 #     # 'http://ohekzdlm:es1g7jpw21uj@185.199.229.156:7492',
 #     # # Add more proxies as needed
 # ]
-proxies = {"http": "172.16.0.1:8080", "https": "172.16.0.1:8080"}
+# proxies = {"http": "172.16.0.1:8080", "https": "172.16.0.1:8080"}
 
 
 # proxy_pool = cycle(proxy_list)
@@ -246,25 +246,7 @@ proxies = {"http": "172.16.0.1:8080", "https": "172.16.0.1:8080"}
 def best(request):
     # scraper = cloudscraper.create_scraper(delay=10, browser="chrome")
     # scraper.proxies.update(proxies)
-    if request.GET.get('pages'):
-        pages = request.GET.get('pages')
-    else:
-        pages = 1
-    for page in range(int(pages), 0, -1):
-        url = f"https://mycima.wecima.show/category/%d9%85%d8%b3%d9%84%d8%b3%d9%84%d8%a7%d8%aa/page/{page}/"
-        html = requests.get(url)
-        time.sleep(5)
-        soup = BeautifulSoup(html.content, "html.parser")
-        card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
-        print("Title:", soup.title.text)
-        results = card_content.find_all("div", {'class': 'GridItem'})
-        print(f"Page ==== {page}")
-        for item in results: 
-            if item:
-                url = item.find('a')['href']
-                title  = re.sub(r'\([^)]*\)', '', item.find('a').text).strip() 
-                try: image = item.find('span', {'class': 'BG--GridItem'})['data-lazy-style']
-                except: image = None
-                image = re.findall(pattern, image)[0]
-                print("المسلسل")
-                getItem(url, image, title) 
+
+    url = request.GET.get('url')
+    getItem(url, image, title) 
+                
