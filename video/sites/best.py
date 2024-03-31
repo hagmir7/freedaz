@@ -233,12 +233,14 @@ proxy_list = [
     # 'http://ohekzdlm:es1g7jpw21uj@185.199.229.156:7492',
     # # Add more proxies as needed
 ]
+proxies = {"http": "47.100.236.23:8080", "https": "47.100.236.23:8080"}
 
 
 proxy_pool = cycle(proxy_list)
 
 def best(request):
-    proxy = next(proxy_pool)
+    scraper = cloudscraper.create_scraper(delay=10, browser="chrome")
+    # scraper.proxies.update(proxies)
     if request.GET.get('pages'):
         pages = request.GET.get('pages')
     else:
