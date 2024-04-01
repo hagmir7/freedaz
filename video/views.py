@@ -523,11 +523,11 @@ def duplicated_series(request):
 def update_scraping_url(request):
     try:
         # Fetch all records containing the old URL
-        movies_to_update = Movie.objects.filter(scraping_url__contains='weciimaa.online')
+        movies_to_update = Movie.objects.filter(scraping_url__contains='mycima2.wecima.cam')
 
         # Update each record with the new URL
         for movie in movies_to_update:
-            movie.scraping_url = movie.scraping_url.replace('weciimaa.online', 't4cce4ma.shop')
+            movie.scraping_url = movie.scraping_url.replace('mycima2.wecima.cam', 'mycima.wecima.show')
             movie.save()
 
         return HttpResponse("Scraping URLs updated successfully.")

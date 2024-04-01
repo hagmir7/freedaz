@@ -42,6 +42,7 @@
                 <div class="plyr__video-embed plyr__control overflow-hidden rounded d-flex justify-content-center bg-card"  id="player">
                     <div id="loading" class="mt-5"></div>
                 </div>
+                <button onclick="changeStuff()">change</button>
                 {% endif %}
             </div>
 
@@ -224,7 +225,7 @@
             const data = await response.json();
 
             if (Array.isArray(data.qualities) && data.qualities.length > 0 && data.servers?.length > 0) {
-                document.getElementById('player').innerHTML = `<iframe src="${data.servers[0].url}" allowfullscreen allowtransparency allow="autoplay"></iframe>`;
+                document.getElementById('player').innerHTML = `<iframe src="${data.servers[0].url}" allowfullscreen allowtransparency id="ifram-player" allow="autoplay"></iframe>`;
             }
 
             if (data.qualities) {
@@ -242,6 +243,13 @@
     };
 
     getData();
+
+
+    const videoIframe = document.getElementById('ifram-player');
+    function changeStuff(){
+        const iframWindows = videoIframe.contentWindow;
+        console.log(iframWindows)
+    }
     </script>
 
 {% endblock footer %}
