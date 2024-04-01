@@ -42,7 +42,6 @@
                 <div class="plyr__video-embed plyr__control overflow-hidden rounded d-flex justify-content-center bg-card"  id="player">
                     <div id="loading" class="mt-5"></div>
                 </div>
-                <button onclick="changeStuff()">change</button>
                 {% endif %}
             </div>
 
@@ -91,7 +90,7 @@
                     <i class="bi bi-share"></i> &#xa0; مشاركة
                 </button>
 
-                <a href="https://t.me/weciimaa" target="_blank" class="btn rounded-pill text-white mt-2" style="background-color: #229ED9;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <a href="https://t.me/weciimaa" target="_blank" class="btn rounded-pill text-white mt-2" style="background-color: #229ED9;">
                     <i class="bi bi-telegram"></i> &#xa0; قناة التليجرام
                 </a>
 
@@ -243,13 +242,6 @@
     };
 
     getData();
-
-
-    const videoIframe = document.getElementById('ifram-player');
-    function changeStuff(){
-        const iframWindows = videoIframe.contentWindow;
-        console.log(iframWindows)
-    }
     </script>
 
 {% endblock footer %}

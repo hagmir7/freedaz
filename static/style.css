@@ -4,6 +4,22 @@
     padding: 20px;
 }
 
+*{
+    font-family: 'Rubik', sans-serif !important;
+}
+
+.reem {
+    font-family: 'Reem Kufi Fun', sans-serif !important;
+}
+
+.rubik {
+    font-family: 'Rubik', sans-serif !important;
+}
+
+.ruwudu {
+    font-family: 'Ruwudu', serif !important;
+}
+
 
 :root {
     --bg-body: #000000;
@@ -11,6 +27,15 @@
     --bg-card: #1b1d2f;
     --color-text: #5367ff;
 }
+
+
+
+@media (prefers-reduced-motion: no-preference) {
+    :root {
+        scroll-behavior: smooth;
+    }
+}
+
 
 nav {
     background-color: var(--bg-card) !important;
@@ -38,6 +63,8 @@ nav {
 
 body {
     background-color: #000000 !important;
+    margin: 0;
+    font-family: 'Rubik',
 }
 
 .movie-card-shadow {
@@ -53,10 +80,6 @@ body {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.91), rgba(0, 0, 0, 0));
 }
 
-
-* {
-    font-family: 'Raleway', sans-serif;
-}
 
 a {
     text-decoration: none !important;

@@ -23,6 +23,7 @@
 
         <a class="navbar-brand" href="/">
             <img width="35px" height="35px" src="{% static 'img/icon.svg' %}" alt="WeciiMaa">
+            <strong class="text-white h5 reem px-3">وي سيما</strong>
         </a>
         <button class="navbar-toggler fs-2 text-white" aria-label="Search Button" title="Search" id="search-icon" type="button">
             <i class="bi bi-search"></i>
@@ -66,7 +67,10 @@
             </div>
             <div class="col-md-4">
                 <form class="d-flex" method='GET' action="{% url 'movies_new' %}" role="search">
-                    <input class="form-control me-2 rounded-pill w-100" name='q' value="{{ request.GET.q }}" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
+                    <div class="input-group ">
+                        <button class="input-group-text border-0 rounded-start-pill"><i class="bi bi-search"></i></button>
+                         <input class="form-control rounded-end-pill border-0" name='q' value="{{ request.GET.q }}" type="search" placeholder="بحث عن فلم , مسلسل, أنيمي..." aria-label="Search">
+                    </div>
                 </form>
             </div>
         
