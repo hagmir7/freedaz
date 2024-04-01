@@ -4,7 +4,7 @@
     padding: 20px;
 }
 
-*{
+* {
     font-family: 'Rubik', sans-serif !important;
 }
 
@@ -45,8 +45,8 @@ nav {
     background-color: #6d758d;
 }
 
-.movie-body{
-    white-space: pre-line!important;
+.movie-body {
+    white-space: pre-line !important;
 }
 
 
@@ -210,7 +210,7 @@ th {
     background-color: #000000 !important;
 }
 
-.overflow-auto{
+.overflow-auto {
     max-height: 100vh;
 }
 
@@ -251,31 +251,23 @@ th {
 
 
 
-@media (max-width: 575.98px) { 
-    
- }
+@media (max-width: 575.98px) {}
 
 
-@media (max-width: 767.98px) { 
-    .overflow-auto{
+@media (max-width: 767.98px) {
+    .overflow-auto {
         max-height: auto;
         height: auto;
     }
- }
+}
 
 
-@media (max-width: 991.98px) { 
-    
- }
+@media (max-width: 991.98px) {}
 
-@media (max-width: 1199.98px) { 
-    
- }
+@media (max-width: 1199.98px) {}
 
 
-@media (max-width: 1399.98px) { 
-    
- }
+@media (max-width: 1399.98px) {}
 
 
 #loading {
