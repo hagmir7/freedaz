@@ -130,8 +130,12 @@ def getItem(url, image):
 
 
 def anim(request):
-    for page in range(16, 0, -1):
-        url = f"https://weciimaa.online/category/%d8%a7%d9%81%d9%84%d8%a7%d9%85-%d9%83%d8%b1%d8%aa%d9%88%d9%86/page/{page}/"
+    if request.GET.get('start'):
+        start = request.GET.get('start')
+    else:
+        start = 1
+    for page in range(int(start), 0, -1):
+        url = f"https://mycima.wecima.show/category/%d8%a7%d9%81%d9%84%d8%a7%d9%85-%d9%83%d8%b1%d8%aa%d9%88%d9%86/page/{page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
         results = soup.find_all("div", {'class': 'Thumb--GridItem'})

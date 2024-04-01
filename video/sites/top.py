@@ -208,8 +208,12 @@ def getItem(url, image, title):
 
 
 def top(request):
-    for page in range(99, 0, -1):
-        url = f"https://weciimaa.online/seriestv/top/?page_number={page}/"
+    if request.GET.get('start'):
+        start = request.GET.get('start')
+    else:
+        start = 1
+    for page in range(int(start), 0, -1):
+        url = f"https://mycima.wecima.show/seriestv/top/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})

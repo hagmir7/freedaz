@@ -7,15 +7,12 @@ from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.contrib.auth.models import User
 import os
-import time
-
 
 pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside parentheses
 
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-}
+
+
 proxy ={"http": "http://10.122.53.36:8080", "https": "http://10.122.53.36:8080"}
 
 # Remove end spaces
@@ -124,8 +121,8 @@ def getItem(url, image, title):
     #     return 0
     if not is_season:
         print("No season👽")
-        # list_content = soup.find('div', {'class' : 'Full--Width'})
-        list_items = soup.find_all('a', {'class': "activable"})
+        list_content = soup.find('div', {'class' : 'Seasons--Episodes'})
+        list_items = list_content.find_all('a')
 
         # Create Season
         if not Serie.objects.filter(title=title).exists():
@@ -225,35 +222,17 @@ def getItem(url, image, title):
 
 
 
-# proxy_list = [
-#     'ohekzdlm:es1g7jpw21uj@188.74.210.21:6100',
-#     # 'http://ohekzdlm:es1g7jpw21uj@185.199.229.156:7492',
-#     # # Add more proxies as needed
-# ]
-proxies = {"http": "172.16.0.1:8080", "https": "172.16.0.1:8080"}
-
-
-# proxy_pool = cycle(proxy_list)
-
-
-# import undetected_chromedriver as uc 
-# driver = uc.Chrome() 
-# driver.get('https://opensea.io/rankings/trending')
-
 def best(request):
-    # requests = cloudrequests.create_requests(delay=10, browser="chrome")
-    # requests.proxies.update(proxies)
-    if request.GET.get('pages'):
-        pages = request.GET.get('pages')
+    if request.GET.get('start'):
+        start = request.GET.get('start')
     else:
-        pages = 1
-    for page in range(int(pages), 0, -1):
-        url = f"https://mycima.wecima.show/seriestv/new/?page_number={page}/"
+        start = 1
+    for page in range(int(start), 0, -1):
+        url = f"https://mycima.wecima.show/seriestv/best/?page_number={page}/"
         html = requests.get(url)
-        time.sleep(5)
         soup = BeautifulSoup(html.content, "html.parser")
         card_content = soup.find('div', {'class': 'Grid--WecimaPosts'})
-        results = card_content.find_all("div", {'class': 'GridItem'})
+        results = card_content.find_all("div", {'class': 'Thumb--GridItem'})
         print(f"Page ==== {page}")
         for item in results: 
             if item:

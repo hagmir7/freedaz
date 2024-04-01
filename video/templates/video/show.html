@@ -90,6 +90,10 @@
                     <i class="bi bi-share"></i> &#xa0; مشاركة
                 </button>
 
+                <a href="https://t.me/weciimaa" target="_blank" class="btn rounded-pill text-white mt-2" style="background-color: #229ED9;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="bi bi-telegram"></i> &#xa0; قناة التليجرام
+                </a>
+
                 <!-- Update / Delete buttons  -->
                 {% if user.is_superuser %}
                     <a href="{% url 'movie-update' movie.slug %}" class="btn btn-info rounded-pill mt-2 text-white"><i class="bi bi-pen"></i> &#xa0; تعديل</a>
@@ -213,6 +217,7 @@
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
     <script src="{% static 'script.js' %}"> </script>
     <script>
+        
     const getData = async () => {
         try {
             const response = await fetch(`/api/movie/{{ movie.slug }}`);
