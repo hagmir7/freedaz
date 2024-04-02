@@ -168,7 +168,6 @@ tr {
 .hero-text {
     position: relative;
     z-index: 1;
-    width: 50%;
     margin: auto;
     color: #fff;
     text-align: center
