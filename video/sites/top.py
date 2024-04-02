@@ -227,4 +227,7 @@ def top(request):
                 except: image = None
                 image = re.findall(pattern, image)[0]
                 print("المسلسل")
-                getItem(url, image, title) 
+                try:
+                    getItem(url, image, title)
+                except:
+                    "Ther is an error🔥"
