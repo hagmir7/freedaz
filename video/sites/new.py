@@ -1,214 +1,102 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-from video.models import Movie, Video, Serie, PlayList
-from django.http import JsonResponse
+from video.models import Movie, Serie, PlayList
 from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
 from django.contrib.auth.models import User
-import os
+from django.core.files.temp import NamedTemporaryFile
 
-pattern = r'\((.*?)\)'  # Regular expression pattern to match the text inside parentheses
+pattern = r'\((.*?)\)'
 
-
-
-
-proxy ={"http": "http://10.122.53.36:8080", "https": "http://10.122.53.36:8080"}
-
-# Remove end spaces
-def remove_end_spaces(string):
-    return "".join(string.rstrip())
-
-# Remove first and  end spaces
-def remove_first_end_spaces(string):
+def remove_spaces(string):
     return "".join(string.rstrip().lstrip())
 
-# Remove all spaces
-def remove_all_spaces(string):
-    return "".join(string.split())
-
-# Remove all extra spaces
-def remove_all_extra_spaces(string):
-    return " ".join(string.split())
-
-
-def download_image_serie(**kwargs):
-    response = requests.get(kwargs.get('image_url'))
+def download_image(url, model_obj, image_field):
+    response = requests.get(url)
     if response.status_code == 200:
-        response.raise_for_status() 
-
+        response.raise_for_status()
         file_temp = NamedTemporaryFile()
         file_temp.write(response.content)
         file_temp.flush()
-        serie = Serie.objects.get(id=kwargs.get('serie_id'))  # Instantiate your model object
-        if not serie.image:
+        model_instance = model_obj  # Assuming model_obj is already instantiated
+        if not getattr(model_instance, image_field):
             with open(file_temp.name, 'rb') as file:
-                serie.image.save("image.png", File(file))
+                getattr(model_instance, image_field).save("image.png", File(file))
             print("File saved successfully.")
         return file_temp.name
 
+def create_or_get_playlist(title):
+    playlist, created = PlayList.objects.get_or_create(
+        title=title,
+        defaults={"user": User.objects.get(id=1)}
+    )
+    if created:
+        print("Season created successfully ✔")
+    return playlist
 
-def download_image_list(**kwargs):
-    response = requests.get(kwargs.get('image_url'))
-    if response.status_code == 200:
-        response.raise_for_status() 
 
-        file_temp = NamedTemporaryFile()
-        file_temp.write(response.content)
-        file_temp.flush()
-        playList = PlayList.objects.get(id=kwargs.get('list_id'))  # Instantiate your model object
-        if not playList.image:
-            with open(file_temp.name, 'rb') as file:
-                playList.image.save("image.png", File(file))
-            print("File saved successfully.")
-        return file_temp.name
 
-def getNewItem(url, season, list_id):
+def create_or_get_serie(title):
+    serie, created = Serie.objects.get_or_create(
+        title=title,
+        defaults={"user": User.objects.get(id=1)}
+    )
+    if created:
+        print("Serie created successfully ✔")
+    return serie
+
+
+def create_movie(url, season, playlist_id):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
     title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
-
-    getTagsContent = soup.find('ul', {'class': 'Terms--Content--Single-begin'})
-    plainTags = []
-    getTagsList = getTagsContent.find_all('a')
-    for tag in getTagsList:
-        plainTags.append(tag.text)
-
-    tags = ",".join(plainTags)[0:100]
-
+    tags_content = soup.find('ul', {'class': 'Terms--Content--Single-begin'})
+    tags = ",".join(tag.text for tag in tags_content.find_all('a'))[:100]
     description = soup.find('div', {'class': 'StoryMovieContent'})
-    if description:
-        description = description.text
-    else:
-        description = ' '
-    
-    if not Movie.objects.filter(episode=season, list=PlayList.objects.get(id=list_id)).exists():
+    description = description.text if description else ' '
+    playlist_instance = PlayList.objects.get(id=playlist_id)
+    if not Movie.objects.filter(episode=season, list=playlist_instance).exists():
         Movie.objects.create(
-            user = User.objects.get(id=1),
-            title = title,
-            tags = tags,
-            description = description,
-            episode = season,
-            list = PlayList.objects.get(id=list_id),
-            scraping_url = url
+            user=User.objects.get(id=1),
+            title=title,
+            tags=tags,
+            description=description,
+            episode=season,
+            list=playlist_instance,
+            scraping_url=url
         )
         print("Created successfully...")
     else:
-        print("Movie is exists...")
+        print("Movie exists...")
 
-
-
-
-def getItem(url, image, title):
+def process_season(url, image, title):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, "html.parser")
-    sub_title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
-    is_season = soup.find('div', {'class': 'List--Seasons--Episodes'})
-    load_btn = soup.find('div', {'class': 'MoreEpisodes--Button'})
-    if load_btn:
-        return 0
-    if not is_season:
-        print("No season👽")
-        list_content = soup.find('div', {'class' : 'Seasons--Episodes'})
-        list_items = list_content.find_all('a')
+    season_title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
+    season_list = soup.find('div', {'class': 'List--Seasons--Episodes'})
 
-        # Create Season
-        if not Serie.objects.filter(title=title).exists():
-            serie = Serie.objects.create(
-                title = title,
-                user = User.objects.get(id=1)
-            )
-        else:
-            serie = Serie.objects.filter(title=title)[0]
 
-        if not PlayList.objects.filter(title=sub_title).exists():
-            playList = PlayList.objects.create(
-                title = sub_title,
-                user = User.objects.get(id=1),
-                season = 1,
-                serie = serie
-            )
-        else:
-            playList = PlayList.objects.filter(title=sub_title)[0]
-
-        # Download image for List
-        download_image_list(
-            image_url = image,
-            list_id = playList.id
-        )
-
-        # Download image for serie
-        download_image_serie(
-            image_url = image,
-            serie_id = serie.id,
-        )
-
-        for item in range(len(list_items) - 1, -1, -1):
-            newUrl = list_items[item]
-            season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
-            getNewItem(newUrl['href'], season, playList.id)
+    
+    if season_list:
+        return 0  # Indicate no season
     else:
-        season_list = is_season.find_all('a')
-        if not Serie.objects.filter(title=title):
-            serie = Serie.objects.create(
-                title = title,
-                user = User.objects.get(id=1)
-            )
-        else:
-            serie = Serie.objects.filter(title=title)[0]
-
-            # Download image for serie
-        download_image_serie(
-            image_url = image,
-            serie_id = serie.id,
-        )
-               
-        # Get season
-        for item in season_list:
-            print("الموسم")
-            response = requests.get(item['href'])
-            soup = BeautifulSoup(response.content, "html.parser")
-            image_style = soup.find('wecima', {'class': 'separated--top'})['style'] ##['data-lazy-style']
-            
-            season_image = re.findall(pattern, image_style)[0]
-            print(season_image)
-            sub_title = re.sub(r'\([^)]*\)', '', soup.find('h1').text).strip()
-            list_content = soup.find('div', {'class' : 'Episodes--Seasons--Episodes'})
-            list_items = list_content.find_all('a')
-            if not PlayList.objects.filter(title=sub_title).exists():
-                playList = PlayList.objects.create(
-                    title = sub_title,
-                    user = User.objects.get(id=1),
-                    season = 1,
-                    serie = serie
-                )
-            else:
-                playList = PlayList.objects.filter(title=sub_title)[0]
-            
-            # Download image for List
-            download_image_list(
-                image_url = season_image,
-                list_id = playList.id
-            )
-
- 
-
-                # Get حلقة
-
-            for item in range(len(list_items) - 1, -1, -1):
-                print("الحلقة")
-                newUrl = list_items[item]
-                season = re.search(r'\d+', newUrl.find('episodetitle').text).group()  #re.search(r'\d+', my_string).group()
-                getNewItem(newUrl['href'], season, playList.id)
- 
-
-
-
-
-
+        playlist = create_or_get_playlist(title)
+        serie = create_or_get_serie(season_title)
+        download_image(image, playlist, 'image')
+        download_image(image, serie, 'image')
+        episode_links = soup.find('div', {'class': 'Seasons--Episodes'}).find_all('a')
+        for episode_link in reversed(episode_links):
+            episode_url = episode_link['href']
+            season = re.search(r'\d+', episode_link.find('episodetitle').text).group()
+            create_movie(episode_url, season, playlist.id)
 
 def new(request):
-    for page in range(100, 0, -1):
+    if request.GET.get("start"):
+        start = int(request.GET.get("start"))
+    else:
+        start = 5
+
+    for page in range(start, 0, -1):
         url = f"https://mycima.wecima.show/seriestv/new/?page_number={page}/"
         html = requests.get(url)
         soup = BeautifulSoup(html.content, "html.parser")
@@ -217,10 +105,13 @@ def new(request):
         print(f"Page ==== {page}")
         for item in results: 
             if item:
-                url = item.find('a')['href']
-                title  = re.sub(r'\([^)]*\)', '', item.find('a').text).strip() 
-                try: image = item.find('span', {'class': 'BG--GridItem'})['data-lazy-style']
-                except: image = None
+                url = str(item.find('a')['href']).replace("https://t4cce4ma.shop","https://mycima.wecima.show")
+                title = re.sub(r'\([^)]*\)', '', item.find('a').text).strip()
+                try: 
+                    image = item.find('span', {'class': 'BG--GridItem'})['data-lazy-style']
+                except Exception as error:
+                    print(error)
+                    image = None
                 image = re.findall(pattern, image)[0]
-                print("المسلسل")
-                getItem(url, image, title) 
+                print("Processing the series...")
+                process_season(url, image, title)

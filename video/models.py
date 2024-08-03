@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.db.models.signals import pre_save, pre_delete,post_save
 from django.dispatch import receiver
 import uuid
+from django.urls import reverse
 import os
 
 
@@ -24,6 +25,18 @@ class Query(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Image(models.Model):
+    image = models.ImageField(upload_to=filename, verbose_name="Image ", null=True, blank=True)
+    
+    def __str__(self):
+        return self.image
+    
+class Country(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to=filename, verbose_name="Image ", null=True, blank=True)
+    slug = models.SlugField(unique=True, blank=True)
     
 class Location(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -81,6 +94,9 @@ class Serie(models.Model):
     save = models.ManyToManyField(User, related_name='serie_save', blank=True)
     subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True, blank=True, verbose_name="الشركة المنتجة ")
     slug = models.SlugField(null=True, blank=True)
+    released = models.DateField(null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='serie_country', null=True, blank=True)
+    quality = models.CharField(max_length=100, null=True, blank=True)
 
 
     def __str__(self):
@@ -112,6 +128,10 @@ class PlayList(models.Model):
     def __str__(self):
         return self.title
     
+    def get_absolute_url(self):
+        return reverse("play-list", kwargs={"slug": self.slug})
+    
+    
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -120,6 +140,7 @@ class PlayList(models.Model):
     
 class Movie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ar_name = models.CharField(max_length=300, null=True, blank=True)
     title = models.CharField(max_length=255, verbose_name="عنوان")
     image = models.ImageField(upload_to=filename, null=True, blank=True, verbose_name="صورة")
     list = models.ForeignKey(PlayList, on_delete=models.CASCADE, null=True, blank=True, verbose_name="إختيار الموسم")
@@ -134,6 +155,14 @@ class Movie(models.Model):
     is_last = models.BooleanField(null=True, default=False, verbose_name="الحلقة الأخيرة")
     scraping_url = models.CharField(max_length=1000, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
+    released = models.DateField(null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='movie_country', null=True, blank=True)
+    quality = models.CharField(max_length=100, null=True, blank=True)
+
+
+
+    def get_absolute_url(self):
+        return reverse("show", kwargs={"slug": self.slug})
 
 
     def __str__(self):

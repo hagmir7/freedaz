@@ -124,8 +124,8 @@ def getItem(url, image):
             print("Movie is exists....")
         print("--------------------------------------------")
         return data
-    except:
-        print("There is error")
+    except Exception as error:
+        print("There is error: ", error)
         
 
 

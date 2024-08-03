@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django_user_agents.utils import get_user_agent
 from .forms import *
 from .models import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from django.views import View
@@ -15,8 +15,11 @@ from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 from django.db.models import Count
 from django.shortcuts import HttpResponse
+from django.template import loader
 
-
+def robots_txt(request):
+    content = loader.render_to_string('robots.txt')
+    return HttpResponse(content, content_type='text/plain')
 
 
 def superuser_required(user):

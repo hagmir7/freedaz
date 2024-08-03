@@ -74,6 +74,9 @@ def getNewItem(url, season, list_id):
     for tag in getTagsList:
         plainTags.append(tag.text)
 
+
+
+
     tags = ",".join(plainTags)[0:100]
 
     description = soup.find('div', {'class': 'StoryMovieContent'})

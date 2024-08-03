@@ -8,6 +8,7 @@ from .sites.anim import *
 
 
 
+
 urlpatterns = [
     path('', index, name='index'),
     path('menu', menu, name='menu'),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('movies/new/', new_movies, name='movies_new'),
     path('movies/best', best_movies, name='movies_best'),
     path('movie/delete/<int:id>', delete_movie, name='delete_movie'),
+    path('robots.txt', robots_txt, name='robots_txt'),
 
 
 
