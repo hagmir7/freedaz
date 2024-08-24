@@ -536,3 +536,9 @@ def update_scraping_url(request):
         return HttpResponse("Scraping URLs updated successfully.")
     except Exception as e:
         return HttpResponse(f"An error occurred: {str(e)}")
+
+
+
+
+def sw(request):
+    return render(request, 'sw.js')

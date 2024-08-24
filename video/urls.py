@@ -49,10 +49,14 @@ urlpatterns = [
     path('episode/create', create_episode, name="create_episode"),
 
 
+    path("sw.js", sw),
+
+
     path('movies/duplicated', duplicated_movies),
     path('lists/duplicated', duplicated_lists),
     path('series/duplicated', duplicated_series),
     path('update_scraping_url', update_scraping_url),
+
 
     path('wecima', wecima),
     path('top', top),
