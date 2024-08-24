@@ -2,19 +2,31 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+# from django.contrib import sitemaps
+# from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import GenericSitemap
+# from video.sitemaps import PlayListSitemap, MovieSitemap
+from django.contrib.sitemaps import views as sitemaps_views
+from video.models import PlayList, Movie
 
 
-from django.contrib import sitemaps
-from django.contrib.sitemaps.views import sitemap
-from video.sitemaps import PlayListSitemap, MovieSitemap
+class PaginatedSitemap(GenericSitemap):
+    limit = 100
 
 list_site_map = {
-    'play-list': PlayListSitemap,
-    'movie' : MovieSitemap
+    'play-list': PaginatedSitemap(
+            {"queryset": PlayList.objects.all().order_by('id')},
+            priority=1.0,
+            changefreq = "daily"
+        )
 }
 
-movies = {
-    'movie' : MovieSitemap
+movies_sitemap = {
+    'movie' : PaginatedSitemap(
+            {"queryset": Movie.objects.all().order_by('id')},
+            priority=1.0,
+            changefreq = "daily"
+    ),
 }
 
 
@@ -25,8 +37,13 @@ urlpatterns = [
     path('', include('users.urls') ),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include('video.api.urls')),
-    path('list.xml', sitemap, {'sitemaps': list_site_map}, name='django.contrib.sitemaps.views.sitemap'),
-    path('movie.xml', sitemap, {'sitemaps': movies}, name='django.contrib.sitemaps.views.sitemap'),
+
+    # Sitemap
+    path('list.xml', sitemaps_views.index, {'sitemaps': list_site_map}, name='django.contrib.sitemaps.views.sitemap'),
+    path('list-<section>.xml', sitemaps_views.sitemap, {'sitemaps': list_site_map}, name='django.contrib.sitemaps.views.sitemap'),
+
+    path('movie.xml', sitemaps_views.index, {'sitemaps': movies_sitemap}, name='django.contrib.sitemaps.views.sitemap'),
+    path('movie-<section>.xml', sitemaps_views.sitemap, {'sitemaps': movies_sitemap}, name='django.contrib.sitemaps.views.sitemap'),
 
 ]
 
