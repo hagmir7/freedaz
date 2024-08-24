@@ -13,20 +13,19 @@ from video.models import PlayList, Movie
 class PaginatedSitemap(GenericSitemap):
     limit = 100
 
-list_site_map = {
-    'play-list': PaginatedSitemap(
-            {"queryset": PlayList.objects.all().order_by('id')},
-            priority=1.0,
-            changefreq = "daily"
-        )
-}
 
-movies_sitemap = {
+sitemap = {
     'movie' : PaginatedSitemap(
             {"queryset": Movie.objects.all().order_by('id')},
             priority=1.0,
             changefreq = "daily"
     ),
+
+    'play-list': PaginatedSitemap(
+        {"queryset": PlayList.objects.all().order_by('id')},
+        priority=1.0,
+        changefreq = "daily"
+    )
 }
 
 
@@ -39,11 +38,8 @@ urlpatterns = [
     path('api/', include('video.api.urls')),
 
     # Sitemap
-    path('list.xml', sitemaps_views.index, {'sitemaps': list_site_map}, name='django.contrib.sitemaps.views.sitemap'),
-    path('list-<section>.xml', sitemaps_views.sitemap, {'sitemaps': list_site_map}, name='django.contrib.sitemaps.views.sitemap'),
-
-    path('movie.xml', sitemaps_views.index, {'sitemaps': movies_sitemap}, name='django.contrib.sitemaps.views.sitemap'),
-    path('movie-<section>.xml', sitemaps_views.sitemap, {'sitemaps': movies_sitemap}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', sitemaps_views.index, {'sitemaps': sitemap}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap-<section>.xml', sitemaps_views.sitemap, {'sitemaps': sitemap}, name='django.contrib.sitemaps.views.sitemap'),
 
 ]
 
