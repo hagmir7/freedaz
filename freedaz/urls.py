@@ -11,7 +11,7 @@ from video.models import PlayList, Movie
 
 
 class PaginatedSitemap(GenericSitemap):
-    limit = 100
+    limit = 1000
 
 
 sitemap = {
